@@ -31,6 +31,5 @@ public class Comment {
         this.postId = post;
         this.createdAt = createdAt;
         this.createdAt = createdAt;
-
     }
 }
