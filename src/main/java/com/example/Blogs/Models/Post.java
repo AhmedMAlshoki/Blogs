@@ -21,10 +21,6 @@ public class Post {
     private String title;
     @Column("created_at")
     private LocalDateTime createdAt;
-    @Column("number_of_likes")
-    private Integer numberOfLikes;
-    @Column("number_of_comments")
-    private Integer numberOfComments;
     private LocalDateTime updated_at;
     private List<Like> likes;
     private List<Comment> comments;
@@ -32,17 +28,13 @@ public class Post {
         this.body = body;
         this.userId = user;
         this.createdAt = LocalDateTime.now();
-        this.numberOfLikes = 0;
-        this.numberOfComments = 0;
     }
 
-    public Post(long id, long userId, String body,String title, LocalDateTime createdAt, int numberOfLikes, int numberOfComments) {
+    public Post(long id, long userId, String body,String title, LocalDateTime createdAt) {
         this.id = id;
         this.userId = userId;
         this.body = body;
         this.createdAt = createdAt;
-        this.numberOfLikes = numberOfLikes;
-        this.numberOfComments = numberOfComments;
         this.title = title;
         List<Like> likes = new ArrayList<>();
         List<Comment> comments = new ArrayList<>();

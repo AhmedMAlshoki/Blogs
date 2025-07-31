@@ -25,24 +25,13 @@ public class PostResultSetExtractor implements ResultSetExtractor<Map<Long, Post
                             rs.getLong("post_user_id"),
                             rs.getString("body"),
                             rs.getString("title"),
-                            rs.getTimestamp("created_at").toLocalDateTime(),
-                            rs.getInt("number_of_likes"),
-                            rs.getInt("number_of_comments"));
+                            rs.getTimestamp("created_at").toLocalDateTime());
                     postId = post.getId();
                     posts.put(post.getId(), post);
                 }
-                if (rs.getObject("comment_id") != null)
-                {
-                    Comment comment = new Comment(
-                            rs.getString("body"),
-                            postId,
-                            rs.getLong("comment_post_id"),
-                            rs.getTimestamp("created_at").toLocalDateTime());
-                    posts.get(postId).getComments().add(comment);
-                }
                 if (rs.getObject("like_id") != null)
                 {
-                    Like like = new Like(rs.getLong("like_user_id"));
+                    Like like = new Like(rs.getLong("like_user_id"),rs.getTimestamp("created_at").toLocalDateTime());
                     posts.get(postId).getLikes().add(like);
                 }
             }

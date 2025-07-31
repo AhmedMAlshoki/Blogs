@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 public class QueryConfig {
     @Bean
     public PostQueries postQueries() {
-        return new PostPostgresQueries();
+        return new PostPostgresQueries(daoUtilities());
     }
 
     @Bean
