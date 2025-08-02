@@ -1,5 +1,6 @@
 package com.example.Blogs.DAOs;
 
+import com.example.Blogs.DAOs.DAOUtilities.DAOUtilities;
 import com.example.Blogs.Models.Comment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -9,14 +10,16 @@ import java.util.Optional;
 
 public class CommentDAOImplement extends DAO_Implementaion implements CommentDAO {
 
+    private  DAOUtilities daoUtilities;
     @Autowired
-    public CommentDAOImplement(JdbcTemplate jdbcTemplate) {
+    public CommentDAOImplement(JdbcTemplate jdbcTemplate , DAOUtilities daoUtilities) {
         super(jdbcTemplate);
+        this.daoUtilities = daoUtilities;
     }
 
     @Override
-    public Optional<Comment> findById(Long id) {
-        return Optional.empty();
+    public Comment findById(Long id) {
+        return null;
     }
 
     @Override

@@ -18,7 +18,7 @@ public class QueryConfig {
     }
 
     @Bean
-    public CommentQueries commentQueries() { return new CommentPostgresQueries(); }
+    public CommentQueries commentQueries() { return new CommentPostgresQueries(daoUtilities()); }
 
 
     @Bean

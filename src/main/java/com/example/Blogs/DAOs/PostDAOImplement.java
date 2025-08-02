@@ -4,7 +4,6 @@ import com.example.Blogs.DAOs.DAOUtilities.DAOUtilities;
 import com.example.Blogs.DAOs.SqlQueries.PostQueries;
 import com.example.Blogs.Exceptions.PostNotFoundException;
 import com.example.Blogs.Exceptions.UserNotFoundException;
-import com.example.Blogs.Models.Comment;
 import com.example.Blogs.Models.Post;
 import com.example.Blogs.ResultSetExtractors.IdResultSetExtractor;
 import com.example.Blogs.ResultSetExtractors.PostResultSetExtractor;
@@ -21,16 +20,13 @@ public class PostDAOImplement extends DAO_Implementaion implements PostDAO {
     private  UserDAO userDAO;
     private PostQueries postQueries;
     private DAOUtilities daoUtilities;
-    private CommentDAO commentDAO;
     @Autowired
     public PostDAOImplement(JdbcTemplate jdbcTemplate, UserDAOImplement userDAO,
-                            PostQueries postQueries,  DAOUtilities daoUtilities,
-                              CommentDAO commentDAO) {
+                            PostQueries postQueries,  DAOUtilities daoUtilities) {
         super(jdbcTemplate);
         this.userDAO = userDAO;
         this.postQueries = postQueries;
         this.daoUtilities = daoUtilities;
-        this.commentDAO = commentDAO;
     }
 
 
@@ -45,32 +41,26 @@ public class PostDAOImplement extends DAO_Implementaion implements PostDAO {
     }
 
 
+
     private Map<Long, Post> MapPosts (String sql,List<Long> ids) {
         Object[] params = daoUtilities.preparingParamForTheQuery(ids);
         return jdbcTemplate.query(sql, new PostResultSetExtractor(), params);
     }
 
-    /*private Map<Long,Post> MapCommentsWithPosts(Map<Long, Post> postsMap, List<Comment> comments) {
-        for (Comment comment : comments) {
-            Post post = postsMap.get(comment.getPostId());
-            post.getComments().add(comment);
-        }
-        return postsMap;
-    }*/
-
-    private Map<Long, Post> findByPostsIds (List<Long> ids,String sql) {
-        Map<Long, Post> postsMap = MapPosts(sql,ids);
-        return  postsMap;
+    private Map<Long, Post> MapPosts (String sql,String searchQuery, List<Long> authorFilter, String minDate, String maxDate) {
+        return jdbcTemplate.query(sql, new PostResultSetExtractor(),searchQuery, authorFilter, minDate, maxDate);
     }
 
-
+    private Map<Long, Post> MapPosts (String sql,Integer offset) {
+        return jdbcTemplate.query(sql, new PostResultSetExtractor(), offset);
+    }
 
 
     //High Level Methods
     @Override
     public Post findById(Long id) throws PostNotFoundException {
         if (existsById(id)) {
-            List<Long> ids = List.of(id,id,id);
+            List<Long> ids = List.of(id);
             String sql = postQueries.SqlQueryForFindingMultiplePosts(daoUtilities.preparingParamForTheQuery(ids));
             Map<Long, Post> postsMap = MapPosts(sql,ids);
             assert postsMap != null;
@@ -91,9 +81,9 @@ public class PostDAOImplement extends DAO_Implementaion implements PostDAO {
             if (ids.isEmpty()) {
                 return List.of();
             }
-            Map<Long, Post> postsMap =   findByPostsIds(ids, postQueries.SqlQueryForFindingMultiplePosts(daoUtilities.preparingParamForTheQuery(ids)));
-            //List<Comment> comments = commentDAO.findCommentsByPostIds(ids);
-            //postsMap = MapCommentsWithPosts(postsMap,comments);
+            Object [] params = daoUtilities.preparingParamForTheQuery(ids);
+            Map<Long, Post> postsMap =
+                    MapPosts(postQueries.SqlQueryForFindingMultiplePosts(params),ids);
             return postsMap.values().stream().toList();
         }
         else {
@@ -110,9 +100,9 @@ public class PostDAOImplement extends DAO_Implementaion implements PostDAO {
             if (ids.isEmpty()) {
                 return List.of();
             }
-            Map<Long, Post> postsMap =   findByPostsIds(ids, postQueries.SqlQueryForFindingMultiplePosts(daoUtilities.preparingParamForTheQuery(ids)));
-            //List<Comment> comments = commentDAO.findCommentsByPostIds(ids);
-            //postsMap = MapCommentsWithPosts(postsMap,comments);
+            Object [] params = daoUtilities.preparingParamForTheQuery(ids);
+            Map<Long, Post> postsMap =
+                    MapPosts(postQueries.SqlQueryForFindingMultiplePosts(params),ids);
             return postsMap.values().stream().toList();
         }
         else {
@@ -124,11 +114,22 @@ public class PostDAOImplement extends DAO_Implementaion implements PostDAO {
     @Override
     public List<Post> findPostsBySearchQuery(String searchQuery, List<Long> authorFilter, String minDate, String maxDate) {
         String sql = postQueries.SQLQueryForPostSearch(searchQuery, authorFilter, minDate, maxDate, 10, 0);
-        return  null;
+        Map<Long, Post> postsMap = MapPosts(sql,searchQuery, authorFilter, minDate, maxDate);
+        assert postsMap != null;
+        if (!postsMap.isEmpty()) {
+            return postsMap.values().stream().toList();
+        }
+        return  List.of();
     }
 
     @Override
-    public List<Post> findTopPostsDaily() {
+    public List<Post> findTopPosts(Integer Offset) {
+        String sql = postQueries.SQLQueryForTopPostsIds(Offset);
+        Map<Long, Post> postsMap = MapPosts(sql,Offset);
+        assert postsMap != null;
+        if (!postsMap.isEmpty()) {
+            return postsMap.values().stream().toList();
+        }
         return List.of();
     }
 
@@ -158,9 +159,5 @@ public class PostDAOImplement extends DAO_Implementaion implements PostDAO {
             throw new PostNotFoundException("Post with ID " + id + " not found.");
         }
     }
-
-
-
-
 
 }

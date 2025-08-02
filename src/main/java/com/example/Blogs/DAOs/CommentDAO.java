@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CommentDAO {
-    Optional<Comment> findById(Long id);
+    Comment findById(Long id);
     Comment saveNewComment(Comment comment);
     void deleteById(Long id);
     boolean existsById(Long id);

@@ -14,6 +14,6 @@ public interface PostDAO {
     List<Post> findByUser(Long userId);
     List<Post> findFollowingUsersPosts(Long userId);
     List<Post> findPostsBySearchQuery(String searchQuery, List<Long> authorFilter, String minDate, String maxDate);
-    List<Post> findTopPostsDaily();
+    List<Post> findTopPosts(Integer offset);
     
 }

@@ -177,6 +177,13 @@ CREATE OR REPLACE FUNCTION search_articles(
                      AND (author_filter IS NULL OR u.id = ANY(author_filter))
                      AND (min_date IS NULL OR p.created_at >= min_date)
                      AND (max_date IS NULL OR p.created_at <= max_date)
+               ),
+               likes_for_ranking AS (
+                     SELECT likes.post_id as id , likes.user_id as user_id , likes.post_id as post_id
+                     FROM likes
+                     WHERE likes.post_id IN (
+                         SELECT id FROM ranked_articles
+                     )
                )
                SELECT
                      ra.id,
@@ -186,8 +193,11 @@ CREATE OR REPLACE FUNCTION search_articles(
                      ra.published_at,
                      ra.rank,
                      ra.highlight,
-                     total as total_count
+                     total as total_count,
+                     likes_for_ranking.user_id,
+                     DENSE_RANK() OVER (PARTITION BY ra.id) as rank_order
                FROM ranked_articles ra
+               LEFT JOIN likes_for_ranking ON ra.id = likes_for_ranking.post_id
                ORDER BY ra.rank DESC
                LIMIT page_size
                OFFSET (page_number - 1) * page_size;
