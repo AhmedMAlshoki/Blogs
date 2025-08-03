@@ -23,12 +23,14 @@ public class User {
     @Column("signed_up_at")
     private LocalDateTime signedUpAt;
 
-    @Column("num_of_posts")
-    private Integer numOfPosts;
 
-    @Column("num_of_followers")
-    private Integer numOfFollowers;
 
-    @Column("num_of_following")
-    private Integer numOfFollowing;
+
+
+    public User(long id, String username, String displayName, LocalDateTime signedUpAt) {
+        this.id = id;
+        this.username = username;
+        this.displayName = displayName;
+        this.signedUpAt = signedUpAt;
+    }
 }

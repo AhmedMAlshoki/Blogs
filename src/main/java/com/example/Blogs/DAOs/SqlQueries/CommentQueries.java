@@ -9,7 +9,6 @@ public abstract class CommentQueries {
     public abstract String insertQuery();
     public abstract String updateQuery();
     public abstract String deleteQuery();
-    public abstract String SQLQueryForFindById();
     public abstract String existsById();
     public abstract String SQLQueryForFindByPost();
     public abstract String SQLQueryForFindByUser();

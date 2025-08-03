@@ -28,9 +28,6 @@ CREATE TABLE  IF NOT EXISTS users (
     password VARCHAR(255) NOT NULL,
     created_at TIMESTAMP WITH  TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH  TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    num_of_posts INTEGER DEFAULT 0,
-    num_of_followers INTEGER DEFAULT 0,
-    num_of_following INTEGER DEFAULT 0
 );
 --likes table
 CREATE TABLE  IF NOT EXISTS likes (

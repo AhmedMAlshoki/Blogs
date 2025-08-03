@@ -124,9 +124,15 @@ public class PostDAOImplement extends DAO_Implementaion implements PostDAO {
 
     @Override
     public List<Post> findTopPosts(Integer Offset) {
-        String sql = postQueries.SQLQueryForTopPostsIds(Offset);
+        String sqlForPostsIds = postQueries.SQLQueryForTopPostsIds(Offset);
+        List<Long> ids= jdbcTemplate.query(sqlForPostsIds, new IdResultSetExtractor(), Offset);
+        assert ids != null;
+        if (ids.isEmpty()) {
+            return List.of();
+        }
+        Object [] params = daoUtilities.preparingParamForTheQuery(ids);
+        String sql = postQueries.SqlQueryForFindingMultiplePosts(params);
         Map<Long, Post> postsMap = MapPosts(sql,Offset);
-        assert postsMap != null;
         if (!postsMap.isEmpty()) {
             return postsMap.values().stream().toList();
         }

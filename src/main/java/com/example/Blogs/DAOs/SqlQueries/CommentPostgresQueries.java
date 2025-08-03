@@ -29,10 +29,6 @@ public class CommentPostgresQueries extends CommentQueries {
         return "DELETE FROM comments WHERE id = $1;";
     }
 
-    @Override
-    public String SQLQueryForFindById() {
-        return "SELECT * FROM comments WHERE id = $1;";
-    }
 
     @Override
     public String existsById() {
