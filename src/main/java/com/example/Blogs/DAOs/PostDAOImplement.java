@@ -21,7 +21,7 @@ public class PostDAOImplement extends DAO_Implementaion implements PostDAO {
     private PostQueries postQueries;
     private DAOUtilities daoUtilities;
     @Autowired
-    public PostDAOImplement(JdbcTemplate jdbcTemplate, UserDAOImplement userDAO,
+    public PostDAOImplement(JdbcTemplate jdbcTemplate, UserDAO userDAO,
                             PostQueries postQueries,  DAOUtilities daoUtilities) {
         super(jdbcTemplate);
         this.userDAO = userDAO;

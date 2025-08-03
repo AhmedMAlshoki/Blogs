@@ -11,24 +11,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class CommentResultSetExtractor implements ResultSetExtractor<Map<Long, Post>> {
-    Map<Long, Post> posts;
-    public CommentResultSetExtractor(Map<Long, Post> posts)
-    {
-        this.posts = posts;
-    }
+public class CommentResultSetExtractor implements ResultSetExtractor<Map<Long, List<Comment>>> {
+    Map<Long, List<Comment>> organizedComments = Map.of();
     @Override
-    public Map<Long, Post> extractData(ResultSet rs) throws SQLException, DataAccessException {
+    public Map<Long, List<Comment>> extractData(ResultSet rs) throws SQLException, DataAccessException {
         while (rs.next()) {
-            if (rs.getLong("c.comment_id") == 0)
-                continue;
             Comment comment = new Comment(
                     rs.getString("body"),
                     rs.getLong("comment_post_id"),
                     rs.getLong("comment_user_id"),
                     rs.getTimestamp("created_at").toLocalDateTime());
-            posts.get(rs.getLong("comment_post_id")).getComments().add(comment);
+            if (!organizedComments.containsKey(rs.getLong("comment_post_id")))
+                organizedComments.put(rs.getLong("comment_post_id"), new ArrayList<Comment>());
+            organizedComments.get(rs.getLong("comment_post_id")).add(comment);
         }
-        return posts;
+        return organizedComments;
     }
 }

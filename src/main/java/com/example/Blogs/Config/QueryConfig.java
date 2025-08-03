@@ -1,12 +1,20 @@
 package com.example.Blogs.Config;
 
+import com.example.Blogs.DAOs.*;
 import com.example.Blogs.DAOs.DAOUtilities.*;
 import com.example.Blogs.DAOs.SqlQueries.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 @Configuration
 public class QueryConfig {
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate() {
+        return new JdbcTemplate();
+    }
     @Bean
     public PostQueries postQueries() {
         return new PostPostgresQueries(daoUtilities());
@@ -24,5 +32,19 @@ public class QueryConfig {
     @Bean
     public DAOUtilities daoUtilities() {
         return new DAOUtilitiesImp();
+    }
+
+    @Bean
+    public UserDAO userDAO() {
+        return new UserDAOImplement(jdbcTemplate());
+    }
+    @Bean
+    public PostDAO postDAO() {
+        return new PostDAOImplement(jdbcTemplate(), userDAO(), postQueries(), daoUtilities());
+    }
+
+    @Bean
+    public CommentDAO commentDAO() {
+        return new CommentDAOImplement(jdbcTemplate(), daoUtilities(), commentQueries(), userDAO(), postDAO());
     }
 }
