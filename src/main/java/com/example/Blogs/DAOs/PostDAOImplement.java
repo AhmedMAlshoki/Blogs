@@ -42,6 +42,7 @@ public class PostDAOImplement extends DAO_Implementaion implements PostDAO {
 
 
 
+
     private Map<Long, Post> MapPosts (String sql,List<Long> ids) {
         Object[] params = daoUtilities.preparingParamForTheQuery(ids);
         return jdbcTemplate.query(sql, new PostResultSetExtractor(), params);

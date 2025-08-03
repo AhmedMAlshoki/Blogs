@@ -6,6 +6,9 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 @Table("users")
 @AllArgsConstructor
@@ -23,7 +26,7 @@ public class User {
     @Column("signed_up_at")
     private LocalDateTime signedUpAt;
 
-
+    private List<Post> posts;
 
 
 
@@ -32,5 +35,12 @@ public class User {
         this.username = username;
         this.displayName = displayName;
         this.signedUpAt = signedUpAt;
+        this.posts= new ArrayList<Post>();
+    }
+
+    public User(Long id , String email, String password) {
+        this.id = id;
+        this.email = email;
+        this.password = password;
     }
 }

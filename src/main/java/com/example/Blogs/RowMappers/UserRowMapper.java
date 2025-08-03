@@ -16,12 +16,7 @@ public class UserRowMapper implements RowMapper<User> {
                 rs.getLong("id"),
                 rs.getString("username"),
                 rs.getString("display_name"),
-                rs.getString("email"),
-                rs.getString("password"),
-                rs.getObject("signed_up_at", LocalDateTime.class),
-                rs.getInt("num_of_posts"),
-                rs.getInt("num_of_followers"),
-                rs.getInt("num_of_following")
+                rs.getObject("signed_up_at", LocalDateTime.class)
         );
     }
 }

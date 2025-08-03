@@ -10,6 +10,11 @@ import java.sql.SQLException;
 public class CommentRowMapper implements RowMapper<Comment> {
     @Override
     public Comment mapRow(ResultSet rs, int rowNum) throws SQLException {
-        return null;
+        return new Comment(
+                rs.getString("body"),
+                rs.getLong("comment_post_id"),
+                rs.getLong("comment_user_id"),
+                rs.getTimestamp("created_at").toLocalDateTime()
+        );
     }
 }
