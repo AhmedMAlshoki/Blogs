@@ -17,6 +17,7 @@ public class CommentResultSetExtractor implements ResultSetExtractor<Map<Long, L
     public Map<Long, List<Comment>> extractData(ResultSet rs) throws SQLException, DataAccessException {
         while (rs.next()) {
             Comment comment = new Comment(
+                    rs.getLong("id"),
                     rs.getString("body"),
                     rs.getLong("comment_post_id"),
                     rs.getLong("comment_user_id"),

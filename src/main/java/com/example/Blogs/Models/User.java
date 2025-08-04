@@ -2,6 +2,7 @@ package com.example.Blogs.Models;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
@@ -23,14 +24,21 @@ public class User {
     private String email;
     private String password;
 
-    @Column("signed_up_at")
+    @Column("created_at")
     private LocalDateTime signedUpAt;
 
     private List<Post> posts;
 
 
+    public User(String username, String displayName, String email, String password) { //Constructor to create a new user
+        this.username = username;
+        this.displayName = displayName;
+        this.email = email;
+        this.password = password;
+        this.posts= new ArrayList<Post>();
+    }
 
-    public User(long id, String username, String displayName, LocalDateTime signedUpAt) {
+    public User(long id, String username, String displayName, LocalDateTime signedUpAt) { //Constructor to Normal retrieve
         this.id = id;
         this.username = username;
         this.displayName = displayName;
@@ -38,9 +46,10 @@ public class User {
         this.posts= new ArrayList<Post>();
     }
 
-    public User(Long id , String email, String password) {
+    public User(Long id, String email, String password) { //Constructor to Login retrieve
         this.id = id;
         this.email = email;
         this.password = password;
     }
+
 }

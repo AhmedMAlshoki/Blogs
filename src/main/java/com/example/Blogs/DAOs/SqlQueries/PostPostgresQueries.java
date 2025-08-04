@@ -1,6 +1,4 @@
 package com.example.Blogs.DAOs.SqlQueries;
-
-import com.example.Blogs.DAOs.DAOUtilities.DAOUtilities;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;

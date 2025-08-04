@@ -12,11 +12,16 @@ import java.time.LocalDateTime;
 public class UserRowMapper implements RowMapper<User> {
     @Override
     public User mapRow(ResultSet rs, int rowNum) throws SQLException {
-        return new User(
+        if (rs.getString("email") != null) {
+            return new User(
+                    rs.getLong("id"),
+                    rs.getString("username"),
+                    rs.getString("password"));
+    }
+        else return new User(
                 rs.getLong("id"),
                 rs.getString("username"),
                 rs.getString("display_name"),
-                rs.getObject("signed_up_at", LocalDateTime.class)
-        );
+                rs.getObject("created_at", LocalDateTime.class));
     }
 }

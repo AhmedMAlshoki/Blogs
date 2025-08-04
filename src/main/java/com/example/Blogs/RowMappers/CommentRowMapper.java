@@ -11,6 +11,7 @@ public class CommentRowMapper implements RowMapper<Comment> {
     @Override
     public Comment mapRow(ResultSet rs, int rowNum) throws SQLException {
         return new Comment(
+                rs.getLong("id"),
                 rs.getString("body"),
                 rs.getLong("comment_post_id"),
                 rs.getLong("comment_user_id"),

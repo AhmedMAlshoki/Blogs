@@ -23,11 +23,9 @@ public class Post {
     private LocalDateTime createdAt;
     private LocalDateTime updated_at;
     private List<Like> likes;
-    private List<Comment> comments;
     public Post(String body,Long user) {
         this.body = body;
         this.userId = user;
-        this.createdAt = LocalDateTime.now();
     }
 
     public Post(long id, long userId, String body,String title, LocalDateTime createdAt) {
@@ -36,8 +34,7 @@ public class Post {
         this.body = body;
         this.createdAt = createdAt;
         this.title = title;
-        List<Like> likes = new ArrayList<>();
-        List<Comment> comments = new ArrayList<>();
+        List<Like> likes = new ArrayList<Like>();
     }
 
 

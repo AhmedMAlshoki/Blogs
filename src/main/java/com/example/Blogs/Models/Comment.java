@@ -16,6 +16,7 @@ public class Comment {
     @Column("post_id")
     private Long postId;
     private String body;
+    @Column("created_at")
     private LocalDateTime createdAt;
 
     public Comment(String body,Long user,Long post) {
@@ -25,11 +26,13 @@ public class Comment {
         this.createdAt = LocalDateTime.now();
 
     }
-    public Comment(String body,Long user,Long post,LocalDateTime createdAt) {
+
+
+    public Comment(long id, String body, long commentPostId, long commentUserId, LocalDateTime createdAt) {
+        this.id = id;
         this.body = body;
-        this.userId = user;
-        this.postId = post;
-        this.createdAt = createdAt;
+        this.postId = commentPostId;
+        this.userId = commentUserId;
         this.createdAt = createdAt;
     }
 }

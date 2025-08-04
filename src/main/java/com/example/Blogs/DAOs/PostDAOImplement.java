@@ -5,7 +5,6 @@ import com.example.Blogs.DAOs.SqlQueries.PostQueries;
 import com.example.Blogs.Exceptions.PostNotFoundException;
 import com.example.Blogs.Exceptions.UserNotFoundException;
 import com.example.Blogs.Models.Post;
-import com.example.Blogs.ResultSetExtractors.IdResultSetExtractor;
 import com.example.Blogs.ResultSetExtractors.PostResultSetExtractor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;

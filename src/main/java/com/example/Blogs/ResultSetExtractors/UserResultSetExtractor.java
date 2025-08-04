@@ -19,7 +19,7 @@ public class UserResultSetExtractor implements ResultSetExtractor<List<User>> {
                     rs.getLong("id"),
                     rs.getString("username"),
                     rs.getString("display_name"),
-                    rs.getObject("signed_up_at", LocalDateTime.class)
+                    rs.getObject("created_at", LocalDateTime.class)
             );
             users.add(user);
         }
