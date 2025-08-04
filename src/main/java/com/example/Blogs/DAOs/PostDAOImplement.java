@@ -34,7 +34,7 @@ public class PostDAOImplement extends DAO_Implementaion implements PostDAO {
 
     @Override
     public boolean existsById(Long id) {
-        String sql = postQueries.existsById(id);
+        String sql = postQueries.existsById();
         return Boolean.TRUE.equals(
                 jdbcTemplate.queryForObject(sql, Boolean.class, id)
         );
@@ -56,13 +56,19 @@ public class PostDAOImplement extends DAO_Implementaion implements PostDAO {
         return jdbcTemplate.query(sql, new PostResultSetExtractor(), offset);
     }
 
+    private Map<Long, Post> MapPosts (String sql,Long id) {
+        return jdbcTemplate.query(sql, new PostResultSetExtractor(), id);
+    }
+
+
+
 
     //High Level Methods
     @Override
     public Post findById(Long id) throws PostNotFoundException {
         if (existsById(id)) {
             List<Long> ids = List.of(id);
-            String sql = postQueries.SqlQueryForFindingMultiplePosts(daoUtilities.preparingParamForTheQuery(ids));
+            String sql = postQueries.SqlQueryForFindingOnePostOrMultiple();
             Map<Long, Post> postsMap = MapPosts(sql,ids);
             assert postsMap != null;
             return postsMap.get(id);
@@ -76,15 +82,9 @@ public class PostDAOImplement extends DAO_Implementaion implements PostDAO {
     @Override
     public List<Post> findByUser(Long userId) throws UserNotFoundException {
         if (userDAO.existsById(userId)) {
-            String sqlForPostsIds = postQueries.SqlQueryForFindingAllPostsIdsByUser();
-            List<Long> ids= jdbcTemplate.query(sqlForPostsIds, new IdResultSetExtractor(), userId);
-            assert ids != null;
-            if (ids.isEmpty()) {
-                return List.of();
-            }
-            Object [] params = daoUtilities.preparingParamForTheQuery(ids);
+            String sqlForPostsByUser = postQueries.SqlQueryForFindingAllPostsByUser();
             Map<Long, Post> postsMap =
-                    MapPosts(postQueries.SqlQueryForFindingMultiplePosts(params),ids);
+                    MapPosts(sqlForPostsByUser,userId);
             return postsMap.values().stream().toList();
         }
         else {
@@ -95,15 +95,9 @@ public class PostDAOImplement extends DAO_Implementaion implements PostDAO {
     @Override
     public List<Post> findFollowingUsersPosts(Long userId) throws UserNotFoundException {
         if (userDAO.existsById(userId)) {
-            String sqlForPostsIds = postQueries.SQLQueryForCurrentUserFollowingPosts(userId);
-            List<Long> ids= jdbcTemplate.query(sqlForPostsIds, new IdResultSetExtractor(), userId);
-            assert ids != null;
-            if (ids.isEmpty()) {
-                return List.of();
-            }
-            Object [] params = daoUtilities.preparingParamForTheQuery(ids);
+            String sqlForFollowingPosts = postQueries.SQLQueryForCurrentUserFollowingPosts();
             Map<Long, Post> postsMap =
-                    MapPosts(postQueries.SqlQueryForFindingMultiplePosts(params),ids);
+                    MapPosts(sqlForFollowingPosts,userId);
             return postsMap.values().stream().toList();
         }
         else {
@@ -114,7 +108,7 @@ public class PostDAOImplement extends DAO_Implementaion implements PostDAO {
 
     @Override
     public List<Post> findPostsBySearchQuery(String searchQuery, List<Long> authorFilter, String minDate, String maxDate) {
-        String sql = postQueries.SQLQueryForPostSearch(searchQuery, authorFilter, minDate, maxDate, 10, 0);
+        String sql = postQueries.SQLQueryForPostSearch();
         Map<Long, Post> postsMap = MapPosts(sql,searchQuery, authorFilter, minDate, maxDate);
         assert postsMap != null;
         if (!postsMap.isEmpty()) {
@@ -125,15 +119,8 @@ public class PostDAOImplement extends DAO_Implementaion implements PostDAO {
 
     @Override
     public List<Post> findTopPosts(Integer Offset) {
-        String sqlForPostsIds = postQueries.SQLQueryForTopPostsIds(Offset);
-        List<Long> ids= jdbcTemplate.query(sqlForPostsIds, new IdResultSetExtractor(), Offset);
-        assert ids != null;
-        if (ids.isEmpty()) {
-            return List.of();
-        }
-        Object [] params = daoUtilities.preparingParamForTheQuery(ids);
-        String sql = postQueries.SqlQueryForFindingMultiplePosts(params);
-        Map<Long, Post> postsMap = MapPosts(sql,Offset);
+        String sqlForTopPosts = postQueries.SQLQueryForTopPosts();
+        Map<Long, Post> postsMap = MapPosts(sqlForTopPosts,Offset);
         if (!postsMap.isEmpty()) {
             return postsMap.values().stream().toList();
         }

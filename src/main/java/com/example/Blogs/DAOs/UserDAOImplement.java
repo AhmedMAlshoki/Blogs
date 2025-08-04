@@ -78,7 +78,7 @@ public class UserDAOImplement extends DAO_Implementaion implements UserDAO  {
     @Override
     public User saveNewUser(User user) throws ExictingUserException {
         if (existsByUsername(user.getUsername())||existsByEmail(user.getEmail())) {
-            throw new ExictingUserException("User already exists");
+            throw new ExictingUserException("User already exists with that username or email");
         }
         else{
             String sql = userQueries.insertQuery();

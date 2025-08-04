@@ -31,7 +31,8 @@ public class PostResultSetExtractor implements ResultSetExtractor<Map<Long, Post
                 }
                 if (rs.getObject("like_id") != null)
                 {
-                    Like like = new Like(rs.getLong("like_user_id"),rs.getTimestamp("created_at").toLocalDateTime());
+                    Like like = new Like(rs.getLong("like_user_id"),
+                                         rs.getTimestamp("like_created_at").toLocalDateTime());
                     posts.get(postId).getLikes().add(like);
                 }
             }
