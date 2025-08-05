@@ -1,27 +1,33 @@
 package com.example.Blogs.DTOs;
 
 import com.example.Blogs.Models.Post;
+import com.fasterxml.jackson.annotation.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Getter
-@AllArgsConstructor
 @NoArgsConstructor
+@JsonRootName(value = "user")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserDTO {
     private Long id;
     private String username;
     private String displayName;
+    @JsonIgnore
     private String email;
+    @JsonIgnore
     private String password;
+    @JsonRawValue
     private LocalDateTime signedUpAt;
     @Setter
-    private List<PostDTO> posts;
+    @JsonAnyGetter
+    private Map<Long, PostDTO> posts;
 
     public UserDTO(Long id, String username, String displayName, LocalDateTime signedUpAt) {
         this.id = id;

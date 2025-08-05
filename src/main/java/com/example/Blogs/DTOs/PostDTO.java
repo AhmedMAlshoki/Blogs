@@ -1,6 +1,8 @@
 package com.example.Blogs.DTOs;
 
 import com.example.Blogs.Models.Like;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonRootName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,6 +14,8 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonRootName(value = "post")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class PostDTO {
     private Long id;
     private Long userId;

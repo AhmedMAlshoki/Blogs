@@ -19,13 +19,14 @@ public class ProfileResultSetExtractor implements ResultSetExtractor<User> {
                 rs.getObject("created_at", LocalDateTime.class)
         );
         while (rs.next()) {
-            user.getPosts().add(new Post(
-                    rs.getLong("post_id"),
-                    rs.getLong("id"),
-                    rs.getString("body"),
-                    rs.getString("title"),
-                    rs.getTimestamp("published_at").toLocalDateTime()
-            ));
+               Post post = new Post(
+                       rs.getLong("post_id"),
+                       rs.getLong("post_user_id"),
+                       rs.getString("body"),
+                       rs.getString("title"),
+                       rs.getTimestamp("created_at").toLocalDateTime());
+               user.getPosts().put(post.getId(), post);
+
         }
         return user;
     }

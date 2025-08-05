@@ -8,7 +8,9 @@ import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Data
 @Table("users")
@@ -27,7 +29,7 @@ public class User {
     @Column("created_at")
     private LocalDateTime signedUpAt;
 
-    private List<Post> posts;
+    private Map<Long, Post> posts;
 
 
     public User(String username, String displayName, String email, String password) { //Constructor to create a new user
@@ -35,7 +37,7 @@ public class User {
         this.displayName = displayName;
         this.email = email;
         this.password = password;
-        this.posts= new ArrayList<Post>();
+        this.posts= new HashMap<Long, Post>();
     }
 
     public User(long id, String username, String displayName, LocalDateTime signedUpAt) { //Constructor to Normal retrieve
@@ -43,7 +45,7 @@ public class User {
         this.username = username;
         this.displayName = displayName;
         this.signedUpAt = signedUpAt;
-        this.posts= new ArrayList<Post>();
+        this.posts= new HashMap<Long, Post>();
     }
 
     public User(Long id, String email, String password) { //Constructor to Login retrieve
