@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 @Data
 @AllArgsConstructor
@@ -16,17 +17,21 @@ public class CommentDTO {
     private Long postId;
     private String body;
     private Long userId;
-    private LocalDateTime createdAt;
+    private OffsetDateTime createdAt;
     public CommentDTO(String body,Long user,Long post) {
         this.body = body;
         this.userId = user;
         this.postId = post;
     }
-    public CommentDTO(Long id,String body,Long post,Long user, LocalDateTime createdAt) {
+    public CommentDTO(Long id,String body,Long post,Long user, OffsetDateTime createdAt) {
         this.body = body;
         this.userId = user;
         this.postId = post;
         this.id = id;
         this.createdAt = createdAt;
+    }
+
+    public void applyTimeOffset(Long offset) {
+        this.createdAt = this.createdAt.plusMinutes(offset);
     }
 }

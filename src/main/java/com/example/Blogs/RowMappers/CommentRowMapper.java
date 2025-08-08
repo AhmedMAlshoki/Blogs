@@ -6,6 +6,8 @@ import org.springframework.stereotype.Component;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.OffsetDateTime;
+
 @Component
 public class CommentRowMapper implements RowMapper<Comment> {
     @Override
@@ -15,7 +17,7 @@ public class CommentRowMapper implements RowMapper<Comment> {
                 rs.getString("body"),
                 rs.getLong("comment_post_id"),
                 rs.getLong("comment_user_id"),
-                rs.getTimestamp("created_at").toLocalDateTime()
+                rs.getObject("created_at", OffsetDateTime.class)
         );
     }
 }

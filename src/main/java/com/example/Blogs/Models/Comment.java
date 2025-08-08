@@ -6,6 +6,8 @@ import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+
 @Data
 @Table("comments")
 public class Comment {
@@ -17,18 +19,16 @@ public class Comment {
     private Long postId;
     private String body;
     @Column("created_at")
-    private LocalDateTime createdAt;
+    private OffsetDateTime createdAt;
 
     public Comment(String body,Long user,Long post) {
         this.body = body;
         this.userId = user;
         this.postId = post;
-        this.createdAt = LocalDateTime.now();
-
     }
 
 
-    public Comment(long id, String body, long commentPostId, long commentUserId, LocalDateTime createdAt) {
+    public Comment(long id, String body, long commentPostId, long commentUserId, OffsetDateTime createdAt) {
         this.id = id;
         this.body = body;
         this.postId = commentPostId;

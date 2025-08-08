@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.ResultSetExtractor;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -21,7 +22,7 @@ public class CommentResultSetExtractor implements ResultSetExtractor<Map<Long, L
                     rs.getString("body"),
                     rs.getLong("comment_post_id"),
                     rs.getLong("comment_user_id"),
-                    rs.getTimestamp("created_at").toLocalDateTime());
+                    rs.getObject("created_at", OffsetDateTime.class));
             if (!organizedComments.containsKey(rs.getLong("comment_post_id")))
                 organizedComments.put(rs.getLong("comment_post_id"), new ArrayList<Comment>());
             organizedComments.get(rs.getLong("comment_post_id")).add(comment);

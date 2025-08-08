@@ -46,5 +46,7 @@ public class UserDTO {
     }
 
 
-
+    public void applyTimeOffset(Long offset) {
+        this.signedUpAt = this.signedUpAt.plusMinutes(offset);
+    }
 }
