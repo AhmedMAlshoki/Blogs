@@ -9,6 +9,7 @@ import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 @Table("likes")
 @Data
@@ -18,14 +19,13 @@ public class Like {
     @Column("user_id")
     private Long userId;
     @JsonIgnore
-    private LocalDateTime createdAt;
+    private OffsetDateTime createdAt;
 
     public Like(Long user) {
         this.userId = user;
-        this.createdAt = LocalDateTime.now();
     }
 
-    public Like(Long user,LocalDateTime createdAt) {
+    public Like(Long user, OffsetDateTime createdAt) {
         this.userId = user;
         this.createdAt = createdAt;
     }

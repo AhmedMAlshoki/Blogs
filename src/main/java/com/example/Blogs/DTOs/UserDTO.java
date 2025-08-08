@@ -1,14 +1,10 @@
 package com.example.Blogs.DTOs;
 
-import com.example.Blogs.Models.Post;
 import com.fasterxml.jackson.annotation.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.time.LocalDateTime;
-import java.util.List;
+import java.time.OffsetDateTime;
 import java.util.Map;
 
 @Getter
@@ -24,12 +20,12 @@ public class UserDTO {
     @JsonIgnore
     private String password;
     @JsonRawValue
-    private LocalDateTime signedUpAt;
+    private OffsetDateTime signedUpAt;
     @Setter
     @JsonAnyGetter
     private Map<Long, PostDTO> posts;
 
-    public UserDTO(Long id, String username, String displayName, LocalDateTime signedUpAt) {
+    public UserDTO(Long id, String username, String displayName, OffsetDateTime signedUpAt) {
         this.id = id;
         this.username = username;
         this.displayName = displayName;

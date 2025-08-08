@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 @Component
 public class UserRowMapper implements RowMapper<User> {
@@ -22,6 +23,6 @@ public class UserRowMapper implements RowMapper<User> {
                 rs.getLong("id"),
                 rs.getString("username"),
                 rs.getString("display_name"),
-                rs.getObject("created_at", LocalDateTime.class));
+                rs.getObject("created_at", OffsetDateTime.class));
     }
 }

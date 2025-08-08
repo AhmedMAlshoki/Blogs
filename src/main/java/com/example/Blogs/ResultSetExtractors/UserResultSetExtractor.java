@@ -6,9 +6,8 @@ import org.springframework.jdbc.core.ResultSetExtractor;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
-import java.util.Map;
 
 public class UserResultSetExtractor implements ResultSetExtractor<List<User>> {
     @Override
@@ -19,7 +18,7 @@ public class UserResultSetExtractor implements ResultSetExtractor<List<User>> {
                     rs.getLong("id"),
                     rs.getString("username"),
                     rs.getString("display_name"),
-                    rs.getObject("created_at", LocalDateTime.class)
+                    rs.getObject("created_at", OffsetDateTime.class)
             );
             users.add(user);
         }

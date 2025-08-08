@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.ResultSetExtractor;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 public class ProfileResultSetExtractor implements ResultSetExtractor<User> {
     @Override
@@ -16,7 +17,7 @@ public class ProfileResultSetExtractor implements ResultSetExtractor<User> {
                 rs.getLong("id"),
                 rs.getString("username"),
                 rs.getString("display_name"),
-                rs.getObject("created_at", LocalDateTime.class)
+                rs.getObject("created_at", OffsetDateTime.class)
         );
         while (rs.next()) {
                Post post = new Post(
@@ -24,7 +25,7 @@ public class ProfileResultSetExtractor implements ResultSetExtractor<User> {
                        rs.getLong("post_user_id"),
                        rs.getString("body"),
                        rs.getString("title"),
-                       rs.getTimestamp("created_at").toLocalDateTime());
+                       rs.getObject("created_at", OffsetDateTime.class));
                user.getPosts().put(post.getId(), post);
 
         }

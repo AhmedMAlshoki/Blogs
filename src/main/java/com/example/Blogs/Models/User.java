@@ -2,14 +2,11 @@ package com.example.Blogs.Models;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.time.OffsetDateTime;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Data
@@ -27,7 +24,7 @@ public class User {
     private String password;
 
     @Column("created_at")
-    private LocalDateTime signedUpAt;
+    private OffsetDateTime signedUpAt;
 
     private Map<Long, Post> posts;
 
@@ -40,7 +37,7 @@ public class User {
         this.posts= new HashMap<Long, Post>();
     }
 
-    public User(long id, String username, String displayName, LocalDateTime signedUpAt) { //Constructor to Normal retrieve
+    public User(long id, String username, String displayName, OffsetDateTime signedUpAt) { //Constructor to Normal retrieve
         this.id = id;
         this.username = username;
         this.displayName = displayName;

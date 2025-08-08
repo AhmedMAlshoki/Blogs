@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.ResultSetExtractor;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -25,14 +26,14 @@ public class PostResultSetExtractor implements ResultSetExtractor<Map<Long, Post
                             rs.getLong("post_user_id"),
                             rs.getString("body"),
                             rs.getString("title"),
-                            rs.getTimestamp("created_at").toLocalDateTime());
+                            rs.getObject("created_at", OffsetDateTime.class));
                     postId = post.getId();
                     posts.put(post.getId(), post);
                 }
                 if (rs.getObject("like_id") != null)
                 {
                     Like like = new Like(rs.getLong("like_user_id"),
-                                         rs.getTimestamp("like_created_at").toLocalDateTime());
+                            rs.getObject("created_at", OffsetDateTime.class));
                     posts.get(postId).getLikes().add(like);
                 }
             }

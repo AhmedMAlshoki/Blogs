@@ -7,6 +7,7 @@ import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,15 +21,15 @@ public class Post {
     private String body;
     private String title;
     @Column("created_at")
-    private LocalDateTime createdAt;
-    private LocalDateTime updated_at;
+    private OffsetDateTime createdAt;
+    private OffsetDateTime updated_at;
     private List<Like> likes;
     public Post(String body,Long user) {
         this.body = body;
         this.userId = user;
     }
 
-    public Post(long id, long userId, String body,String title, LocalDateTime createdAt) {
+    public Post(long id, long userId, String body,String title, OffsetDateTime createdAt) {
         this.id = id;
         this.userId = userId;
         this.body = body;
