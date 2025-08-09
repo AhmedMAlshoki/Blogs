@@ -1,4 +1,4 @@
-package com.example.Blogs.DAOs.DAOUtilities;
+package com.example.Blogs.Utils.DAOUtilities;
 
 import java.util.List;
 

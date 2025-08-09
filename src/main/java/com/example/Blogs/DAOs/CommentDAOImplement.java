@@ -1,18 +1,17 @@
 package com.example.Blogs.DAOs;
 
-import com.example.Blogs.DAOs.DAOUtilities.DAOUtilities;
+import com.example.Blogs.Utils.DAOUtilities.DAOUtilities;
 import com.example.Blogs.DAOs.SqlQueries.CommentQueries;
 import com.example.Blogs.Exceptions.CommentNotFoundException;
 import com.example.Blogs.Exceptions.PostNotFoundException;
 import com.example.Blogs.Models.Comment;
-import com.example.Blogs.ResultSetExtractors.CommentResultSetExtractor;
-import com.example.Blogs.RowMappers.CommentRowMapper;
+import com.example.Blogs.Mappers.ResultSetExtractors.CommentResultSetExtractor;
+import com.example.Blogs.Mappers.RowMappers.CommentRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 public class CommentDAOImplement extends DAO_Implementaion implements CommentDAO {
 

@@ -1,4 +1,4 @@
-package com.example.Blogs.RowMappers;
+package com.example.Blogs.Mappers.RowMappers;
 
 import com.example.Blogs.Models.User;
 import org.springframework.jdbc.core.RowMapper;

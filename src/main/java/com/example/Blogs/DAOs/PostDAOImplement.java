@@ -1,11 +1,11 @@
 package com.example.Blogs.DAOs;
 
-import com.example.Blogs.DAOs.DAOUtilities.DAOUtilities;
+import com.example.Blogs.Utils.DAOUtilities.DAOUtilities;
 import com.example.Blogs.DAOs.SqlQueries.PostQueries;
 import com.example.Blogs.Exceptions.PostNotFoundException;
 import com.example.Blogs.Exceptions.UserNotFoundException;
 import com.example.Blogs.Models.Post;
-import com.example.Blogs.ResultSetExtractors.PostResultSetExtractor;
+import com.example.Blogs.Mappers.ResultSetExtractors.PostResultSetExtractor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;

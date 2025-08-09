@@ -1,19 +1,17 @@
 package com.example.Blogs.DAOs;
 
-import com.example.Blogs.DAOs.DAOUtilities.DAOUtilities;
 import com.example.Blogs.DAOs.SqlQueries.UserQueries;
 import com.example.Blogs.Exceptions.ExictingUserException;
 import com.example.Blogs.Exceptions.UserNotFoundException;
 import com.example.Blogs.Models.User;
-import com.example.Blogs.ResultSetExtractors.ProfileResultSetExtractor;
-import com.example.Blogs.ResultSetExtractors.UserResultSetExtractor;
-import com.example.Blogs.RowMappers.UserRowMapper;
+import com.example.Blogs.Mappers.ResultSetExtractors.ProfileResultSetExtractor;
+import com.example.Blogs.Mappers.ResultSetExtractors.UserResultSetExtractor;
+import com.example.Blogs.Mappers.RowMappers.UserRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 @Repository
 public class UserDAOImplement extends DAO_Implementaion implements UserDAO  {

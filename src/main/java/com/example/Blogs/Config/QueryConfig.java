@@ -1,8 +1,9 @@
 package com.example.Blogs.Config;
 
 import com.example.Blogs.DAOs.*;
-import com.example.Blogs.DAOs.DAOUtilities.*;
 import com.example.Blogs.DAOs.SqlQueries.*;
+import com.example.Blogs.Utils.DAOUtilities.DAOUtilities;
+import com.example.Blogs.Utils.DAOUtilities.DAOUtilitiesImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

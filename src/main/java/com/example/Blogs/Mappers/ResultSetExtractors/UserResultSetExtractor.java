@@ -1,4 +1,4 @@
-package com.example.Blogs.ResultSetExtractors;
+package com.example.Blogs.Mappers.ResultSetExtractors;
 
 import com.example.Blogs.Models.User;
 import org.springframework.dao.DataAccessException;

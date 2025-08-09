@@ -1,7 +1,5 @@
 package com.example.Blogs.DAOs.SqlQueries;
 
-import com.example.Blogs.DAOs.DAOUtilities.DAOUtilities;
-
 public class CommentPostgresQueries extends CommentQueries {
 
     public CommentPostgresQueries() {

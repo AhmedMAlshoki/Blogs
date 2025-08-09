@@ -1,4 +1,4 @@
-package com.example.Blogs.ResultSetExtractors;
+package com.example.Blogs.Mappers.ResultSetExtractors;
 
 import com.example.Blogs.Models.Comment;
 import com.example.Blogs.Models.Post;

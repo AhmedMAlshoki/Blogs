@@ -1,4 +1,4 @@
-package com.example.Blogs.Mappers;
+package com.example.Blogs.Mappers.MapStructMappers;
 
 
 import com.example.Blogs.DTOs.UserDTO;

@@ -1,4 +1,4 @@
-package com.example.Blogs.Mappers;
+package com.example.Blogs.Mappers.MapStructMappers;
 
 import com.example.Blogs.DTOs.PostDTO;
 import com.example.Blogs.Models.Post;
