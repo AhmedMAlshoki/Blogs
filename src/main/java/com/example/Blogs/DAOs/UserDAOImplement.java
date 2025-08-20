@@ -78,7 +78,7 @@ public class UserDAOImplement extends DAO_Implementaion implements UserDAO  {
 
 
     @Override
-    public User saveNewUser(User user) throws ExictingUserException {
+    public String saveNewUser(User user) throws ExictingUserException {
         if (existsByUsername(user.getUsername())||existsByEmail(user.getEmail())) {
             throw new ExictingUserException("User already exists with that username or email");
         }
@@ -89,7 +89,7 @@ public class UserDAOImplement extends DAO_Implementaion implements UserDAO  {
                     user.getDisplayName(),
                     user.getEmail(),
                     user.getPassword());
-            return user;
+            return "User have registered successfully";
         }
     }
 

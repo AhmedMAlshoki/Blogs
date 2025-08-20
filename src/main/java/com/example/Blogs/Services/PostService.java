@@ -6,4 +6,24 @@ public class PostService {
     public PostDTO getUserPosts(Long id) {
         return null;
     }
+
+    public PostDTO savePost(String body, String title) {
+        return null;
+    }
+
+    public PostDTO updatePost(Long id, String body, String title) {
+        return null;
+    }
+
+    public String deletePost(Long id) {
+        return null;
+    }
+
+    public Boolean likePost(Long id) {
+        return null;
+    }
+
+    public Boolean dislikePost(Long id) {
+        return null;
+    }
 }

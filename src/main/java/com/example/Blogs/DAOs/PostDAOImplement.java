@@ -127,13 +127,16 @@ public class PostDAOImplement extends DAO_Implementaion implements PostDAO {
     }
 
     @Override
-    public int saveNewPost(Post post) {
-        return jdbcTemplate.update(
+    public Post saveNewPost(Post post) {
+        int rowsAffected = jdbcTemplate.update(
                 postQueries.insertQuery(),
+                post.getUserId(),
                 post.getBody(),
-                post.getTitle(),
-                post.getUserId()
-        );
+                post.getTitle());
+        if (rowsAffected == 0) {
+            throw new PostNotFoundException("Post not saved");
+        }
+        return post;
     }
 
     @Override
@@ -146,11 +149,12 @@ public class PostDAOImplement extends DAO_Implementaion implements PostDAO {
     }
 
     @Override
-    public void deleteById(Long id) throws PostNotFoundException {
+    public String deleteById(Long id) throws PostNotFoundException {
         int rowsAffected = jdbcTemplate.update(postQueries.deleteQuery(), id);
         if (rowsAffected == 0) {
             throw new PostNotFoundException("Post with ID " + id + " not found.");
         }
+        return "Post with ID " + id + " deleted successfully.";
     }
 
 }

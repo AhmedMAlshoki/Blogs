@@ -12,7 +12,7 @@ public interface UserDAO {
     Optional<User> findById(Long id);
     List<User> findFollowers(Long userId);
     List<User> findFollowing(Long userId);
-    User saveNewUser(User user);
+    String saveNewUser(User user);
     String deleteById(Long id);
     List<User> getByUserIds(List<Long> ids);
     boolean existsById(Long id);

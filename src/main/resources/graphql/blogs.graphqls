@@ -27,11 +27,29 @@ type Query {
 type Mutation {
    saveNewComment(postId: ID!, body: String!): Comment
 
+    updateComment(body: String!,commentId: ID!,): String
+
+    deleteComment(commentId: ID!): String
+
     saveNewPost(title: String!, body: String!): Post
+
+    updatePost(postId: ID!, title: String!, body: String!): Post
+
+    deletePost(postId: ID!): String
 
     saveNewLike(postId: ID!): Like
 
-    registerNewUser(username: String!, password: String!, email: String, displayName: String): User
+    deleteLike(postId: ID!): String
+
+    followUser(userId: ID!): String
+
+    unfollowUser(userId: ID!): String
+
+    registerNewUser(username: String!, password: String!, email: String, displayName: String): String
+
+    updateUser(username: String!, password: String!, email: String, displayName: String): User
+
+    deleteUser(userId: ID!): String
 
     login(email: String!, password: String!): User
 
