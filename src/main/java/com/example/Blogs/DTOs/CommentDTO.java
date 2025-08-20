@@ -11,7 +11,6 @@ import java.time.OffsetDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonRootName(value="comment")
 public class CommentDTO {
     private Long id;
     private Long postId;

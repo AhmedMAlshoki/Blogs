@@ -7,6 +7,7 @@ import com.example.Blogs.Models.User;
 import com.example.Blogs.Mappers.ResultSetExtractors.ProfileResultSetExtractor;
 import com.example.Blogs.Mappers.ResultSetExtractors.UserResultSetExtractor;
 import com.example.Blogs.Mappers.RowMappers.UserRowMapper;
+import com.example.Blogs.Utils.DAOUtilities.DAOUtilities;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -18,10 +19,13 @@ public class UserDAOImplement extends DAO_Implementaion implements UserDAO  {
 
 
     private UserQueries userQueries;;
+    private DAOUtilities daoUtilities;
     @Autowired
-    public UserDAOImplement(JdbcTemplate jdbcTemplate, UserQueries userQueries) {
+    public UserDAOImplement(JdbcTemplate jdbcTemplate, UserQueries userQueries
+                            , DAOUtilities daoUtilities) {
         super(jdbcTemplate);
         this.userQueries = userQueries;
+        this.daoUtilities = daoUtilities;
     }
 
     @Override
@@ -98,6 +102,16 @@ public class UserDAOImplement extends DAO_Implementaion implements UserDAO  {
             return "User deleted successfully";
         }
         else throw new UserNotFoundException("User not found");
+    }
+
+    @Override
+    public List<User> getByUserIds(List<Long> ids) {
+        String sql = userQueries.getMultipleUsers();
+        Object[] params = daoUtilities.preparingParamForTheQuery(ids);
+        List<User> users = jdbcTemplate.query(sql, new UserResultSetExtractor(), params);
+        assert users != null;
+        if (!users.isEmpty()) return users;
+        return List.of();
     }
 
     @Override

@@ -12,8 +12,6 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonRootName(value = "post")
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class PostDTO {
     private Long id;
     private Long userId;
@@ -22,6 +20,7 @@ public class PostDTO {
     private OffsetDateTime createdAt;
     private OffsetDateTime updated_at;
     private List<Like> likes;
+    private UserDTO userDTO;
     public PostDTO(String body,Long user) {
         this.body = body;
         this.userId = user;

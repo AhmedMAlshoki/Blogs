@@ -71,4 +71,9 @@ public class UserPostgresQueries extends UserQueries{
     public String getUserCredential() {
         return "SELECT id, email, password FROM users WHERE email = $1;";
     }
+
+    @Override
+    public String getMultipleUsers() {
+        return "SELECT id,username,display_name,created_at FROM users WHERE id = ANY($1);";
+    }
 }

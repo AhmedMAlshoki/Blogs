@@ -37,7 +37,7 @@ public class QueryConfig {
 
     @Bean
     public UserDAO userDAO() {
-        return new UserDAOImplement(jdbcTemplate(),userQueries());
+        return new UserDAOImplement(jdbcTemplate(),userQueries(), daoUtilities());
     }
     @Bean
     public PostDAO postDAO() {

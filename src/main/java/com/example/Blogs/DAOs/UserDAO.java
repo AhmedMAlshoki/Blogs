@@ -14,6 +14,7 @@ public interface UserDAO {
     List<User> findFollowing(Long userId);
     User saveNewUser(User user);
     String deleteById(Long id);
+    List<User> getByUserIds(List<Long> ids);
     boolean existsById(Long id);
     boolean existsByUsername(String username);
     boolean existsByEmail(String email);

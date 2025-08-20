@@ -14,4 +14,5 @@ public abstract class UserQueries {
     public abstract String findFollowing();
     public abstract String getUserProfile();
     public abstract String getUserCredential ();
+    public abstract String getMultipleUsers();
 }

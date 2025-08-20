@@ -9,20 +9,17 @@ import java.util.Map;
 
 @Getter
 @NoArgsConstructor
-@JsonRootName(value = "user")
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserDTO {
+    @Setter
     private Long id;
+    @Setter
     private String username;
+    @Setter
     private String displayName;
-    @JsonIgnore
     private String email;
-    @JsonIgnore
     private String password;
-    @JsonRawValue
     private OffsetDateTime signedUpAt;
     @Setter
-    @JsonAnyGetter
     private Map<Long, PostDTO> posts;
 
     public UserDTO(Long id, String username, String displayName, OffsetDateTime signedUpAt) {
