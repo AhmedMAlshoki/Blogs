@@ -65,6 +65,7 @@ CREATE INDEX user_following_list ON relationships(follower_id);
 CREATE INDEX user_followers_list ON relationships(following_id);
 --to find is user is following another user or vise versa
 CREATE UNIQUE INDEX user_relationships_unique ON relationships (follower_id, following_id);
+CREATE UNIQUE INDEX user_like_post_unique ON likes (user_id, post_id);
 --for efficient search
 CREATE INDEX posts_search_idx ON posts USING GIN (search_vector);
 

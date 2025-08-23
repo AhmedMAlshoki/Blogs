@@ -19,11 +19,11 @@ public class PostService {
         return null;
     }
 
-    public Boolean likePost(Long id) {
+    public String likePost(Long id) {
         return null;
     }
 
-    public Boolean dislikePost(Long id) {
+    public String dislikePost(Long id) {
         return null;
     }
 }

@@ -37,7 +37,7 @@ type Mutation {
 
     deletePost(postId: ID!): String
 
-    saveNewLike(postId: ID!): Like
+    saveNewLike(postId: ID!): String
 
     deleteLike(postId: ID!): String
 

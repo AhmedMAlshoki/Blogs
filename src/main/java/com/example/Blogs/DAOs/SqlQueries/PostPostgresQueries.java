@@ -74,4 +74,14 @@ public  class  PostPostgresQueries extends PostQueries {
     public  String deleteQuery() {
         return "DELETE FROM posts WHERE id = $1;";
     }
+
+    @Override
+    public String likePostQuery() {
+        return "INSERT INTO likes (user_id, post_id) VALUES ($1, $2);";
+    }
+
+    @Override
+    public String dislikePostQuery() {
+        return "DELETE FROM likes WHERE user_id = $1 AND post_id = $2;";
+    }
 }

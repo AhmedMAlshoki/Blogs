@@ -172,4 +172,23 @@ public class UserDAOImplement extends DAO_Implementaion implements UserDAO  {
             throw new UserNotFoundException("User not found");
         }
     }
+
+    @Override
+    public String follow(Long followerId, Long followingId) {
+        String sql = userQueries.followUser();
+        try {
+            jdbcTemplate.update(sql, followerId, followingId);
+            return "User followed successfully";
+        } catch (Exception e) {
+            return "User already followed";
+        }
+    }
+
+    @Override
+    public String unfollow(Long followerId, Long followingId) {
+        String sql = userQueries.unfollowUser();
+        int result = jdbcTemplate.update(sql, followerId, followingId);
+        if (result == 1) return "User unfollowed successfully";
+        else return "No relationship found";
+    }
 }

@@ -33,12 +33,12 @@ public class PostMutationResolver {
     }
 
     @MutationMapping
-    public Boolean saveNewLike(@Argument Long id) {
+    public String saveNewLike(@Argument Long id) {
         return postService.likePost(id);
     }
 
     @MutationMapping
-    public Boolean deleteLike(@Argument Long id) {
+    public String deleteLike(@Argument Long id) {
         return postService.dislikePost(id);
     }
 }

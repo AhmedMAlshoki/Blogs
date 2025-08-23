@@ -21,4 +21,6 @@ public interface UserDAO {
     User update(User user);
     User getUserWithPosts(Long userId);
     User getUserCredential(String email);
+    String follow(Long followerId, Long followingId);
+    String unfollow(Long followerId, Long followingId);
 }

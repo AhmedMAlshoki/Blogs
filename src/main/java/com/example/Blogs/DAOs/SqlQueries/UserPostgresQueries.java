@@ -76,4 +76,14 @@ public class UserPostgresQueries extends UserQueries{
     public String getMultipleUsers() {
         return "SELECT id,username,display_name,created_at FROM users WHERE id = ANY($1);";
     }
+
+    @Override
+    public String followUser() {
+        return "INSERT INTO relationships (follower_id, following_id) VALUES ($1, $2);";
+    }
+
+    @Override
+    public String unfollowUser() {
+        return "DELETE FROM relationships WHERE follower_id = $1 AND following_id = $2;";
+    }
 }

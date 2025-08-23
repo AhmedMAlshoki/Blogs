@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
@@ -124,6 +125,35 @@ public class PostDAOImplement extends DAO_Implementaion implements PostDAO {
             return postsMap.values().stream().toList();
         }
         return List.of();
+    }
+
+    @Override
+    public String likePost(Long postId, Long userId) {
+        String sql = postQueries.likePostQuery();
+        if (existsById(postId))
+        {
+            try {
+                jdbcTemplate.update(sql, userId, postId);
+                return "Post Liked";
+            }
+            catch (Exception  e) {
+                return "User"+userId+"has already liked this post";
+            }
+        }
+        else {
+            return "Post not found";
+        }
+    }
+
+    @Override
+    public String dislikePost(Long postId, Long userId) {
+        String sql = postQueries.dislikePostQuery();
+        int rowsAffected = jdbcTemplate.update(sql, userId, postId);
+        if (rowsAffected > 0) {
+            return "Post Disliked";
+        }
+        else
+           return "User"+userId+"has not liked this post";
     }
 
     @Override
