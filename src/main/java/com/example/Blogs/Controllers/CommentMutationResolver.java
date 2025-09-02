@@ -2,6 +2,7 @@ package com.example.Blogs.Controllers;
 
 
 import com.example.Blogs.DTOs.CommentDTO;
+import com.example.Blogs.ExceptionHandler.GraphQLExceptionResolver;
 import com.example.Blogs.Services.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
@@ -10,8 +11,11 @@ import org.springframework.stereotype.Controller;
 
 @Controller
 public class CommentMutationResolver {
+    @Autowired
     private final CommentService commentService;
 
+    @Autowired
+    private GraphQLExceptionResolver graphQLExceptionResolver;
 
     @Autowired
     public CommentMutationResolver(CommentService commentService) {

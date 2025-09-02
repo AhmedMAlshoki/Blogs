@@ -3,6 +3,7 @@ package com.example.Blogs.Controllers;
 import com.example.Blogs.DTOs.CommentDTO;
 import com.example.Blogs.DTOs.PostDTO;
 import com.example.Blogs.DTOs.UserDTO;
+import com.example.Blogs.ExceptionHandler.GraphQLExceptionResolver;
 import com.example.Blogs.Services.CommentService;
 import com.example.Blogs.Services.PostService;
 import com.example.Blogs.Services.UserService;
@@ -21,6 +22,8 @@ public class FieldsResolvers {
     private PostService postService;
     @Autowired
     private CommentService commentService;
+    @Autowired
+    private GraphQLExceptionResolver graphQLExceptionResolver;
 
     @SchemaMapping(typeName = "Post", field = "user")
     public CompletableFuture<UserDTO> getUser(PostDTO post, DataLoader<Long, UserDTO> userDataLoader) {

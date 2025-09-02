@@ -51,9 +51,16 @@ type Mutation {
 
     deleteUser(userId: ID!): String
 
-    login(email: String!, password: String!): User
+    login(email: String!, password: String!): LoginResponse!
 
 }
+
+type LoginResponse {
+    token: String!
+    user: User!
+}
+
+
 
 type User {
     id: ID!

@@ -2,6 +2,7 @@ package com.example.Blogs.Controllers;
 
 
 import com.example.Blogs.DTOs.UserDTO;
+import com.example.Blogs.ExceptionHandler.GraphQLExceptionResolver;
 import com.example.Blogs.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
@@ -11,6 +12,8 @@ import org.springframework.stereotype.Controller;
 public class UserMutationResolver {
 
     private final UserService userService;
+    @Autowired
+    private GraphQLExceptionResolver graphQLExceptionResolver;
 
     @Autowired
     public UserMutationResolver(UserService userService) {
