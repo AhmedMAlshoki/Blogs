@@ -1,5 +1,6 @@
 package com.example.Blogs.Filters;
 
+import com.example.Blogs.AuthenticationObject.AdvancedEmailPasswordToken;
 import com.example.Blogs.Exceptions.HandlingRequestException;
 import com.example.Blogs.Filters.Wrappers.CachedBodyHttpServletRequest;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -45,8 +46,8 @@ public class EmailPasswordAuthenticationFilter extends OncePerRequestFilter {
 
                     if (email != null && password != null) {
                         // Create authentication token
-                        UsernamePasswordAuthenticationToken authToken =
-                                new UsernamePasswordAuthenticationToken(email, password);
+                        AdvancedEmailPasswordToken authToken =
+                                new AdvancedEmailPasswordToken(email, password);
 
                         // Set authentication in security context
                         try {
