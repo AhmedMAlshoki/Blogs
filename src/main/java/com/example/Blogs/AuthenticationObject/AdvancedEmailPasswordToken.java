@@ -1,18 +1,16 @@
 package com.example.Blogs.AuthenticationObject;
 
+import com.example.Blogs.Utils.ApiUtils.ClientApiInfo;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
-
-import java.time.LocalDateTime;
 import java.util.Collection;
 
 @Getter
 public class AdvancedEmailPasswordToken extends UsernamePasswordAuthenticationToken {
     @Setter
-    private String IP;
-    private String timeZone;
+    ClientApiInfo clientApiInfo;
     public AdvancedEmailPasswordToken(Object principal, Object credentials) {
         super(principal, credentials);
     }
@@ -21,8 +19,15 @@ public class AdvancedEmailPasswordToken extends UsernamePasswordAuthenticationTo
         super(principal, credentials, authorities);
     }
 
-    public void setTimeZone(LocalDateTime timeZone) {
-
+    public AdvancedEmailPasswordToken(Object principal, Object credentials, ClientApiInfo clientApiInfo) {
+        super(principal, credentials);
+        this.clientApiInfo = clientApiInfo;
     }
+
+    public AdvancedEmailPasswordToken(Object principal, Object credentials, Collection<? extends GrantedAuthority> authorities, ClientApiInfo clientApiInfo) {
+        super(principal, credentials, authorities);
+        this.clientApiInfo = clientApiInfo;
+    }
+
 
 }

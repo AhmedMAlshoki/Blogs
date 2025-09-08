@@ -11,6 +11,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 import org.springframework.graphql.GraphQlRequest;
 import org.springframework.graphql.support.DefaultGraphQlRequest;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,6 +25,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
+@Order(2)
 public class EmailPasswordAuthenticationFilter extends OncePerRequestFilter {
     private final ObjectMapper objectMapper = new ObjectMapper();
     @Autowired

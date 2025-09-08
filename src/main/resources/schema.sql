@@ -16,7 +16,9 @@ CREATE TABLE  IF NOT EXISTS posts (
                                            setweight(to_tsvector('english', coalesce(body, '')), 'B'))
         STORED,
     created_at TIMESTAMP WITH  TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    created_timezone timezone_enum DEFAULT 'UTC',
     updated_at TIMESTAMP WITH  TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_timezone timezone_enum DEFAULT 'UTC',
 );
 
 --users table
@@ -27,15 +29,17 @@ CREATE TABLE  IF NOT EXISTS users (
     email VARCHAR(255) UNIQUE UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
     created_at TIMESTAMP WITH  TIME ZONE ,
+    created_timezone timezone_enum DEFAULT 'UTC',
     updated_at TIMESTAMP WITH  TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    timezone VARCHAR(255)
+    updated_timezone timezone_enum DEFAULT 'UTC',
 );
 --likes table
 CREATE TABLE  IF NOT EXISTS likes (
     id SERIAL PRIMARY KEY,
     user_id SERIAL REFERENCES users(id),
     post_id SERIAL REFERENCES posts(id),
-    created_at TIMESTAMP WITH  TIME ZONE
+    created_at TIMESTAMP WITH  TIME ZONE,
+    created_timezone timezone_enum DEFAULT 'UTC',
 );
 
 --comments table
@@ -45,7 +49,9 @@ CREATE TABLE  IF NOT EXISTS comments (
     post_id SERIAL REFERENCES posts(id) ON DELETE CASCADE,
     body TEXT,
     created_at TIMESTAMP WITH TIME ZONE ,
+    created_timezone timezone_enum DEFAULT 'UTC',
     updated_at TIMESTAMP WITH  TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_timezone timezone_enum DEFAULT 'UTC',
 );
 --relationship table
 CREATE TABLE  IF NOT EXISTS relationships (
@@ -69,6 +75,35 @@ CREATE UNIQUE INDEX user_like_post_unique ON likes (user_id, post_id);
 --for efficient search
 CREATE INDEX posts_search_idx ON posts USING GIN (search_vector);
 
+CREATE TYPE timezone_enum AS ENUM (
+    'UTC',
+    'US/Eastern',
+    'US/Central',
+    'US/Mountain',
+    'US/Pacific',
+    'Europe/London',
+    'Europe/Paris',
+    'Europe/Berlin',
+    'Europe/Rome',
+    'Europe/Moscow',
+    'Asia/Tokyo',
+    'Asia/Shanghai',
+    'Asia/Kolkata',
+    'Asia/Dubai',
+    'Australia/Sydney',
+    'Australia/Melbourne',
+    'America/New_York',
+    'America/Chicago',
+    'America/Denver',
+    'America/Los_Angeles',
+    'America/Toronto',
+    'America/Vancouver',
+    'America/Sao_Paulo',
+    'America/Mexico_City',
+    'Africa/Cairo',
+    'Africa/Johannesburg',
+    'Pacific/Auckland'
+);
 --to get user's posts quickly using index
 CREATE TYPE search_result AS (
   id INTEGER,
