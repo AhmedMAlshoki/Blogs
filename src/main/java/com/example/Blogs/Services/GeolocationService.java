@@ -2,6 +2,7 @@ package com.example.Blogs.Services;
 
 
 import com.example.Blogs.AuthenticationObject.AdvancedEmailPasswordToken;
+import jakarta.annotation.PreDestroy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -53,5 +54,16 @@ public class GeolocationService {
             return null;
         }
 
+    }
+
+    @PreDestroy
+    public void cleanup() {
+        if (dbReader != null) {
+            try {
+                dbReader.close();
+            } catch (IOException e) {
+                logger.error("Error closing GeoIP database", e);
+            }
+        }
     }
 }

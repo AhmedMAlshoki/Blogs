@@ -36,8 +36,8 @@ CREATE TABLE  IF NOT EXISTS users (
 --likes table
 CREATE TABLE  IF NOT EXISTS likes (
     id SERIAL PRIMARY KEY,
-    user_id SERIAL REFERENCES users(id),
-    post_id SERIAL REFERENCES posts(id),
+    user_id INTEGER REFERENCES users(id),
+    post_id INTEGER REFERENCES posts(id),
     created_at TIMESTAMP WITH  TIME ZONE,
     created_timezone timezone_enum DEFAULT 'UTC',
 );
@@ -45,19 +45,19 @@ CREATE TABLE  IF NOT EXISTS likes (
 --comments table
 CREATE TABLE  IF NOT EXISTS comments (
     id INTEGER PRIMARY KEY,
-    user_id SERIAL REFERENCES users(id) ON DELETE CASCADE,
-    post_id SERIAL REFERENCES posts(id) ON DELETE CASCADE,
+    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+    post_id INTEGER REFERENCES posts(id) ON DELETE CASCADE,
     body TEXT,
     created_at TIMESTAMP WITH TIME ZONE ,
     created_timezone timezone_enum DEFAULT 'UTC',
-    updated_at TIMESTAMP WITH  TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_timezone timezone_enum DEFAULT 'UTC',
 );
 --relationship table
 CREATE TABLE  IF NOT EXISTS relationships (
     id SERIAL PRIMARY KEY,
-    follower_id SERIAL REFERENCES users(id) ON DELETE CASCADE,
-    following_id SERIAL REFERENCES users(id) ON DELETE CASCADE
+    follower_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+    following_id INTEGER REFERENCES users(id) ON DELETE CASCADE
 );
 
 --to get user's posts quickly using index
