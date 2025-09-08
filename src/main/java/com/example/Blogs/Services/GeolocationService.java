@@ -24,6 +24,7 @@ public class GeolocationService {
     private DatabaseReader dbReader;
     Authentication authentication;
 
+
     public GeolocationService(@Value("${geoip.database.path:classpath:GeoLite2-City.mmdb}") String geoIpDatabasePath) {
         try {
             File database = new File(geoIpDatabasePath);
@@ -38,7 +39,6 @@ public class GeolocationService {
             this.dbReader = null; // Ensure dbReader is null if loading fails
         }
 
-        authentication = (AdvancedEmailPasswordToken)SecurityContextHolder.getContext().getAuthentication();
     }
 
     public CityResponse geolocate(String ipAddress) {

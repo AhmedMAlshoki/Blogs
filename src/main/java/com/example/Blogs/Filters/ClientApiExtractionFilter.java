@@ -17,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.io.IOException;
@@ -28,7 +29,7 @@ import java.util.Optional;
 public class ClientApiExtractionFilter implements Filter {
     private static final Logger logger = LoggerFactory.getLogger(ClientApiExtractionFilter.class);
     private final ObjectMapper objectMapper = new ObjectMapper();
-    AdvancedEmailPasswordToken authentication;
+    Authentication authentication;
 
     @Autowired
     private GeolocationService geolocationService;
@@ -61,8 +62,15 @@ public class ClientApiExtractionFilter implements Filter {
                     // Optionally add response headers
                     httpResponse.setHeader("X-Processed-By", "ClientApiExtractionFilter");
                 }
-                authentication = (AdvancedEmailPasswordToken)SecurityContextHolder.getContext().getAuthentication();
-                authentication.setClientApiInfo(clientApiInfo);
+                authentication = SecurityContextHolder.getContext().getAuthentication();
+                if (authentication instanceof AdvancedEmailPasswordToken advancedToken) {
+                    advancedToken.setClientApiInfo(clientApiInfo);
+                    logger.debug("Enhanced authentication token with client API info for user: {}",
+                            authentication.getPrincipal());
+                } else {
+                    logger.warn("Authentication is not AdvancedEmailPasswordToken type: {}",
+                            authentication != null ? authentication.getClass().getSimpleName() : "null");
+                }
 
             } catch (Exception e) {
                 logger.error("Error extracting client API information", e);
@@ -99,6 +107,7 @@ public class ClientApiExtractionFilter implements Filter {
 
         // 4. Extract IP address and perform geolocation
         String clientIp = IPExtractor.getClientIpAddress(request);
+        builder.ipAddress(clientIp);
         if (clientIp != null && !clientIp.isEmpty()) {
             CityResponse geoResponse = geolocationService.geolocate(clientIp);
             if (geoResponse != null) {
@@ -106,7 +115,7 @@ public class ClientApiExtractionFilter implements Filter {
                     builder.country(geoResponse.getCountry().getName());
                 }
                 if (geoResponse.getCity() != null && geoResponse.getCity().getName() != null) {
-                    // Optionally add city or other details if needed
+                    builder.country(geoResponse.getCity().getName());
                 }
                 if (geoResponse.getLocation() != null && geoResponse.getLocation().getTimeZone() != null) {
                     Optional<Timezone> mappedTimezone = TimezoneMapper.mapMaxMindTimezoneToEnum(geoResponse.getLocation().getTimeZone());

@@ -35,6 +35,10 @@ public  class ClientApiInfo {
                 clientApi, version, platform, userAgent, country, timezone, ipAddress, customHeaders);
     }
 
+    //public class displayIPasString() {
+    //    return ipAddress;
+    //}
+
     public static class Builder {
         private String clientApi;
         private String version;
@@ -79,6 +83,12 @@ public  class ClientApiInfo {
             this.customHeaders.put(name, value);
             return this;
         }
+
+        public Builder ipAddress(String ipAddress) {
+            this.ipAddress = ipAddress;
+            return this;
+        }
+
 
         public ClientApiInfo build() {
             // Only build if we have at least some information
