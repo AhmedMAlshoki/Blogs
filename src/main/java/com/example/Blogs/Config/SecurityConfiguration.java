@@ -1,5 +1,6 @@
 package com.example.Blogs.Config;
 
+import com.example.Blogs.AuthenticationProviders.CustomAuthenticationProvider;
 import com.example.Blogs.Filters.EmailPasswordAuthenticationFilter;
 import com.example.Blogs.Filters.RequestCachingFilter;
 import com.example.Blogs.Services.Security.UserDetailsServiceImpl;
@@ -34,8 +35,8 @@ public class SecurityConfiguration {
         return new BCryptPasswordEncoder();
     }
     @Bean
-    public DaoAuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+    public CustomAuthenticationProvider customAuthenticationProvider() {
+        CustomAuthenticationProvider authProvider = new CustomAuthenticationProvider();
         authProvider.setUserDetailsService(userDetailsService);
         authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
