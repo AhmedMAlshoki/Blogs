@@ -2,6 +2,7 @@ package com.example.Blogs.Config;
 
 import com.example.Blogs.AuthenticationProviders.CustomAuthenticationProvider;
 import com.example.Blogs.Filters.EmailPasswordAuthenticationFilter;
+import com.example.Blogs.Filters.JwtAuthenticationFilter;
 import com.example.Blogs.Filters.RequestCachingFilter;
 import com.example.Blogs.Services.Security.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +29,6 @@ public class SecurityConfiguration {
     private UserDetailsServiceImpl  userDetailsService;
     @Autowired
     private RequestCachingFilter requestCachingFilter;
-    @Autowired
-    private EmailPasswordAuthenticationFilter emailPasswordAuthenticationFilter;
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -47,6 +46,15 @@ public class SecurityConfiguration {
     }
 
     @Bean
+    public JwtAuthenticationFilter jwtAuthenticationFilter() {
+        return new JwtAuthenticationFilter();
+    }
+
+    @Bean EmailPasswordAuthenticationFilter emailPasswordAuthenticationFilter() {
+        return new EmailPasswordAuthenticationFilter();
+    }
+
+    @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -56,7 +64,8 @@ public class SecurityConfiguration {
                         }
                 ).httpBasic(withDefaults());
         http.addFilterBefore(requestCachingFilter, UsernamePasswordAuthenticationFilter.class);
-        http.addFilterAt(emailPasswordAuthenticationFilter,UsernamePasswordAuthenticationFilter.class);
+        http.addFilterAt(emailPasswordAuthenticationFilter(),UsernamePasswordAuthenticationFilter.class);
+        http.addFilterAfter(jwtAuthenticationFilter(),UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 }

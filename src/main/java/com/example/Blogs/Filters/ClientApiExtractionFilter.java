@@ -92,7 +92,7 @@ public class ClientApiExtractionFilter implements Filter {
                     builder.country(geoResponse.getCountry().getName());
                 }
                 if (geoResponse.getCity() != null && geoResponse.getCity().getName() != null) {
-                    builder.country(geoResponse.getCity().getName());
+                    builder.city(geoResponse.getCity().getName());
                 }
                 if (geoResponse.getLocation() != null && geoResponse.getLocation().getTimeZone() != null) {
                     Optional<Timezone> mappedTimezone = TimezoneMapper.mapMaxMindTimezoneToEnum(geoResponse.getLocation().getTimeZone());

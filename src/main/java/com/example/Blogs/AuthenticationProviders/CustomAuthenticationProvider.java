@@ -33,7 +33,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         String password = (String) token.getCredentials();
         String emailFromDB = userDetailsService.loadUserByUsername(email).getUsername();
         String passwordFromDB = userDetailsService.loadUserByUsername(email).getPassword();
-        if (emailFromDB.equals(email) && passwordFromDB.equals(passwordEncoder.encode(password))) {
+        if (emailFromDB.equals(email) && passwordEncoder.matches(password, passwordFromDB)) {
             // If authentication is successful, create a new AdvancedEmailPasswordToken
             // marked as authenticated, and include authorities.
             List<GrantedAuthority> authorities = new ArrayList<>();

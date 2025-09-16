@@ -13,8 +13,9 @@ public  class ClientApiInfo {
     private final String version;
     private final String platform;
     private final String userAgent;
-    private final java.util.Map<String, String> customHeaders;
+    private final Map<String, String> customHeaders;
     private final String country;
+    private final String city;
     private final Timezone timezone;
     private final String ipAddress;
 
@@ -25,6 +26,7 @@ public  class ClientApiInfo {
         this.userAgent = builder.userAgent;
         this.customHeaders = builder.customHeaders;
         this.country = builder.country;
+        this.city = builder.city;
         this.timezone = builder.timezone;
         this.ipAddress = builder.ipAddress;
     }
@@ -44,6 +46,7 @@ public  class ClientApiInfo {
         private String version;
         private String platform;
         private String userAgent;
+        private String city;
         private String country;
         private Timezone timezone;
         private String ipAddress;
@@ -74,6 +77,10 @@ public  class ClientApiInfo {
             return this;
         }
 
+        public void city(String name) {
+            this.city = name;
+        }
+
         public Builder timezone(Timezone timezone) {
             this.timezone = timezone;
             return this;
@@ -98,5 +105,7 @@ public  class ClientApiInfo {
             }
             return null;
         }
+
+
     }
 }
