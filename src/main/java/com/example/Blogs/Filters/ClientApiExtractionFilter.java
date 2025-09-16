@@ -21,7 +21,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import java.io.IOException;
 import java.util.Optional;
 
-@Order(2)
+@Order(4)
 public class ClientApiExtractionFilter implements Filter {
     private static final Logger logger = LoggerFactory.getLogger(ClientApiExtractionFilter.class);
     private final ApiHelperMethods apiHelperMethods = new ApiHelperMethods();

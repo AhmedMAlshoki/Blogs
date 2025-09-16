@@ -11,6 +11,8 @@ import java.util.Collection;
 public class AdvancedEmailPasswordToken extends UsernamePasswordAuthenticationToken {
     @Setter
     ClientApiInfo clientApiInfo;
+    @Setter
+    String jwt;
     public AdvancedEmailPasswordToken(Object principal, Object credentials) {
         super(principal, credentials);
     }

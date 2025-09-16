@@ -10,6 +10,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
@@ -28,5 +30,14 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             throw new UsernameNotFoundException("User not found");
         }
         return UserDetailsImpl.build(user);
+    }
+
+    public UserDetails loadUserById(Long id) throws UsernameNotFoundException {
+
+        Optional<User> userOptional = userDAO.findById(id);
+        if(userOptional.isEmpty()){
+            throw new UsernameNotFoundException("User not found");
+        }
+        return UserDetailsImpl.build(userOptional.get());
     }
 }

@@ -20,7 +20,6 @@ import java.io.IOException;
 
 @Order(2)
 public class EmailPasswordAuthenticationFilter extends OncePerRequestFilter {
-    private final ObjectMapper objectMapper = new ObjectMapper();
     @Autowired
     private AuthenticationManager authenticationManager;
     private final ApiHelperMethods apiHelperMethods = new ApiHelperMethods();
