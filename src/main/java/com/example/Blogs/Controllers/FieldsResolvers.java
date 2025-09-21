@@ -3,7 +3,6 @@ package com.example.Blogs.Controllers;
 import com.example.Blogs.DTOs.CommentDTO;
 import com.example.Blogs.DTOs.PostDTO;
 import com.example.Blogs.DTOs.UserDTO;
-import com.example.Blogs.ExceptionHandler.GraphQLExceptionResolver;
 import com.example.Blogs.Services.CommentService;
 import com.example.Blogs.Services.PostService;
 import com.example.Blogs.Services.UserService;

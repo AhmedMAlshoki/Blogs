@@ -2,7 +2,6 @@ package com.example.Blogs.Controllers;
 
 
 import com.example.Blogs.DTOs.UserDTO;
-import com.example.Blogs.ExceptionHandler.GraphQLExceptionResolver;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;

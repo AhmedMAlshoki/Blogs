@@ -2,7 +2,6 @@ package com.example.Blogs.Controllers;
 
 
 import com.example.Blogs.DTOs.CommentDTO;
-import com.example.Blogs.ExceptionHandler.GraphQLExceptionResolver;
 import com.example.Blogs.Services.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;

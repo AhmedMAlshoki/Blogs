@@ -2,14 +2,13 @@ package com.example.Blogs.Filters;
 
 import com.example.Blogs.AuthenticationObject.AdvancedEmailPasswordToken;
 import com.example.Blogs.Exceptions.HandlingRequestException;
+import com.example.Blogs.Exceptions.UserNotFoundException;
 import com.example.Blogs.Utils.ApiUtils.ApiHelperMethods;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.annotation.Order;
 import org.springframework.graphql.GraphQlRequest;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
@@ -18,7 +17,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
-@Order(2)
 
 public class EmailPasswordAuthenticationFilter extends OncePerRequestFilter {
     @Autowired
@@ -50,17 +48,11 @@ public class EmailPasswordAuthenticationFilter extends OncePerRequestFilter {
                             Authentication authentication = authenticationManager.authenticate(authToken);
                             SecurityContextHolder.getContext().setAuthentication(authentication);
 
-                            // Optionally, you can modify the response here or let GraphQL handle it
-                            // For example, you might want to add a JWT token to the response
-
                         } catch (AuthenticationException e) {
-                            // Authentication failed - you can handle this here or let GraphQL handle it
-                            // Clear any existing authentication
-                            SecurityContextHolder.clearContext();
+                            throw new UserNotFoundException("User not found");
                         }
                     }
                 } catch (Exception e) {
-                    // Log the error and continue with the filter chain
                     throw new HandlingRequestException("Failed to process login mutation");
                 }
             }

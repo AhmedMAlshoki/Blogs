@@ -33,8 +33,8 @@ public  class ClientApiInfo {
 
     @Override
     public String toString() {
-        return String.format("ClientApiInfo{clientApi=\\'%s\\', version=\\'%s\\', platform=\\'%s\\', userAgent=\\'%s\\', country=\\'%s\\', timezone=%s, ipAddress=\\'%s\\', customHeaders=%s}",
-                clientApi, version, platform, userAgent, country, timezone, ipAddress, customHeaders);
+        return String.format("ClientApiInfo{clientApi=\\'%s\\', version=\\'%s\\', platform=\\'%s\\', userAgent=\\'%s\\',  country=\\'%s\\', city=\\'%s\\' timezone=%s, ipAddress=\\'%s\\', customHeaders=%s}",
+                clientApi, version, platform, userAgent, country, city, timezone, ipAddress, customHeaders);
     }
 
     //public class displayIPasString() {
@@ -77,8 +77,9 @@ public  class ClientApiInfo {
             return this;
         }
 
-        public void city(String name) {
+        public Builder city(String name) {
             this.city = name;
+            return this;
         }
 
         public Builder timezone(Timezone timezone) {
@@ -100,7 +101,7 @@ public  class ClientApiInfo {
         public ClientApiInfo build() {
             // Only build if we have at least some information
             if (clientApi != null || version != null || platform != null ||
-                    userAgent != null || !customHeaders.isEmpty() || country != null || timezone != null) {
+                    userAgent != null || !customHeaders.isEmpty() || country != null || city != null || timezone != null) {
                 return new ClientApiInfo(this);
             }
             return null;

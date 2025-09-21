@@ -4,14 +4,12 @@ import com.example.Blogs.Filters.Wrappers.CachedBodyHttpServletRequest;
 import com.example.Blogs.Utils.ApiUtils.ApiHelperMethods;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
+
 import org.springframework.stereotype.Component;
 import java.io.IOException;
 
 
 @Component
-@Order(Ordered.HIGHEST_PRECEDENCE)
 public class RequestCachingFilter implements Filter {
 
     private final ApiHelperMethods apiHelperMethods = new ApiHelperMethods();

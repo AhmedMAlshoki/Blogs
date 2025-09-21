@@ -1,9 +1,8 @@
 package com.example.Blogs.Config;
 
 import com.example.Blogs.AuthenticationProviders.CustomAuthenticationProvider;
-import com.example.Blogs.Filters.EmailPasswordAuthenticationFilter;
-import com.example.Blogs.Filters.JwtAuthenticationFilter;
-import com.example.Blogs.Filters.RequestCachingFilter;
+import com.example.Blogs.ExceptionHandler.GraphQLFilterExceptionHandler;
+import com.example.Blogs.Filters.*;
 import com.example.Blogs.Services.Security.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -19,6 +18,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.filter.CorsFilter;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -29,6 +29,12 @@ public class SecurityConfiguration {
     private UserDetailsServiceImpl  userDetailsService;
     @Autowired
     private RequestCachingFilter requestCachingFilter;
+    @Autowired
+    private GraphQLFilterExceptionHandler graphQLFilterExceptionHandler;
+    @Autowired
+    private ClientApiExtractionFilter clientApiExtractionFilter;
+    @Autowired
+    private ExceptionHandlerFilter exceptionHandlerFilter;
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -63,9 +69,11 @@ public class SecurityConfiguration {
                             auth.anyRequest().permitAll();
                         }
                 ).httpBasic(withDefaults());
-        http.addFilterBefore(requestCachingFilter, UsernamePasswordAuthenticationFilter.class);
-        http.addFilterAt(emailPasswordAuthenticationFilter(),UsernamePasswordAuthenticationFilter.class);
-        http.addFilterAfter(jwtAuthenticationFilter(),UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(exceptionHandlerFilter, CorsFilter.class);
+        http.addFilterAfter(requestCachingFilter, ExceptionHandlerFilter.class);
+        http.addFilterAt(emailPasswordAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterAfter(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterAfter(clientApiExtractionFilter, JwtAuthenticationFilter.class);
         return http.build();
     }
 }

@@ -38,8 +38,6 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
             // marked as authenticated, and include authorities.
             List<GrantedAuthority> authorities = new ArrayList<>();
             authorities.add(null);
-
-
             return new AdvancedEmailPasswordToken(email, password, authorities, null);
         } else {
             throw new BadCredentialsException("Invalid email or password");

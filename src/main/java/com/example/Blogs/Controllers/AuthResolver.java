@@ -2,7 +2,6 @@ package com.example.Blogs.Controllers;
 
 
 import com.example.Blogs.CustomResponses.LoginResponse;
-import com.example.Blogs.ExceptionHandler.GraphQLExceptionResolver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;

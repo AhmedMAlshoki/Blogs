@@ -2,6 +2,7 @@ package com.example.Blogs.Filters;
 
 import com.example.Blogs.AuthenticationObject.AdvancedEmailPasswordToken;
 import com.example.Blogs.Enums.Timezone;
+import com.example.Blogs.Exceptions.HandlingRequestException;
 import com.example.Blogs.Filters.Wrappers.CachedBodyHttpServletRequest;
 import com.example.Blogs.Mappers.TimezoneMapper;
 import com.example.Blogs.Utils.ApiUtils.ApiHelperMethods;
@@ -14,18 +15,20 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.annotation.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
+
 import java.io.IOException;
 import java.util.Optional;
 
-@Order(4)
+@Component
 public class ClientApiExtractionFilter implements Filter {
     private static final Logger logger = LoggerFactory.getLogger(ClientApiExtractionFilter.class);
     private final ApiHelperMethods apiHelperMethods = new ApiHelperMethods();
-    Authentication authentication;
+    private Authentication authentication;
+
     @Autowired
     private GeolocationService geolocationService;
     @Override
@@ -60,7 +63,7 @@ public class ClientApiExtractionFilter implements Filter {
 
             } catch (Exception e) {
                 logger.error("Error extracting client API information", e);
-                // Continue with the filter chain even if extraction fails
+                throw new HandlingRequestException("Failed to process login mutation");
             }
         }
 

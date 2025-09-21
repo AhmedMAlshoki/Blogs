@@ -1,5 +1,6 @@
 package com.example.Blogs.Utils.Jwt;
 
+import com.example.Blogs.Exceptions.JwtFilterException;
 import com.example.Blogs.Services.Security.UserDetailsImpl;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
@@ -44,21 +45,23 @@ public class JwtUtil {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public boolean validateJwtToken(String authToken) {
+    public boolean validateJwtToken(String authToken) throws JwtFilterException {
         try {
             Jwts.parser().verifyWith(key()).build().parseSignedClaims(authToken);
             return true;
         } catch (MalformedJwtException e) {
             logger.error("Invalid JWT token: {}", e.getMessage());
+            throw new JwtFilterException("Invalid JWT token");
         } catch (ExpiredJwtException e) {
             logger.error("JWT token is expired: {}", e.getMessage());
+            throw new JwtFilterException("JWT token is expired");
         } catch (UnsupportedJwtException e) {
             logger.error("JWT token is unsupported: {}", e.getMessage());
+            throw new JwtFilterException("JWT token is unsupported");
         } catch (IllegalArgumentException e) {
             logger.error("JWT claims string is empty: {}", e.getMessage());
+            throw new JwtFilterException("JWT claims string is empty");
         }
-
-        return false;
     }
 
     public String getUserIdFromJwtToken(String token) {

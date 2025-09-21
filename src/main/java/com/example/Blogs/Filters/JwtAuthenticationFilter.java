@@ -1,7 +1,8 @@
 package com.example.Blogs.Filters;
 
 import com.example.Blogs.AuthenticationObject.AdvancedEmailPasswordToken;
-import com.example.Blogs.Exceptions.HandlingRequestException;
+import com.example.Blogs.Exceptions.JwtFilterException;
+import com.example.Blogs.Exceptions.UserNotAuthenticated;
 import com.example.Blogs.Services.Security.UserDetailsImpl;
 import com.example.Blogs.Services.Security.UserDetailsServiceImpl;
 import com.example.Blogs.Utils.ApiUtils.ApiHelperMethods;
@@ -11,20 +12,18 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.annotation.Order;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
-@Order(3)
+
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Autowired
     private  JwtUtil jwtUtil;
     private ApiHelperMethods apiHelperMethods = new ApiHelperMethods();
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
-
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
@@ -42,19 +41,20 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             } else if (jwt == null) {
                 Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-                if (authentication == null)
-                    throw new HandlingRequestException("User is not authenticated");
+                if (authentication == null) {
+                    throw new UserNotAuthenticated("User is not authenticated");
+                }
                 else if (authentication instanceof AdvancedEmailPasswordToken advancedToken) {
                     jwt = jwtUtil.generateJwtToken(advancedToken);
                     advancedToken.setJwt(jwt);
                 }
             }
         }
-        catch (Exception e){
-            throw new HandlingRequestException("Failed to process JWT token");
+        catch (JwtFilterException e){
+            throw new JwtFilterException(e.getMessage());
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
         }
-        finally {
-            filterChain.doFilter(request, response);
-        }
+        filterChain.doFilter(request, response);
     }
 }
