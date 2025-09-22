@@ -21,7 +21,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private PasswordEncoder passwordEncoder;
     @Override
     @Transactional
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+    public UserDetailsImpl loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = null;
         try {
             user = userDAO.getUserCredential(email);
@@ -32,12 +32,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         return UserDetailsImpl.build(user);
     }
 
-    public UserDetails loadUserById(Long id) throws UsernameNotFoundException {
+    public UserDetailsImpl loadUserById(Long id) throws UsernameNotFoundException {
 
-        Optional<User> userOptional = userDAO.findById(id);
-        if(userOptional.isEmpty()){
+        User userOptional = userDAO.findByIdUserDetails(id);
+        if(userOptional == null){
             throw new UsernameNotFoundException("User not found");
         }
-        return UserDetailsImpl.build(userOptional.get());
+        return UserDetailsImpl.build(userOptional);
     }
 }

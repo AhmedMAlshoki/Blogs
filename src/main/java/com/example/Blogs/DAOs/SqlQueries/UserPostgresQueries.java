@@ -87,4 +87,9 @@ public class UserPostgresQueries extends UserQueries{
     public String unfollowUser() {
         return "DELETE FROM relationships WHERE follower_id = $1 AND following_id = $2;";
     }
+
+    @Override
+    public String findByIdUserDetails() {
+        return "SELECT id, email, password FROM users WHERE id = $1;";
+    }
 }

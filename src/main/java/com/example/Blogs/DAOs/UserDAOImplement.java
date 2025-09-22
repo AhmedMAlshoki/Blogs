@@ -194,4 +194,15 @@ public class UserDAOImplement extends DAO_Implementation implements UserDAO  {
         if (result == 1) return "User unfollowed successfully";
         else return "No relationship found";
     }
+
+    @Override
+    public User findByIdUserDetails(Long id) {
+        if (existsById(id)) {
+            String sql = userQueries.getUserCredential();
+            return jdbcTemplate.queryForObject(sql, new UserRowMapper(), id);
+        }
+        else {
+            throw new UserNotFoundException("User not found");
+        }
+    }
 }

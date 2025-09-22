@@ -11,8 +11,6 @@ import org.springframework.stereotype.Controller;
 public class UserMutationResolver {
 
     private final UserService userService;
-    @Autowired
-    private GraphQLExceptionResolver graphQLExceptionResolver;
 
     @Autowired
     public UserMutationResolver(UserService userService) {
@@ -25,8 +23,8 @@ public class UserMutationResolver {
     }
 
     @MutationMapping
-    public UserDTO update(String username, String password, String email, String displayName) {
-        return userService.updateUser(username, password, email, displayName);
+    public UserDTO update(Long id, String username, String password, String email, String displayName) {
+        return userService.updateUser(id,username, password, email, displayName);
     }
 
     @MutationMapping

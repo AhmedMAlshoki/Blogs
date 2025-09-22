@@ -10,8 +10,6 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class AuthResolver {
 
-    @Autowired
-    private GraphQLExceptionResolver graphQLExceptionResolver;
 
     @MutationMapping
     private LoginResponse login(@Argument String email, @Argument String password) {

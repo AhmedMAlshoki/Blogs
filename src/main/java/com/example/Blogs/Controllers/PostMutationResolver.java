@@ -10,8 +10,6 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class PostMutationResolver {
 
-    @Autowired
-    private GraphQLExceptionResolver graphQLExceptionResolver;
     private final PostService postService;
 
     @Autowired

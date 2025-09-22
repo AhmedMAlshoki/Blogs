@@ -24,4 +24,5 @@ public interface UserDAO {
     User getUserCredential(String email);
     String follow(Long followerId, Long followingId);
     String unfollow(Long followerId, Long followingId);
+    User findByIdUserDetails(Long id);
 }

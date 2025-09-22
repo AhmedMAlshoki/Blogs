@@ -12,8 +12,6 @@ import java.util.List;
 @Controller
 public class PostQueryResolver {
 
-    @Autowired
-    private GraphQLExceptionResolver graphQLExceptionResolver;
 
     @QueryMapping
     public PostDTO  post(@Argument Long id) {

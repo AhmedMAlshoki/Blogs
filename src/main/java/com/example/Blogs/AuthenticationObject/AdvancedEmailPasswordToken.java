@@ -1,5 +1,6 @@
 package com.example.Blogs.AuthenticationObject;
 
+import com.example.Blogs.Services.Security.UserDetailsImpl;
 import com.example.Blogs.Utils.ApiUtils.ClientApiInfo;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,9 +11,9 @@ import java.util.Collection;
 @Getter
 public class AdvancedEmailPasswordToken extends UsernamePasswordAuthenticationToken {
     @Setter
-    ClientApiInfo clientApiInfo;
+    private ClientApiInfo clientApiInfo;
     @Setter
-    String jwt;
+    private String jwt;
     public AdvancedEmailPasswordToken(Object principal, Object credentials) {
         super(principal, credentials);
     }
@@ -32,4 +33,13 @@ public class AdvancedEmailPasswordToken extends UsernamePasswordAuthenticationTo
     }
 
 
+    public Long getCurrentUserId(){
+        return ((UserDetailsImpl) this.getPrincipal()).getId();
+    }
+    public String getCurrentUserEmail(){
+        return ((UserDetailsImpl) this.getPrincipal()).getUsername();
+    }
+    public String getCurrentUserPassword(){
+        return ((UserDetailsImpl) this.getPrincipal()).getPassword();
+    }
 }

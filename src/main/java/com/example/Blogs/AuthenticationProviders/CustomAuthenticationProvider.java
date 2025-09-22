@@ -2,6 +2,8 @@ package com.example.Blogs.AuthenticationProviders;
 
 import com.example.Blogs.AuthenticationObject.AdvancedEmailPasswordToken;
 import com.example.Blogs.DTOs.UserDTO;
+import com.example.Blogs.Services.Security.UserDetailsImpl;
+import com.example.Blogs.Services.Security.UserDetailsServiceImpl;
 import lombok.AllArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -18,7 +20,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 public class CustomAuthenticationProvider implements AuthenticationProvider {
-    private UserDetailsService userDetailsService;
+    private UserDetailsServiceImpl userDetailsService;
     private  PasswordEncoder passwordEncoder;
 
 
@@ -28,17 +30,20 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         AdvancedEmailPasswordToken token = (AdvancedEmailPasswordToken) authentication;
-
-        String email = token.getPrincipal().toString();
-        String password = (String) token.getCredentials();
-        String emailFromDB = userDetailsService.loadUserByUsername(email).getUsername();
-        String passwordFromDB = userDetailsService.loadUserByUsername(email).getPassword();
+        String email = null;
+        Object principal = authentication.getPrincipal();
+        if (principal instanceof String)
+            email = (String) principal;
+        else if (principal instanceof UserDetailsImpl)
+            email = ((UserDetailsImpl) principal).getUsername();
+        String password = (String) authentication.getCredentials();
+        UserDetailsImpl user = userDetailsService.loadUserByUsername(email);
+        String emailFromDB = user.getUsername();
+        String passwordFromDB = user.getPassword();
         if (emailFromDB.equals(email) && passwordEncoder.matches(password, passwordFromDB)) {
-            // If authentication is successful, create a new AdvancedEmailPasswordToken
-            // marked as authenticated, and include authorities.
             List<GrantedAuthority> authorities = new ArrayList<>();
             authorities.add(null);
-            return new AdvancedEmailPasswordToken(email, password, authorities, null);
+            return new AdvancedEmailPasswordToken(user, password, authorities, null);
         } else {
             throw new BadCredentialsException("Invalid email or password");
         }

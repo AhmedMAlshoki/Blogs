@@ -3,6 +3,8 @@ package com.example.Blogs.Filters;
 import com.example.Blogs.AuthenticationObject.AdvancedEmailPasswordToken;
 import com.example.Blogs.Exceptions.HandlingRequestException;
 import com.example.Blogs.Exceptions.UserNotFoundException;
+import com.example.Blogs.Models.User;
+import com.example.Blogs.Services.Security.UserDetailsImpl;
 import com.example.Blogs.Utils.ApiUtils.ApiHelperMethods;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -39,9 +41,10 @@ public class EmailPasswordAuthenticationFilter extends OncePerRequestFilter {
                     String password = apiHelperMethods.extractPassword(graphQLRequest);
 
                     if (email != null && password != null) {
+                        UserDetailsImpl user = new UserDetailsImpl(email, password);
                         // Create authentication token
                         AdvancedEmailPasswordToken authToken =
-                                new AdvancedEmailPasswordToken(email, password);
+                                new AdvancedEmailPasswordToken(user, password);
 
                         // Set authentication in security context
                         try {

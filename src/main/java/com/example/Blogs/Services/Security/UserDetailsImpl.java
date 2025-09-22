@@ -22,6 +22,10 @@ public class UserDetailsImpl implements UserDetails {
     private String password;
 
 
+    public UserDetailsImpl(String email, String password) {
+        this.email = email;
+        this.password = password;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

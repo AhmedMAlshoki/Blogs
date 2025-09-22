@@ -21,8 +21,7 @@ public class FieldsResolvers {
     private PostService postService;
     @Autowired
     private CommentService commentService;
-    @Autowired
-    private GraphQLExceptionResolver graphQLExceptionResolver;
+
 
     @SchemaMapping(typeName = "Post", field = "user")
     public CompletableFuture<UserDTO> getUser(PostDTO post, DataLoader<Long, UserDTO> userDataLoader) {

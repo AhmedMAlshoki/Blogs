@@ -19,9 +19,9 @@ import java.util.Date;
 public class JwtUtil {
     private static final Logger logger = LoggerFactory.getLogger(JwtUtil.class);
 
-    @Value("${ecommerce.app.jwtSecret}")
+    @Value("${Blogs.app.jwtSecret}")
     private String jwtSecret;
-    @Value("${ecommerce.app.jwtExpirationMs}")
+    @Value("${Blogs.app.jwtExpirationMs}")
     private int jwtExpirationMs;
 
 

@@ -14,8 +14,6 @@ public class CommentQueryResolver {
 
     @Autowired
     private CommentService commentService;
-    @Autowired
-    private GraphQLExceptionResolver graphQLExceptionResolver;
     @QueryMapping
     public Iterable<CommentDTO> commentsByPost(Long id) {
         return null;

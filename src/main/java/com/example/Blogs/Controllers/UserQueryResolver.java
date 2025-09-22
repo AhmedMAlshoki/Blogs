@@ -13,8 +13,6 @@ import org.springframework.stereotype.Controller;
 public class UserQueryResolver {
 
     //UserService
-    @Autowired
-    private GraphQLExceptionResolver graphQLExceptionResolver;
 
     @QueryMapping
     public Iterable<UserDTO> users() {

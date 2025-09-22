@@ -37,6 +37,15 @@ public class User {
         this.posts= new HashMap<Long, Post>();
     }
 
+    public User(Long id, String username, String displayName, String email, String password) { //Constructor to update a  user
+        this.id = id;
+        this.username = username;
+        this.displayName = displayName;
+        this.email = email;
+        this.password = password;
+        this.posts= new HashMap<Long, Post>();
+    }
+
     public User(long id, String username, String displayName, OffsetDateTime signedUpAt) { //Constructor to Normal retrieve
         this.id = id;
         this.username = username;

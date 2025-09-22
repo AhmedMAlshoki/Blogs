@@ -17,4 +17,5 @@ public abstract class UserQueries {
     public abstract String getMultipleUsers();
     public abstract String followUser();
     public abstract String unfollowUser();
+    public abstract String findByIdUserDetails();
 }

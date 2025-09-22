@@ -13,8 +13,6 @@ public class CommentMutationResolver {
     @Autowired
     private final CommentService commentService;
 
-    @Autowired
-    private GraphQLExceptionResolver graphQLExceptionResolver;
 
     @Autowired
     public CommentMutationResolver(CommentService commentService) {

@@ -84,4 +84,5 @@ public  class  PostPostgresQueries extends PostQueries {
     public String dislikePostQuery() {
         return "DELETE FROM likes WHERE user_id = $1 AND post_id = $2;";
     }
+
 }
