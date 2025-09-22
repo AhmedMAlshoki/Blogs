@@ -29,12 +29,12 @@ public class FieldsResolvers {
     }
 
     @SchemaMapping(typeName = "User", field = "posts")
-    public PostDTO getPosts(UserDTO user) {
+    public Iterable<PostDTO> getPosts(UserDTO user) {
         return postService.getUserPosts(user.getId());
     }
 
     @SchemaMapping(typeName = "Post", field = "comments")
-    public CommentDTO getComments(PostDTO post) {
+    public Iterable<CommentDTO> getComments(PostDTO post) {
         return commentService.getPostComments(post.getId());
     }
 

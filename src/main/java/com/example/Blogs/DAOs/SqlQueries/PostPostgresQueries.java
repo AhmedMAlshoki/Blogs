@@ -85,4 +85,9 @@ public  class  PostPostgresQueries extends PostQueries {
         return "DELETE FROM likes WHERE user_id = $1 AND post_id = $2;";
     }
 
+    @Override
+    public String getPostOwnerQuery() {
+        return "SELECT user_id FROM posts WHERE id = $1;";
+    }
+
 }

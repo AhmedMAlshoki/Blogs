@@ -14,4 +14,5 @@ public abstract class PostQueries {
     public abstract String deleteQuery();
     public abstract String likePostQuery();
     public abstract String dislikePostQuery();
+    public abstract String getPostOwnerQuery();
 }

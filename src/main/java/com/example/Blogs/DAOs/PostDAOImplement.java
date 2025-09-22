@@ -158,7 +158,13 @@ public class PostDAOImplement extends DAO_Implementation implements PostDAO {
             return "Post Disliked";
         }
         else
-           return "User"+userId+"has not liked this post";
+           return "User "+userId+" has not liked this post";
+    }
+
+    @Override
+    public Long getPostOwner(Long postId) {
+        String sql = postQueries.getPostOwnerQuery();
+        return jdbcTemplate.queryForObject(sql, Long.class, postId);
     }
 
     @Override

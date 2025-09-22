@@ -37,6 +37,31 @@ public class Post {
         this.title = title;
         List<Like> likes = new ArrayList<Like>();
     }
+     public Post(Long id, String body, String title, Long userId)
+     {
+         this.id = id;
+         this.body = body;
+         this.title = title;
+         this.userId = userId;
+         this.likes = new ArrayList<Like>();
+     }
+
+    public Post(Long id, String body, String title)
+    {
+        this.id = id;
+        this.body = body;
+        this.title = title;
+        this.likes = new ArrayList<Like>();
+    }
+
+
+    public Post(String body, String title, Long userId)
+    {
+        this.body = body;
+        this.title = title;
+        this.userId = userId;
+        this.likes = new ArrayList<Like>();
+    }
 
 
 }

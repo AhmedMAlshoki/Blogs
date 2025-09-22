@@ -18,4 +18,5 @@ public interface PostDAO {
     List<Post> findTopPosts(Integer offset);
     String likePost(Long postId, Long userId, Timezone timezone);
     String dislikePost(Long postId, Long userId);
+    Long getPostOwner(Long postId);
 }

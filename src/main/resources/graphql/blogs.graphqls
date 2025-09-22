@@ -17,7 +17,7 @@ type Query {
         maxDate: Date
         first: Int = 20 # Pagination (default 20 items)
         after: Int   # Cursor for pagination
-    ): PostConnection!
+    ): [Post]!
 
 
     commentsByPost(postId: ID!): [Comment]
@@ -93,20 +93,7 @@ type Comment {
     userId: ID!
 }
 
-type PostConnection {
-    edges: [PostEdge!]!
-    pageInfo: PageInfo!
-}
 
-type PostEdge {
-    cursor: Int!
-    node: Post!
-}
-
-type PageInfo {
-    hasNextPage: Boolean!
-    endCursor: Int
-}
 
 # Custom scalar for ISO 8601 dates (e.g., "2023-10-05T14:48:00Z")
 scalar Date
