@@ -1,6 +1,7 @@
 package com.example.Blogs.Services;
 
 import com.example.Blogs.AuthenticationObject.AdvancedEmailPasswordToken;
+import com.example.Blogs.CustomResponses.LoginResponse;
 import com.example.Blogs.DAOs.UserDAO;
 import com.example.Blogs.DTOs.UserDTO;
 import com.example.Blogs.Enums.Timezone;
@@ -14,6 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 
 @Service
@@ -29,6 +31,10 @@ public class UserService {
         this.userMapper = userMapper;
         this.userDAO = userDAO;
         this.authentication = (AdvancedEmailPasswordToken) SecurityContextHolder.getContext().getAuthentication();
+    }
+
+    public boolean isUserAuthorized(Long id) {
+        return Objects.equals(authentication.getCurrentUserId(), id);
     }
 
     public  UserDTO  findByUsername(String username){
@@ -51,6 +57,14 @@ public class UserService {
     public List<UserDTO> findFollowings(Long id){
         List<User> followings = userDAO.findFollowing(id);
         return followings.stream().map(userMapper::userToUserDTO).toList();
+    }
+
+    public LoginResponse loginResponse(){
+        LoginResponse loginResponse = new LoginResponse();
+        loginResponse.setToken(authentication.getJwt());
+        UserDTO user = userMapper.userToUserDTO(userDAO.findById(authentication.getCurrentUserId()).get());
+        loginResponse.setUser(user);
+        return loginResponse;
     }
 
     private String saveUser(User user){
