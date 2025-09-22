@@ -13,4 +13,5 @@ public abstract class CommentQueries {
     public abstract String SQLQueryForFindByPost();
     public abstract String SQLQueryForFindByUser();
     public abstract String SQLQueryForFindByMultiplePosts();
+    public abstract String getCommentOwnerQuery();
 }

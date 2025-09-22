@@ -45,4 +45,9 @@ public class CommentPostgresQueries extends CommentQueries {
     public String SQLQueryForFindByMultiplePosts() {
         return "SELECT * FROM comments WHERE post_id = ANY($1);";
     }
+
+    @Override
+    public String getCommentOwnerQuery() {
+        return "SELECT user_id FROM comments WHERE id = $1;";
+    }
 }

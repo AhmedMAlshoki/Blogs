@@ -17,7 +17,7 @@ import java.util.Objects;
 public class PostService {
     private final PostDAO postDAO;
     private final PostMapper postMapper;
-    private AdvancedEmailPasswordToken advancedEmailPasswordToken;
+    private final AdvancedEmailPasswordToken advancedEmailPasswordToken;
 
     @Autowired
     public PostService(PostDAO postDAO, PostMapper postMapper) {

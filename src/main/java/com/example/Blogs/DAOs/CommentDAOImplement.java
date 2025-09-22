@@ -55,6 +55,12 @@ public class CommentDAOImplement extends DAO_Implementation implements CommentDA
     }
 
     @Override
+    public Long findCommentOwner(Long id) {
+        String sql = commentQueries.getCommentOwnerQuery();
+        return jdbcTemplate.queryForObject(sql, Long.class, id);
+    }
+
+    @Override
     public String deleteById(Long id) {
         String sql = commentQueries.deleteQuery();
         int delete = jdbcTemplate.update(sql, id);
