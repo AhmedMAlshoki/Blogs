@@ -1,5 +1,6 @@
 package com.example.Blogs.DAOs;
 
+import com.example.Blogs.Enums.Timezone;
 import com.example.Blogs.Utils.DAOUtilities.DAOUtilities;
 import com.example.Blogs.DAOs.SqlQueries.CommentQueries;
 import com.example.Blogs.Exceptions.CommentNotFoundException;
@@ -13,7 +14,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import java.util.List;
 import java.util.Map;
 
-public class CommentDAOImplement extends DAO_Implementaion implements CommentDAO {
+public class CommentDAOImplement extends DAO_Implementation implements CommentDAO {
 
     private  DAOUtilities daoUtilities;
     private CommentQueries commentQueries;
@@ -44,12 +45,13 @@ public class CommentDAOImplement extends DAO_Implementaion implements CommentDAO
     }
 
     @Override
-    public Comment saveNewComment(Comment comment) {
+    public Comment saveNewComment(Comment comment, Timezone timezone) {
         String sql = commentQueries.insertQuery();
         return jdbcTemplate.queryForObject(sql, new CommentRowMapper(),
                                                  comment.getBody(),
                                                  comment.getUserId(),
-                                                 comment.getPostId());
+                                                 comment.getPostId(),
+                                                 timezone.toString());
     }
 
     @Override
@@ -72,9 +74,9 @@ public class CommentDAOImplement extends DAO_Implementaion implements CommentDAO
     }
 
     @Override
-    public String updateComment(String body, Long id) {
+    public String updateComment(String body, Long id, Timezone timezone) {
         String sql = commentQueries.updateQuery();
-        int update = jdbcTemplate.update(sql, body, id);
+        int update = jdbcTemplate.update(sql, body,timezone.toString(), id);
         if (update == 1) {
             return "Comment updated successfully.";
         } else {

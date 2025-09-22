@@ -1,5 +1,6 @@
 package com.example.Blogs.DAOs;
 
+import com.example.Blogs.Enums.Timezone;
 import com.example.Blogs.Utils.DAOUtilities.DAOUtilities;
 import com.example.Blogs.DAOs.SqlQueries.PostQueries;
 import com.example.Blogs.Exceptions.PostNotFoundException;
@@ -10,12 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
 @Repository
-public class PostDAOImplement extends DAO_Implementaion implements PostDAO {
+public class PostDAOImplement extends DAO_Implementation implements PostDAO {
 
     private  UserDAO userDAO;
     private PostQueries postQueries;
@@ -107,7 +107,12 @@ public class PostDAOImplement extends DAO_Implementaion implements PostDAO {
 
 
     @Override
-    public List<Post> findPostsBySearchQuery(String searchQuery, List<Long> authorFilter, String minDate, String maxDate) {
+    public List<Post> findPostsBySearchQuery(String searchQuery,
+                                             List<Long> authorFilter,
+                                             String minDate,
+                                             String maxDate,
+                                             Integer limit,
+                                             Integer offset) {
         String sql = postQueries.SQLQueryForPostSearch();
         Map<Long, Post> postsMap = MapPosts(sql,searchQuery, authorFilter, minDate, maxDate);
         assert postsMap != null;
@@ -128,16 +133,16 @@ public class PostDAOImplement extends DAO_Implementaion implements PostDAO {
     }
 
     @Override
-    public String likePost(Long postId, Long userId) {
+    public String likePost(Long postId, Long userId, Timezone timezone) {
         String sql = postQueries.likePostQuery();
         if (existsById(postId))
         {
             try {
-                jdbcTemplate.update(sql, userId, postId);
+                jdbcTemplate.update(sql, userId, postId, timezone.toString());
                 return "Post Liked";
             }
             catch (Exception  e) {
-                return "User"+userId+"has already liked this post";
+                return "User "+userId+" has already liked this post";
             }
         }
         else {
@@ -157,12 +162,13 @@ public class PostDAOImplement extends DAO_Implementaion implements PostDAO {
     }
 
     @Override
-    public Post saveNewPost(Post post) {
+    public Post saveNewPost(Post post , Timezone timezone) {
         int rowsAffected = jdbcTemplate.update(
                 postQueries.insertQuery(),
                 post.getUserId(),
                 post.getBody(),
-                post.getTitle());
+                post.getTitle(),
+                timezone.toString());
         if (rowsAffected == 0) {
             throw new PostNotFoundException("Post not saved");
         }
@@ -170,8 +176,8 @@ public class PostDAOImplement extends DAO_Implementaion implements PostDAO {
     }
 
     @Override
-    public Post updatePost(Post post) throws PostNotFoundException {
-        int rowsAffected = jdbcTemplate.update(postQueries.updateQuery(), post.getBody(), post.getTitle(), post.getId());
+    public Post updatePost(Post post , Timezone timezone) throws PostNotFoundException {
+        int rowsAffected = jdbcTemplate.update(postQueries.updateQuery(), post.getBody(), post.getTitle(), timezone.toString(), post.getId());
         if (rowsAffected == 0) {
             throw new PostNotFoundException("Post with ID " + post.getId() + " not found.");
         }

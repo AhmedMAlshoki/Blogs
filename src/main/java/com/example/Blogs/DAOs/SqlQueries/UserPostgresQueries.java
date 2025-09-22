@@ -18,12 +18,13 @@ public class UserPostgresQueries extends UserQueries{
 
     @Override
     public String insertQuery() {
-        return "INSERT INTO users (username, password, email, display_name) VALUES ($1 , $2, $3, $4);";
+        return "INSERT INTO users (username, password, email, display_name, created_timezone) VALUES ($1 , $2, $3, $4, $5);";
     }
 
     @Override
     public String updateQuery() {
-        return "UPDATE users SET username = $1, password = $2, email = $3, display_name = $4 WHERE id = $5;";
+        return "UPDATE users SET username = $1, password = $2, email = $3, display_name = $4, updated_timezone = $5" +
+                " WHERE id = $6;";
     }
 
     @Override

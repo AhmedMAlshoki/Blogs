@@ -50,4 +50,9 @@ public enum Timezone {
                 .filter(tz -> tz.zoneId.equals(zoneIdString))
                 .findFirst();
     }
+
+    @Override
+    public String toString() {
+        return this.zoneId;
+    }
 }

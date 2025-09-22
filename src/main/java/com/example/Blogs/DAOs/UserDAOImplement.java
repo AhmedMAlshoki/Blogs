@@ -1,6 +1,7 @@
 package com.example.Blogs.DAOs;
 
 import com.example.Blogs.DAOs.SqlQueries.UserQueries;
+import com.example.Blogs.Enums.Timezone;
 import com.example.Blogs.Exceptions.ExictingUserException;
 import com.example.Blogs.Exceptions.UserNotFoundException;
 import com.example.Blogs.Models.User;
@@ -15,7 +16,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 @Repository
-public class UserDAOImplement extends DAO_Implementaion implements UserDAO  {
+public class UserDAOImplement extends DAO_Implementation implements UserDAO  {
 
 
     private UserQueries userQueries;;
@@ -78,7 +79,7 @@ public class UserDAOImplement extends DAO_Implementaion implements UserDAO  {
 
 
     @Override
-    public String saveNewUser(User user) throws ExictingUserException {
+    public String saveNewUser(User user, Timezone timezone) throws ExictingUserException {
         if (existsByUsername(user.getUsername())||existsByEmail(user.getEmail())) {
             throw new ExictingUserException("User already exists with that username or email");
         }
@@ -88,7 +89,8 @@ public class UserDAOImplement extends DAO_Implementaion implements UserDAO  {
                     user.getUsername(),
                     user.getDisplayName(),
                     user.getEmail(),
-                    user.getPassword());
+                    user.getPassword(),
+                    timezone.toString());
             return "User have registered successfully";
         }
     }
@@ -140,13 +142,14 @@ public class UserDAOImplement extends DAO_Implementaion implements UserDAO  {
 
 
     @Override
-    public User update(User user) {
+    public User update(User user, Timezone timezone) {
         if (existsById(user.getId())) {
             String sql = userQueries.updateQuery();
             jdbcTemplate.update(sql,
                     user.getDisplayName(),
                     user.getEmail(),
                     user.getPassword(),
+                    timezone.toString(),
                     user.getId());
             return user;
         }

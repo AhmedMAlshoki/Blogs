@@ -62,12 +62,12 @@ public  class  PostPostgresQueries extends PostQueries {
 
     @Override
     public  String insertQuery() {
-        return "INSERT INTO posts (user_id, body, title) VALUES ($1 , $2, $3);";
+        return "INSERT INTO posts (user_id, body, title ,created_timezone) VALUES ($1 , $2, $3, $4);";
     }
 
     @Override
     public  String updateQuery() {
-        return "UPDATE posts SET body = $1,title = $2,WHERE id = $3;" ;
+        return "UPDATE posts SET body = $1,title = $2, updated_timezone = $3 WHERE id = $4;" ;
     }
 
     @Override
@@ -77,7 +77,7 @@ public  class  PostPostgresQueries extends PostQueries {
 
     @Override
     public String likePostQuery() {
-        return "INSERT INTO likes (user_id, post_id) VALUES ($1, $2);";
+        return "INSERT INTO likes (user_id, post_id, created_timezone) VALUES ($1, $2, $3);";
     }
 
     @Override

@@ -12,12 +12,12 @@ public class CommentPostgresQueries extends CommentQueries {
     }
     @Override
     public String insertQuery() {
-        return "INSERT INTO comments (user_id, post_id, body) VALUES ($1 , $2, $3);";
+        return "INSERT INTO comments (user_id, post_id, body, created_timezone) VALUES ($1 , $2, $3, $4);";
     }
 
     @Override
     public String updateQuery() {
-        return "UPDATE comments SET body = $1 WHERE id = $2;";
+        return "UPDATE comments SET body = $1 , updated_timezone = $2 WHERE id = $3;";
     }
 
     @Override

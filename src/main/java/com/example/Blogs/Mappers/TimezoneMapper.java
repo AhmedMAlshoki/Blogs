@@ -8,7 +8,7 @@ public class TimezoneMapper {
 
     public static Optional<Timezone> mapMaxMindTimezoneToEnum(String maxMindTimezone) {
         if (maxMindTimezone == null || maxMindTimezone.isEmpty()) {
-            return Optional.empty();
+            return Optional.of(Timezone.UTC);
         }
         // MaxMind timezones are typically IANA Time Zone Database identifiers (e.g., "America/New_York").
         // Our custom enum also uses these, so a direct string comparison is often sufficient.
