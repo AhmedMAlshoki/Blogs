@@ -7,6 +7,7 @@ import com.example.Blogs.Enums.Timezone;
 import com.example.Blogs.Mappers.MapStructMappers.PostMapper;
 import com.example.Blogs.Models.Post;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -50,6 +51,9 @@ public class PostService {
         List<Post> posts = postDAO.findPostsBySearchQuery(searchQuery, authorFilter, minDate, maxDate, limit, offset);
         return posts.stream().map(postMapper::postToPostDTO).toList();
     }
+
+
+
 
     public List<PostDTO> getTopPosts(Integer offset) {
         List<Post> posts = postDAO.findTopPosts(offset);
