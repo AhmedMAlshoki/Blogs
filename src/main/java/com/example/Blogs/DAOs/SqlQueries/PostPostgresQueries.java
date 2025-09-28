@@ -44,7 +44,15 @@ public  class  PostPostgresQueries extends PostQueries {
         return  theStandardSelectStatement() +
                 "FROM posts p LEFT JOIN likes l ON p.id = l.post_id" +
                 "WHERE p.created_at > NOW() - INTERVAL '1 week' " +
-                "GROUP BY p.id ORDER BY COUNT(l.post_id) DESC OFFSET $1 * 20  LIMIT 20";
+                "GROUP BY p.id ORDER BY COUNT(l.post_id) DESC  LIMIT 2000";
+    }
+
+    @Override
+    public String getTopPostsOffsetQuery() {
+        return  theStandardSelectStatement() +
+                "FROM posts p LEFT JOIN likes l ON p.id = l.post_id" +
+                "WHERE p.created_at > NOW() - INTERVAL '1 week' " +
+                "GROUP BY p.id ORDER BY COUNT(l.post_id) DESC  LIMIT 20 OFFSET $1 * 20";
     }
 
     @Override
@@ -89,5 +97,7 @@ public  class  PostPostgresQueries extends PostQueries {
     public String getPostOwnerQuery() {
         return "SELECT user_id FROM posts WHERE id = $1;";
     }
+
+
 
 }

@@ -60,10 +60,10 @@ public class PostDAOImplement extends DAO_Implementation implements PostDAO {
         return jdbcTemplate.query(sql, new PostResultSetExtractor(), id);
     }
 
+    private Map<Long, Post> MapPosts (String sql) {
+        return jdbcTemplate.query(sql, new PostResultSetExtractor());
+    }
 
-
-
-    //High Level Methods
     @Override
     public Post findById(Long id) throws PostNotFoundException {
         if (existsById(id)) {
@@ -123,9 +123,19 @@ public class PostDAOImplement extends DAO_Implementation implements PostDAO {
     }
 
     @Override
-    public List<Post> findTopPosts(Integer Offset) {
+    public List<Post> findTopPosts() {
         String sqlForTopPosts = postQueries.SQLQueryForTopPosts();
-        Map<Long, Post> postsMap = MapPosts(sqlForTopPosts,Offset);
+        Map<Long, Post> postsMap = MapPosts(sqlForTopPosts);
+        if (!postsMap.isEmpty()) {
+            return postsMap.values().stream().toList();
+        }
+        return List.of();
+    }
+
+    @Override
+    public List<Post> findTopPostsOffset(Integer offset) {
+        String sqlForTopPosts = postQueries.getTopPostsOffsetQuery();
+        Map<Long, Post> postsMap = MapPosts(sqlForTopPosts,offset);
         if (!postsMap.isEmpty()) {
             return postsMap.values().stream().toList();
         }

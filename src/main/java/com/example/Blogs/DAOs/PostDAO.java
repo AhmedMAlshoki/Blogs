@@ -15,7 +15,8 @@ public interface PostDAO {
     List<Post> findByUser(Long userId);
     List<Post> findFollowingUsersPosts(Long userId);
     List<Post> findPostsBySearchQuery(String searchQuery, List<Long> authorFilter, String minDate, String maxDate, Integer limit ,Integer offset);
-    List<Post> findTopPosts(Integer offset);
+    List<Post> findTopPosts();
+    List<Post> findTopPostsOffset(Integer offset);
     String likePost(Long postId, Long userId, Timezone timezone);
     String dislikePost(Long postId, Long userId);
     Long getPostOwner(Long postId);

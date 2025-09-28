@@ -1,4 +1,4 @@
-package com.example.Blogs.Controllers;
+package com.example.Blogs.Resolvers;
 
 import com.example.Blogs.DTOs.CommentDTO;
 import com.example.Blogs.Services.CommentService;

@@ -106,13 +106,13 @@ public class RedisConfiguration {
 
 
     @Bean
-    public RedisTemplate<Long, Post> redisTemplate() {
-        RedisTemplate<Long, Post> template = new RedisTemplate<>();
+    public RedisTemplate<String, Object> redisTemplate() {
+        RedisTemplate<String, Object> template = new RedisTemplate<>();
         template.setConnectionFactory(connectionFactory());
         template.setKeySerializer(new StringRedisSerializer());
         template.setHashKeySerializer(new StringRedisSerializer());
-        template.setHashValueSerializer(new Jackson2JsonRedisSerializer<>(Post.class));
-        template.setValueSerializer(new Jackson2JsonRedisSerializer<>(Post.class));
+        template.setHashValueSerializer(new Jackson2JsonRedisSerializer<>(Object.class));
+        template.setValueSerializer(new Jackson2JsonRedisSerializer<>(Object.class));
         return template;
     }
 
