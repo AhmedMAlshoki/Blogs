@@ -3,6 +3,7 @@ package com.example.Blogs.Models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.jdbc.core.mapping.AggregateReference;
 import org.springframework.data.relational.core.mapping.Column;
@@ -13,6 +14,7 @@ import java.time.OffsetDateTime;
 
 @Table("likes")
 @Data
+@NoArgsConstructor
 public class Like {
     @Id
     private Long id;

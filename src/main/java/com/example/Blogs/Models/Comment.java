@@ -1,6 +1,7 @@
 package com.example.Blogs.Models;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
@@ -10,6 +11,7 @@ import java.time.OffsetDateTime;
 
 @Data
 @Table("comments")
+@NoArgsConstructor
 public class Comment {
     @Id
     private Long id; // Schema specifies INTEGER, but SERIAL is likely intended

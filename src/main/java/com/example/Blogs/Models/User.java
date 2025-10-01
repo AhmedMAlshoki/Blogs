@@ -2,6 +2,7 @@ package com.example.Blogs.Models;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
@@ -12,6 +13,7 @@ import java.util.Map;
 @Data
 @Table("users")
 @AllArgsConstructor
+@NoArgsConstructor
 public class User {
     @Id
     private Long id;
