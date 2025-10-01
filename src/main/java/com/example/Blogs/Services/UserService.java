@@ -8,6 +8,7 @@ import com.example.Blogs.Enums.Timezone;
 import com.example.Blogs.Mappers.MapStructMappers.UserMapper;
 import com.example.Blogs.Models.User;
 import com.example.Blogs.Services.Security.UserDetailsImpl;
+import lombok.Setter;
 import org.mapstruct.control.MappingControl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -24,17 +25,18 @@ public class UserService {
 
     private final UserMapper userMapper;
     private final UserDAO userDAO;
-    private AdvancedEmailPasswordToken authentication;
+    @Setter
+    private AdvancedEmailPasswordToken advancedEmailPasswordToken;
 
     @Autowired
     public UserService(UserMapper userMapper, UserDAO userDAO) {
         this.userMapper = userMapper;
         this.userDAO = userDAO;
-        this.authentication = (AdvancedEmailPasswordToken) SecurityContextHolder.getContext().getAuthentication();
+        this.advancedEmailPasswordToken = (AdvancedEmailPasswordToken) SecurityContextHolder.getContext().getAuthentication();
     }
 
     public boolean isUserAuthorized(Long id) {
-        return Objects.equals(authentication.getCurrentUserId(), id);
+        return Objects.equals(advancedEmailPasswordToken.getCurrentUserId(), id);
     }
 
     public  UserDTO  findByUsername(String username){
@@ -61,14 +63,14 @@ public class UserService {
 
     public LoginResponse loginResponse(){
         LoginResponse loginResponse = new LoginResponse();
-        loginResponse.setToken(authentication.getJwt());
-        UserDTO user = userMapper.userToUserDTO(userDAO.findById(authentication.getCurrentUserId()).get());
+        loginResponse.setToken(advancedEmailPasswordToken.getJwt());
+        UserDTO user = userMapper.userToUserDTO(userDAO.findById(advancedEmailPasswordToken.getCurrentUserId()).get());
         loginResponse.setUser(user);
         return loginResponse;
     }
 
     private String saveUser(User user){
-        Timezone timezone = authentication.getClientApiInfo().getTimezone();
+        Timezone timezone = advancedEmailPasswordToken.getClientApiInfo().getTimezone();
         return userDAO.saveNewUser(user,timezone);
     }
 
@@ -88,7 +90,7 @@ public class UserService {
 
     public UserDTO updateUser(Long id,String username, String password, String email, String displayName) {
         User user = new User(id, username, displayName, email, password);
-        Timezone timezone = authentication.getClientApiInfo().getTimezone();
+        Timezone timezone = advancedEmailPasswordToken.getClientApiInfo().getTimezone();
         return userMapper.userToUserDTO(userDAO.update(user,timezone));
     }
 
@@ -97,12 +99,12 @@ public class UserService {
     }
 
     public String followUser(Long userId) {
-        Long currentUserId = ((UserDetailsImpl)authentication.getPrincipal()).getId();
+        Long currentUserId = ((UserDetailsImpl)advancedEmailPasswordToken.getPrincipal()).getId();
         return userDAO.follow(currentUserId, userId);
     }
 
     public String unfollowUser(Long userId) {
-        Long currentUserId = ((UserDetailsImpl)authentication.getPrincipal()).getId();
+        Long currentUserId = ((UserDetailsImpl)advancedEmailPasswordToken.getPrincipal()).getId();
         return userDAO.unfollow(currentUserId, userId);
     }
 }

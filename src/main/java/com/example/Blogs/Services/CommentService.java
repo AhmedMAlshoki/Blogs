@@ -6,6 +6,7 @@ import com.example.Blogs.DTOs.CommentDTO;
 import com.example.Blogs.Enums.Timezone;
 import com.example.Blogs.Mappers.MapStructMappers.CommentMapper;
 import com.example.Blogs.Models.Comment;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,8 @@ import java.util.stream.Collectors;
 public class CommentService {
     private final CommentDAO commentDAO;
     private final CommentMapper commentMapper;
-    private final AdvancedEmailPasswordToken advancedEmailPasswordToken;
+    @Setter
+    private  AdvancedEmailPasswordToken advancedEmailPasswordToken;
 
     @Autowired
     public CommentService(CommentDAO commentDAO, CommentMapper commentMapper, AdvancedEmailPasswordToken advancedEmailPasswordToken) {

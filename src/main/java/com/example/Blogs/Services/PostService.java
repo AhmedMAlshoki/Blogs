@@ -8,6 +8,7 @@ import com.example.Blogs.Exceptions.PostNotFoundException;
 import com.example.Blogs.Mappers.MapStructMappers.PostMapper;
 import com.example.Blogs.Models.Post;
 import com.example.Blogs.ScheduleJobs.TopPostsJob;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
@@ -27,7 +28,8 @@ import java.util.Objects;
 public class PostService {
     private final PostDAO postDAO;
     private final PostMapper postMapper;
-    private final AdvancedEmailPasswordToken advancedEmailPasswordToken;
+    @Setter
+    private  AdvancedEmailPasswordToken advancedEmailPasswordToken;
     private final RedisTemplate<String, Object> redisTemplate;
     private static final String TOP_POSTS_ORDER_KEY = "top_posts_order";
     private static final String POST_PREFIX = "post:";
