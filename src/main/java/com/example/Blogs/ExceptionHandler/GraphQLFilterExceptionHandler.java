@@ -26,7 +26,8 @@ public class GraphQLFilterExceptionHandler {
             HandlingRequestException.class,
             UserNotAuthenticated.class,
             AuthenticationException.class,
-            JwtFilterException.class
+            JwtFilterException.class,
+            TooManyRequestsException.class
     })
     public ResponseEntity<Map<String, Object>> handleFilterExceptions(Exception ex) {
         GraphQLError error = switch (ex) {
@@ -46,6 +47,8 @@ public class GraphQLFilterExceptionHandler {
                     authEx.getMessage(), ErrorType.UNAUTHORIZED, 401);
             case JwtFilterException jwtEx -> prepareGraphQLErrorResponse(
                     jwtEx.getMessage(), ErrorType.UNAUTHORIZED, 401);
+            case TooManyRequestsException tmrEx -> prepareGraphQLErrorResponse(
+                    tmrEx.getMessage(), ErrorType.BAD_REQUEST, 429);
             default -> prepareGraphQLErrorResponse(
                     "Internal server error", ErrorType.INTERNAL_ERROR, 500);
         };
