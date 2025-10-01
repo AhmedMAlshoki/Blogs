@@ -5,6 +5,7 @@ import com.example.Blogs.CustomResponses.LoginResponse;
 import com.example.Blogs.DAOs.UserDAO;
 import com.example.Blogs.DTOs.UserDTO;
 import com.example.Blogs.Enums.Timezone;
+import com.example.Blogs.Exceptions.UserNotFoundException;
 import com.example.Blogs.Mappers.MapStructMappers.UserMapper;
 import com.example.Blogs.Models.User;
 import com.example.Blogs.Services.Security.UserDetailsImpl;
@@ -40,14 +41,17 @@ public class UserService {
     }
 
     public  UserDTO  findByUsername(String username){
+        if (!userDAO.existsByUsername(username)) {
+            throw new UserNotFoundException("User not found");
+        }
         return userMapper.userToUserDTO(userDAO.findByUsername(username).get());
     }
 
-    public UserDTO findByEmail(String email){
-        return userMapper.userToUserDTO(userDAO.findByEmail(email).get());
-    }
 
-    public UserDTO findById(Long id){
+    public UserDTO findById(Long id) throws UserNotFoundException{
+        if (!userDAO.existsById(id)) {
+            throw new UserNotFoundException("User not found");
+        }
         return userMapper.userToUserDTO(userDAO.findById(id).get());
     }
 

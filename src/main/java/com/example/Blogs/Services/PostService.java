@@ -33,16 +33,13 @@ public class PostService {
     private final RedisTemplate<String, Object> redisTemplate;
     private static final String TOP_POSTS_ORDER_KEY = "top_posts_order";
     private static final String POST_PREFIX = "post:";
-    private final TopPostsJob topPostsJob;
 
     @Autowired
-    public PostService(PostDAO postDAO, PostMapper postMapper, RedisTemplate<String, Object> redisTemplate,
-                       TopPostsJob topPostsJob) {
+    public PostService(PostDAO postDAO, PostMapper postMapper, RedisTemplate<String, Object> redisTemplate) {
         this.postDAO = postDAO;
         this.postMapper = postMapper;
         this.advancedEmailPasswordToken = (AdvancedEmailPasswordToken) SecurityContextHolder.getContext().getAuthentication();
         this.redisTemplate = redisTemplate;
-        this.topPostsJob = topPostsJob;
     }
 
     public PostDTO getPost(Long id) {

@@ -14,16 +14,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 public class UserIdSetterAspect {
     @Pointcut("execution(* com.example.Blogs.Services.*.*(..))")
     public void serviceCall(){}
-
-
     @Before("serviceCall()")
     public void setAuthenticationToken(JoinPoint joinPoint) {
         Object target = joinPoint.getTarget();
         AdvancedEmailPasswordToken authentication = (AdvancedEmailPasswordToken)SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication != null) {
-
-            // Set the token based on the service type
             if (target instanceof CommentService) {
                 ((CommentService) target).setAdvancedEmailPasswordToken( authentication);
             } else if (target instanceof PostService) {

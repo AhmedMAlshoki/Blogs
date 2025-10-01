@@ -16,11 +16,16 @@ public class CommentQueryResolver {
     private CommentService commentService;
     @QueryMapping
     public Iterable<CommentDTO> commentsByPost(Long id) {
-        return null;
+        return commentService.getPostComments(id);
     }
 
     @QueryMapping
     public Iterable<CommentDTO> commentsByUser(Long id) {
-        return null;
+        return commentService.getUserComments(id);
+    }
+
+    @QueryMapping
+    public CommentDTO comment(Long id) {
+        return commentService.getComment(id);
     }
 }
