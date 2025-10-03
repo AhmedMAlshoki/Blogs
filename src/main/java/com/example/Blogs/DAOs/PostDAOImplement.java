@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -48,7 +49,7 @@ public class PostDAOImplement extends DAO_Implementation implements PostDAO {
         return jdbcTemplate.query(sql, new PostResultSetExtractor(), params);
     }
 
-    private Map<Long, Post> MapPosts (String sql,String searchQuery, List<Long> authorFilter, String minDate, String maxDate, Integer limit, Integer offset) {
+    private Map<Long, Post> MapPosts (String sql,String searchQuery, List<Long> authorFilter, OffsetDateTime minDate, OffsetDateTime maxDate, Integer limit, Integer offset) {
         return jdbcTemplate.query(sql, new PostResultSetExtractor(),searchQuery, authorFilter, minDate, maxDate);
     }
 
@@ -109,8 +110,8 @@ public class PostDAOImplement extends DAO_Implementation implements PostDAO {
     @Override
     public List<Post> findPostsBySearchQuery(String searchQuery,
                                              List<Long> authorFilter,
-                                             String minDate,
-                                             String maxDate,
+                                             OffsetDateTime minDate,
+                                             OffsetDateTime maxDate,
                                              Integer limit,
                                              Integer offset) {
         String sql = postQueries.SQLQueryForPostSearch();
