@@ -23,7 +23,7 @@ public class UserMutationResolver {
 
     @Validated
     @MutationMapping
-    public String registerNewUser(@Argument @NotBlank String username,
+    public String register(@Argument @NotBlank String username,
                                   @Argument @NotBlank String displayName,
                                   @Argument @NotBlank @Email String email,
                                   @Argument @NotBlank @Size(min = 8) String password) {

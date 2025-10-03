@@ -65,6 +65,22 @@ public class ApiHelperMethods {
         }
     }
 
+    public boolean isRegisterRequest(String requestBody)
+    {
+        try {
+            JsonNode jsonNode = objectMapper.readTree(requestBody);
+            String query = jsonNode.path("query").asText();
+
+            // Check if the query contains the login mutation
+            // This is a simple check - you might want to make it more sophisticated
+            return query.contains("mutation") &&
+                    (query.contains("register(") || query.contains("register "));
+
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     public  GraphQlRequest parseGraphQLRequest(String requestBody) throws IOException {
         JsonNode jsonNode = objectMapper.readTree(requestBody);
 

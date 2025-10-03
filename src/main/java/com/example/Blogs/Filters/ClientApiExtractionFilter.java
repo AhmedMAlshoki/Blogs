@@ -36,9 +36,14 @@ public class ClientApiExtractionFilter implements Filter {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
 
+
+
         if (apiHelperMethods.isGraphQLRequest(httpRequest)) {
             try {
-                // Extract client API information
+                if (apiHelperMethods.isRegisterRequest(apiHelperMethods.getRequestBody(httpRequest)))
+                {
+                    chain.doFilter(request,response);
+                }
                 ClientApiInfo clientApiInfo = extractClientApiInfo(httpRequest);
 
                 if (clientApiInfo != null) {

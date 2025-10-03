@@ -40,6 +40,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 authentication.setJwt(jwt);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             } else if (jwt == null) {
+                if (apiHelperMethods.isRegisterRequest(apiHelperMethods.getRequestBody(request)))
+                {
+                    filterChain.doFilter(request, response);
+                }
                 Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
                 if (authentication == null) {
                     throw new UserNotAuthenticated("User is not authenticated");

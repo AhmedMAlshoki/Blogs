@@ -33,6 +33,10 @@ public class EmailPasswordAuthenticationFilter extends OncePerRequestFilter {
             // Read the request body to check for login mutation
             String requestBody = apiHelperMethods.getRequestBody(request);
 
+            if (apiHelperMethods.isRegisterRequest(requestBody))
+            {
+                filterChain.doFilter(request,response);
+            }
             if (apiHelperMethods.isLoginMutation(requestBody)) {
                 try {
                     // Parse the GraphQL request to extract email and password
