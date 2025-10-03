@@ -138,14 +138,9 @@
             <artifactId>geoip2</artifactId>
             <version>4.0.0</version>
         </dependency>
-        <dependency>   <!-- Connection Pool 2 for Spring Redis Lettuce -->
+        <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-pool2</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.bucket4j</groupId>
-            <artifactId>bucket4j-core</artifactId>
-            <version>8.1.0</version>
         </dependency>
 	</dependencies>
 

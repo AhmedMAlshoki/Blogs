@@ -48,7 +48,7 @@ public class PostDAOImplement extends DAO_Implementation implements PostDAO {
         return jdbcTemplate.query(sql, new PostResultSetExtractor(), params);
     }
 
-    private Map<Long, Post> MapPosts (String sql,String searchQuery, List<Long> authorFilter, String minDate, String maxDate) {
+    private Map<Long, Post> MapPosts (String sql,String searchQuery, List<Long> authorFilter, String minDate, String maxDate, Integer limit, Integer offset) {
         return jdbcTemplate.query(sql, new PostResultSetExtractor(),searchQuery, authorFilter, minDate, maxDate);
     }
 
@@ -114,7 +114,7 @@ public class PostDAOImplement extends DAO_Implementation implements PostDAO {
                                              Integer limit,
                                              Integer offset) {
         String sql = postQueries.SQLQueryForPostSearch();
-        Map<Long, Post> postsMap = MapPosts(sql,searchQuery, authorFilter, minDate, maxDate);
+        Map<Long, Post> postsMap = MapPosts(sql,searchQuery, authorFilter, minDate, maxDate,limit,offset);
         assert postsMap != null;
         if (!postsMap.isEmpty()) {
             return postsMap.values().stream().toList();

@@ -93,9 +93,17 @@ public class UserService {
     }
 
     public UserDTO updateUser(Long id,String username, String password, String email, String displayName) {
-        User user = new User(id, username, displayName, email, password);
-        Timezone timezone = advancedEmailPasswordToken.getClientApiInfo().getTimezone();
-        return userMapper.userToUserDTO(userDAO.update(user,timezone));
+        try{
+            if (userDAO.existsById(id)) {
+                User user = new User(id, username, displayName, email, password);
+                Timezone timezone = advancedEmailPasswordToken.getClientApiInfo().getTimezone();
+                return userMapper.userToUserDTO(userDAO.update(user,timezone));
+            }
+            else throw new UserNotFoundException("User not found");
+        }
+        catch (Exception e){
+            throw new UserNotFoundException("Email or Username belong to another user");
+        }
     }
 
     public UserDTO getUserFullProfile(Long id){

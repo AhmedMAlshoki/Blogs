@@ -19,6 +19,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -64,8 +65,8 @@ public class PostService {
 
     public List<PostDTO> getPostsBySearchQuery(String searchQuery,
                                             List<Long> authorFilter,
-                                            String minDate,
-                                            String maxDate,
+                                            OffsetDateTime minDate,
+                                            OffsetDateTime maxDate,
                                             Integer limit,
                                             Integer offset) {
         List<Post> posts = postDAO.findPostsBySearchQuery(searchQuery, authorFilter, minDate, maxDate, limit, offset);

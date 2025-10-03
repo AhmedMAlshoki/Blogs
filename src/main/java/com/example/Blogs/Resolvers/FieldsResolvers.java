@@ -10,6 +10,7 @@ import org.dataloader.DataLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.SchemaMapping;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -23,16 +24,19 @@ public class FieldsResolvers {
     private CommentService commentService;
 
 
+    @Validated
     @SchemaMapping(typeName = "Post", field = "user")
     public CompletableFuture<UserDTO> getUser(PostDTO post, DataLoader<Long, UserDTO> userDataLoader) {
         return userDataLoader.load(post.getUserId());
     }
 
+    @Validated
     @SchemaMapping(typeName = "User", field = "posts")
     public Iterable<PostDTO> getPosts(UserDTO user) {
         return postService.getUserPosts(user.getId());
     }
 
+    @Validated
     @SchemaMapping(typeName = "Post", field = "comments")
     public Iterable<CommentDTO> getComments(PostDTO post) {
         return commentService.getPostComments(post.getId());

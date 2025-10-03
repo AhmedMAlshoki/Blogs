@@ -3,6 +3,7 @@ package com.example.Blogs.DAOs;
 import com.example.Blogs.Enums.Timezone;
 import com.example.Blogs.Models.Post;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 
 public interface PostDAO {
@@ -14,7 +15,7 @@ public interface PostDAO {
     String deleteById(Long id);
     List<Post> findByUser(Long userId);
     List<Post> findFollowingUsersPosts(Long userId);
-    List<Post> findPostsBySearchQuery(String searchQuery, List<Long> authorFilter, String minDate, String maxDate, Integer limit ,Integer offset);
+    List<Post> findPostsBySearchQuery(String searchQuery, List<Long> authorFilter, OffsetDateTime minDate, OffsetDateTime maxDate, Integer limit , Integer offset);
     List<Post> findTopPosts();
     List<Post> findTopPostsOffset(Integer offset);
     String likePost(Long postId, Long userId, Timezone timezone);
