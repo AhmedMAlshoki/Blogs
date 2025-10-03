@@ -9,6 +9,7 @@ import jakarta.validation.constraints.Positive;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 
@@ -33,6 +34,7 @@ public class CommentMutationResolver {
 
     @Validated
     @MutationMapping
+    @PreAuthorize("@userService.isUserAuthorized(#id)")
     public String updateComment(@Argument @NotNull  @Positive Long id,
                                 @Argument @NotBlank String body) {
         return commentService.updateComment(body, id);
@@ -40,6 +42,7 @@ public class CommentMutationResolver {
 
     @Validated
     @MutationMapping
+    @PreAuthorize("@userService.isUserAuthorized(#id)")
     public String deleteComment(@Argument @NotNull @Positive Long id) {
         return commentService.deleteComment(id);
     }

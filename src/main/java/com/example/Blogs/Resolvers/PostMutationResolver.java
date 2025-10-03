@@ -9,6 +9,7 @@ import jakarta.validation.constraints.Size;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 
@@ -31,6 +32,7 @@ public class PostMutationResolver {
 
     @Validated
     @MutationMapping
+    @PreAuthorize("@userService.isUserAuthorized(#id)")
     public PostDTO updatePost(@Argument @Positive @NotNull Long id,
                               @Argument @NotBlank String body,
                               @Argument @Size(min = 1, max = 50) String title) {
@@ -39,6 +41,7 @@ public class PostMutationResolver {
 
     @Validated
     @MutationMapping
+    @PreAuthorize("@userService.isUserAuthorized(#id)")
     public String deletePost(@Argument @Positive @NotNull Long id) {
         return postService.deletePost(id);
     }
