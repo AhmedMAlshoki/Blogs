@@ -13,9 +13,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 public class QueryConfig {
 
     @Autowired
-    private JdbcTemplate jdbcTemplate() {
-        return new JdbcTemplate();
-    }
+    private JdbcTemplate jdbcTemplate;
     @Bean
     public PostQueries postQueries() {
         return new PostPostgresQueries();
@@ -37,15 +35,15 @@ public class QueryConfig {
 
     @Bean
     public UserDAO userDAO() {
-        return new UserDAOImplement(jdbcTemplate(),userQueries(), daoUtilities());
+        return new UserDAOImplement(jdbcTemplate,userQueries(), daoUtilities());
     }
     @Bean
     public PostDAO postDAO() {
-        return new PostDAOImplement(jdbcTemplate(), userDAO(), postQueries(), daoUtilities());
+        return new PostDAOImplement(jdbcTemplate, userDAO(), postQueries(), daoUtilities());
     }
 
     @Bean
     public CommentDAO commentDAO() {
-        return new CommentDAOImplement(jdbcTemplate(), daoUtilities(), commentQueries(), userDAO(), postDAO());
+        return new CommentDAOImplement(jdbcTemplate, daoUtilities(), commentQueries(), userDAO(), postDAO());
     }
 }

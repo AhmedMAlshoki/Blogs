@@ -12,8 +12,10 @@ public  class  PostPostgresQueries extends PostQueries {
 
     private String theStandardSelectStatement(){
         return "SELECT p.id AS post_id, p.user_id AS post_user_id, p.body, p.title, p.created_at," +
-                " l.id AS like_id, l.user_id AS like_user_id, l.created_at AS like_created_at";
+                " l.id AS like_id, l.user_id AS like_user_id, l.created_at AS like_created_at ";
     }
+
+
 
 
     @Override
@@ -42,9 +44,9 @@ public  class  PostPostgresQueries extends PostQueries {
     @Override
     public String SQLQueryForTopPosts() {
         return  theStandardSelectStatement() +
-                "FROM posts p LEFT JOIN likes l ON p.id = l.post_id" +
+                "FROM posts p LEFT JOIN likes l ON p.id = l.post_id " +
                 "WHERE p.created_at > NOW() - INTERVAL '1 week' " +
-                "GROUP BY p.id ORDER BY COUNT(l.post_id) DESC  LIMIT 2000";
+                "GROUP BY p.id , l.id ORDER BY p.score DESC  LIMIT 2000";
     }
 
     @Override
@@ -52,15 +54,15 @@ public  class  PostPostgresQueries extends PostQueries {
         return  theStandardSelectStatement() +
                 "FROM posts p LEFT JOIN likes l ON p.id = l.post_id" +
                 "WHERE p.created_at > NOW() - INTERVAL '1 week' " +
-                "GROUP BY p.id ORDER BY COUNT(l.post_id) DESC  LIMIT 20 OFFSET $1 * 20";
+                "GROUP BY p.id ORDER BY p.score DESC  LIMIT 20 OFFSET $1 * 20";
     }
 
     @Override
     public String SQLQueryForCurrentUserFollowingPosts() { //TODO: implement this SQLQueryForCurrentUserFollowing
         return  theStandardSelectStatement() +
                 "FROM posts p LEFT JOIN likes l ON p.id = l.post_id" +
-                "INNER JOIN relationships r ON p.user_id = r.follower_id" +
-                "WHERE r.follower_id = $1 ORDER BY p.created_at DESC";
+                "INNER JOIN relationships r ON p.user_id = r.follower_id " +
+                "WHERE r.follower_id = $1 GROUP BY p.id ORDER BY p.created_at DESC";
     }
 
     @Override

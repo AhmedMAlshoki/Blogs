@@ -1,9 +1,10 @@
 package com.example.Blogs.Config;
-import com.example.Blogs.Config.RedisConfugurations.PostsRedisConfiguration;
-import com.example.Blogs.Models.Post;
+import com.example.Blogs.Config.RedisConfigurations.PostsRedisConfiguration;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
@@ -41,6 +42,8 @@ public class RedisConfiguration {
     @Value("${spring.redis.lettuce.pool.max-wait}")
     private long maxWait;
 
+    @Autowired
+    @Lazy
     private PostsRedisConfiguration postsRedisConfiguration;
 
 
@@ -61,7 +64,6 @@ public class RedisConfiguration {
     @Bean
     public LettuceClientConfiguration lettuceClientConfiguration() {
         return LettuceClientConfiguration.builder()
-                .useSsl().and()
                 .commandTimeout(Duration.ofSeconds(2))
                 .shutdownTimeout(Duration.ZERO)
                 .build();

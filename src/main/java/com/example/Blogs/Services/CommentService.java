@@ -25,10 +25,9 @@ public class CommentService {
     private  AdvancedEmailPasswordToken advancedEmailPasswordToken;
 
     @Autowired
-    public CommentService(CommentDAO commentDAO, CommentMapper commentMapper, AdvancedEmailPasswordToken advancedEmailPasswordToken) {
+    public CommentService(CommentDAO commentDAO, CommentMapper commentMapper) {
         this.commentDAO = commentDAO;
         this.commentMapper = commentMapper;
-        this.advancedEmailPasswordToken = (AdvancedEmailPasswordToken) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
     public boolean isUserAuthorized(Long id) {

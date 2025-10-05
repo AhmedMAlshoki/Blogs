@@ -39,7 +39,6 @@ public class PostService {
     public PostService(PostDAO postDAO, PostMapper postMapper, RedisTemplate<String, Object> redisTemplate) {
         this.postDAO = postDAO;
         this.postMapper = postMapper;
-        this.advancedEmailPasswordToken = (AdvancedEmailPasswordToken) SecurityContextHolder.getContext().getAuthentication();
         this.redisTemplate = redisTemplate;
     }
 

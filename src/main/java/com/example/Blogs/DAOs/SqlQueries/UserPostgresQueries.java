@@ -57,7 +57,7 @@ public class UserPostgresQueries extends UserQueries{
     @Override
     public String findFollowing() {
         return "SELECT u.id, u.username, u.display_name FROM users u " +
-                "INNER JOIN relationships r ON  u.id = r.follower_id" +
+                "INNER JOIN relationships r ON  u.id = r.follower_id " +
                 "WHERE r.follower_id = $1;";
     }
 

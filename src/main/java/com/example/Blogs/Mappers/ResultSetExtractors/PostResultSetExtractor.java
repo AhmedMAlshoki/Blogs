@@ -3,6 +3,7 @@ package com.example.Blogs.Mappers.ResultSetExtractors;
 import com.example.Blogs.Models.Comment;
 import com.example.Blogs.Models.Like;
 import com.example.Blogs.Models.Post;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
 
@@ -12,13 +13,16 @@ import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 public class PostResultSetExtractor implements ResultSetExtractor<Map<Long, Post>> {
     @Override
     public Map<Long, Post> extractData(ResultSet rs) throws SQLException, DataAccessException {
         Map<Long, Post> posts = new java.util.HashMap<>();
-        Long postId = rs.getLong("post_id");
+        Long postId = null;
+        log.info("Start Mapping ");
         while (rs.next()) {
             if(rs.getObject("post_id") != null) {
+                log.info("Mapping to Post id: {}", rs.getLong("post_id"));
                 if (!posts.containsKey(rs.getLong("post_id")))
                 {
                     Post post = new Post(

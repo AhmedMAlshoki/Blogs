@@ -33,7 +33,6 @@ public class UserService {
     public UserService(UserMapper userMapper, UserDAO userDAO) {
         this.userMapper = userMapper;
         this.userDAO = userDAO;
-        this.advancedEmailPasswordToken = (AdvancedEmailPasswordToken) SecurityContextHolder.getContext().getAuthentication();
     }
 
     public boolean isUserAuthorized(Long id) {

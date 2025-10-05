@@ -46,6 +46,10 @@ public class TopPostsJob {
             topPosts = topPosts.subList(0, TOTAL_TOP_POSTS);
         }
 
+        if (topPosts.isEmpty()) {
+            log.info("No top posts found");
+            return;
+        }
         // 3. Store each post individually in cache
         List<Long> postIds = new ArrayList<>();
 
