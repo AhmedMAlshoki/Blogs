@@ -54,7 +54,7 @@ public  class  PostPostgresQueries extends PostQueries {
         return  theStandardSelectStatement() +
                 "FROM posts p LEFT JOIN likes l ON p.id = l.post_id" +
                 "WHERE p.created_at > NOW() - INTERVAL '1 week' " +
-                "GROUP BY p.id ORDER BY p.score DESC  LIMIT 20 OFFSET $1 * 20";
+                "GROUP BY p.id , l.id ORDER BY p.score DESC  LIMIT 20 OFFSET $1 * 20";
     }
 
     @Override
@@ -62,12 +62,12 @@ public  class  PostPostgresQueries extends PostQueries {
         return  theStandardSelectStatement() +
                 "FROM posts p LEFT JOIN likes l ON p.id = l.post_id" +
                 "INNER JOIN relationships r ON p.user_id = r.follower_id " +
-                "WHERE r.follower_id = $1 GROUP BY p.id ORDER BY p.created_at DESC";
+                "WHERE r.follower_id = $1 GROUP BY p.id , l.id ORDER BY p.created_at DESC";
     }
 
     @Override
     public String SQLQueryForPostSearch() {
-        return "SELECT search_articles($1, $2, $3, $4, $5, $6);";  //user defined function in schema.sql file
+        return "SELECT search_articles($1, $2, $3, $4, $5, $6);";
     }
 
     @Override

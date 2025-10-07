@@ -9,11 +9,11 @@ CREATE TABLE  IF NOT EXISTS users (
     id SERIAL PRIMARY KEY,
     username VARCHAR(255) UNIQUE NOT NULL,
     display_name VARCHAR(255),
-    email VARCHAR(255) UNIQUE UNIQUE NOT NULL,
+    email VARCHAR(255) UNIQUE  NOT NULL,
     password VARCHAR(255) NOT NULL,
     created_at TIMESTAMP WITH  TIME ZONE ,
     created_timezone VARCHAR(255) DEFAULT 'UTC',
-    updated_at TIMESTAMP WITH  TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH  TIME ZONE ,
     updated_timezone VARCHAR(255) DEFAULT 'UTC'
 );
 --posts table
@@ -27,9 +27,9 @@ CREATE TABLE  IF NOT EXISTS posts (
                                            setweight(to_tsvector('english', coalesce(body, '')), 'B'))
         STORED,
     score INTEGER DEFAULT 0,
-    created_at TIMESTAMP WITH  TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMP WITH  TIME ZONE ,
     created_timezone VARCHAR(255) DEFAULT 'UTC',
-    updated_at TIMESTAMP WITH  TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH  TIME ZONE ,
     updated_timezone VARCHAR(255)
 );
 
@@ -37,21 +37,21 @@ CREATE TABLE  IF NOT EXISTS posts (
 --likes table
 CREATE TABLE  IF NOT EXISTS likes (
     id SERIAL PRIMARY KEY,
-    user_id INTEGER REFERENCES users(id),
-    post_id INTEGER REFERENCES posts(id),
+    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+    post_id INTEGER REFERENCES posts(id) ON DELETE CASCADE,
     created_at TIMESTAMP WITH  TIME ZONE,
     created_timezone VARCHAR(255) DEFAULT 'UTC'
 );
 
 --comments table
 CREATE TABLE  IF NOT EXISTS comments (
-    id INTEGER PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
     post_id INTEGER REFERENCES posts(id) ON DELETE CASCADE,
     body TEXT,
     created_at TIMESTAMP WITH TIME ZONE ,
     created_timezone VARCHAR(255) DEFAULT 'UTC',
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE ,
     updated_timezone VARCHAR(255) DEFAULT 'UTC'
 );
 --relationship table
@@ -60,6 +60,7 @@ CREATE TABLE  IF NOT EXISTS relationships (
     follower_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
     following_id INTEGER REFERENCES users(id) ON DELETE CASCADE
 );
+
 
 --to get user's posts quickly using index
 CREATE INDEX IF NOT EXISTS user_posts ON posts(user_id);
@@ -104,7 +105,7 @@ END ' LANGUAGE plpgsql;
         END IF;
         -- Example: Delete from another_table when a row is deleted from the triggered table
         IF TG_OP = ''DELETE'' THEN
-            UPDATE posts SET score = score - 1 WHERE id = NEW.post_id;
+            UPDATE posts SET score = score - 1 WHERE id = OLD.post_id;
             RETURN OLD;
         END IF;
         RETURN NULL;
@@ -141,13 +142,13 @@ CREATE TRIGGER posts_updated_at
 
 DROP TRIGGER IF EXISTS comments_updated_at ON comments;
 CREATE TRIGGER comments_updated_at
-    AFTER UPDATE ON comments
+    BEFORE UPDATE ON comments
     FOR EACH ROW
         EXECUTE FUNCTION update_updated_at();
 
 DROP TRIGGER IF EXISTS user_updated_at ON users;
 CREATE TRIGGER user_updated_at
-    AFTER UPDATE ON users
+    BEFORE UPDATE ON users
     FOR EACH ROW
         EXECUTE FUNCTION update_updated_at();
 -- Create created_at trigger Comments
@@ -163,22 +164,25 @@ LANGUAGE plpgsql;
 
 DROP TRIGGER IF EXISTS posts_created_at ON posts;
 CREATE TRIGGER posts_created_at
-    AFTER UPDATE ON posts
+    BEFORE INSERT ON posts
     FOR EACH ROW
         EXECUTE FUNCTION created_at();
 
 DROP TRIGGER IF EXISTS users_created_at ON users;
 CREATE TRIGGER users_created_at
-    AFTER UPDATE ON users
+    BEFORE INSERT ON users
     FOR EACH ROW
         EXECUTE FUNCTION created_at();
 
 DROP TRIGGER IF EXISTS comments_created_at ON comments;
 CREATE TRIGGER comments_created_at
-    AFTER UPDATE ON comments
+    BEFORE INSERT ON comments
     FOR EACH ROW
         EXECUTE FUNCTION created_at();
---The Search Articles Function 
+--The Search Articles Function
+
+
+
 CREATE OR REPLACE FUNCTION search_articles(
     search_query TEXT,
     author_filter INTEGER[] DEFAULT NULL,
@@ -189,16 +193,16 @@ CREATE OR REPLACE FUNCTION search_articles(
     ) RETURNS TABLE (
               results search_result,
               total_count BIGINT
-    ) AS '
+    ) AS $$
           DECLARE
           tsquery_var tsquery;
           total BIGINT;
     BEGIN
        -- Convert search query to tsquery, handling multiple words
-        SELECT array_to_string(array_agg(lexeme || '':*''), '' & '')
-        FROM unnest(regexp_split_to_array(trim(search_query), ''\s+'')) lexeme
+        SELECT array_to_string(array_agg(lexeme || ':*'), ' & ')
+        FROM unnest(regexp_split_to_array(trim(search_query), '\s+')) lexeme
         INTO search_query;
-        tsquery_var := to_tsquery(''english'', search_query);
+        tsquery_var := to_tsquery('english', search_query); --plainto_tsquery('english',search_query)
         -- Get total count for pagination
         SELECT COUNT(DISTINCT p.id)
         FROM posts p
@@ -218,11 +222,11 @@ CREATE OR REPLACE FUNCTION search_articles(
                              p.created_at as published_at,
                              ts_rank(p.search_vector, tsquery_var) *
                              CASE
-                                  WHEN p.created_at > NOW() - INTERVAL ''7 days'' THEN 1.5  -- Boost recent articles
-                                  WHEN p.created_at > NOW() - INTERVAL ''30 days'' THEN 1.2
+                                  WHEN p.created_at > NOW() - INTERVAL '7 days' THEN 1.5  -- Boost recent articles
+                                  WHEN p.created_at > NOW() - INTERVAL '30 days' THEN 1.2
                                   ELSE 1.0
                                   END as rank,
-                              ts_headline(''english'', p.body, tsquery_var, ''StartSel=<mark>, StopSel=</mark>, MaxFragments=1, MaxWords=50, MinWords=20'') as highlight
+                             ts_headline('english', p.body, tsquery_var, 'StartSel=<mark>, StopSel=</mark>, MaxFragments=1, MaxWords=50, MinWords=20') as highlight
                      FROM posts p
                      JOIN users u  ON p.user_id = u.id
                      AND p.search_vector @@ tsquery_var
@@ -238,22 +242,19 @@ CREATE OR REPLACE FUNCTION search_articles(
                      )
                )
                SELECT
-                     ra.id,
-                     ra.title,
-                     ra.subtitle,
-                     ra.author_name,
-                     ra.published_at,
-                     ra.rank,
-                     ra.highlight,
-                     total as total_count,
-                     likes_for_ranking.user_id,
-                     DENSE_RANK() OVER (PARTITION BY ra.id) as rank_order
+                     ROW(ra.id,
+                      ra.title,
+                      ra.body,
+                      ra.user_name,
+                      ra.published_at,
+                      ra.rank,
+                      ra.highlight)::search_result AS results,
+                     total as total_count
                FROM ranked_articles ra
                LEFT JOIN likes_for_ranking ON ra.id = likes_for_ranking.post_id
                ORDER BY ra.rank DESC
                LIMIT page_size
                OFFSET (page_number - 1) * page_size;
     END;
-'
-LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql;
 
