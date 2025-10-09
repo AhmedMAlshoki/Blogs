@@ -20,7 +20,7 @@ public  class  PostPostgresQueries extends PostQueries {
 
     @Override
     public  String existsById() {
-        return "SELECT EXISTS(SELECT 1 FROM posts WHERE id = $1 )";
+        return "SELECT EXISTS(SELECT 1 FROM posts WHERE id = ? )";
     }
 
 
@@ -28,14 +28,14 @@ public  class  PostPostgresQueries extends PostQueries {
     public  String SqlQueryForFindingAllPostsByUser() {
         return  theStandardSelectStatement() +
                 " FROM posts p LEFT JOIN likes l ON p.id = l.post_id" +
-                " WHERE p.user_id = $1 ORDER BY p.created_at DESC";
+                " WHERE p.user_id = ? ORDER BY p.created_at DESC";
     }
 
     @Override
     public  String SqlQueryForFindingOnePostOrMultiple() {
         return  theStandardSelectStatement() +
                 "FROM posts p " +
-                "LEFT JOIN likes l ON p.id = l.post_id WHERE p.id = ANY($1)";
+                "LEFT JOIN likes l ON p.id = l.post_id WHERE p.id = ANY(?)";
     }
 
 
@@ -54,7 +54,7 @@ public  class  PostPostgresQueries extends PostQueries {
         return  theStandardSelectStatement() +
                 "FROM posts p LEFT JOIN likes l ON p.id = l.post_id" +
                 "WHERE p.created_at > NOW() - INTERVAL '1 week' " +
-                "GROUP BY p.id , l.id ORDER BY p.score DESC  LIMIT 20 OFFSET $1 * 20";
+                "GROUP BY p.id , l.id ORDER BY p.score DESC  LIMIT 20 OFFSET ? * 20";
     }
 
     @Override
@@ -62,42 +62,42 @@ public  class  PostPostgresQueries extends PostQueries {
         return  theStandardSelectStatement() +
                 "FROM posts p LEFT JOIN likes l ON p.id = l.post_id" +
                 "INNER JOIN relationships r ON p.user_id = r.follower_id " +
-                "WHERE r.follower_id = $1 GROUP BY p.id , l.id ORDER BY p.created_at DESC";
+                "WHERE r.follower_id = ? GROUP BY p.id , l.id ORDER BY p.created_at DESC";
     }
 
     @Override
     public String SQLQueryForPostSearch() {
-        return "SELECT search_articles($1, $2, $3, $4, $5, $6);";
+        return "SELECT search_articles(?, ?, ?, ?, ?, ?);";
     }
 
     @Override
     public  String insertQuery() {
-        return "INSERT INTO posts (user_id, body, title ,created_timezone) VALUES ($1 , $2, $3, $4);";
+        return "INSERT INTO posts (user_id, body, title ,created_timezone) VALUES (? , ?, ?, ?);";
     }
 
     @Override
     public  String updateQuery() {
-        return "UPDATE posts SET body = $1,title = $2, updated_timezone = $3 WHERE id = $4;" ;
+        return "UPDATE posts SET body = ?,title = ?, updated_timezone = ? WHERE id = ?;" ;
     }
 
     @Override
     public  String deleteQuery() {
-        return "DELETE FROM posts WHERE id = $1;";
+        return "DELETE FROM posts WHERE id = ?;";
     }
 
     @Override
     public String likePostQuery() {
-        return "INSERT INTO likes (user_id, post_id, created_timezone) VALUES ($1, $2, $3);";
+        return "INSERT INTO likes (user_id, post_id, created_timezone) VALUES (?, ?, ?);";
     }
 
     @Override
     public String dislikePostQuery() {
-        return "DELETE FROM likes WHERE user_id = $1 AND post_id = $2;";
+        return "DELETE FROM likes WHERE user_id = ? AND post_id = ?;";
     }
 
     @Override
     public String getPostOwnerQuery() {
-        return "SELECT user_id FROM posts WHERE id = $1;";
+        return "SELECT user_id FROM posts WHERE id = ?;";
     }
 
 
