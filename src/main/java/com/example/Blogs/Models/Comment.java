@@ -1,5 +1,9 @@
 package com.example.Blogs.Models;
 
+import com.example.Blogs.Serializers.OffsetDateTimeDeserializer;
+import com.example.Blogs.Serializers.OffsetDateTimeSerializer;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
@@ -21,6 +25,8 @@ public class Comment {
     private Long postId;
     private String body;
     @Column("created_at")
+    @JsonSerialize(using = OffsetDateTimeSerializer.class)
+    @JsonDeserialize(using = OffsetDateTimeDeserializer.class)
     private OffsetDateTime createdAt;
 
     public Comment(String body,Long user,Long post) {

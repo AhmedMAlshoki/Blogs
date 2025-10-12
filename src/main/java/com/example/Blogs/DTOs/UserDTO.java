@@ -1,6 +1,9 @@
 package com.example.Blogs.DTOs;
 
-import com.fasterxml.jackson.annotation.*;
+import com.example.Blogs.Serializers.OffsetDateTimeDeserializer;
+import com.example.Blogs.Serializers.OffsetDateTimeSerializer;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -18,6 +21,8 @@ public class UserDTO {
     private String displayName;
     private String email;
     private String password;
+    @JsonSerialize(using = OffsetDateTimeSerializer.class)
+    @JsonDeserialize(using = OffsetDateTimeDeserializer.class)
     private OffsetDateTime signedUpAt;
     @Setter
     private Map<Long, PostDTO> posts;

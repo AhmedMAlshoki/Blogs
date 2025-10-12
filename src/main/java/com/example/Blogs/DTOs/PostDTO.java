@@ -1,8 +1,10 @@
 package com.example.Blogs.DTOs;
 
 import com.example.Blogs.Models.Like;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonRootName;
+import com.example.Blogs.Serializers.OffsetDateTimeDeserializer;
+import com.example.Blogs.Serializers.OffsetDateTimeSerializer;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,7 +19,11 @@ public class PostDTO {
     private Long userId;
     private String body;
     private String title;
+    @JsonSerialize(using = OffsetDateTimeSerializer.class)
+    @JsonDeserialize(using = OffsetDateTimeDeserializer.class)
     private OffsetDateTime createdAt;
+    @JsonSerialize(using = OffsetDateTimeSerializer.class)
+    @JsonDeserialize(using = OffsetDateTimeDeserializer.class)
     private OffsetDateTime updated_at;
     private List<Like> likes;
     private UserDTO userDTO;

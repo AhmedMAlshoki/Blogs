@@ -1,6 +1,10 @@
 package com.example.Blogs.Models;
 
+import com.example.Blogs.Serializers.OffsetDateTimeDeserializer;
+import com.example.Blogs.Serializers.OffsetDateTimeSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

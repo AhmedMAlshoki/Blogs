@@ -1,11 +1,12 @@
 package com.example.Blogs.DTOs;
 
-import com.fasterxml.jackson.annotation.JsonRootName;
+import com.example.Blogs.Serializers.OffsetDateTimeDeserializer;
+import com.example.Blogs.Serializers.OffsetDateTimeSerializer;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 
 @Data
@@ -16,6 +17,8 @@ public class CommentDTO {
     private Long postId;
     private String body;
     private Long userId;
+    @JsonSerialize(using = OffsetDateTimeSerializer.class)
+    @JsonDeserialize(using = OffsetDateTimeDeserializer.class)
     private OffsetDateTime createdAt;
     public CommentDTO(String body,Long user,Long post) {
         this.body = body;
