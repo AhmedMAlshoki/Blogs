@@ -1,6 +1,7 @@
 package com.example.Blogs.DAOs;
 
 import com.example.Blogs.Enums.Timezone;
+import com.example.Blogs.Exceptions.SQLError;
 import com.example.Blogs.Utils.DAOUtilities.DAOUtilities;
 import com.example.Blogs.DAOs.SqlQueries.CommentQueries;
 import com.example.Blogs.Exceptions.CommentNotFoundException;
@@ -47,11 +48,14 @@ public class CommentDAOImplement extends DAO_Implementation implements CommentDA
     @Override
     public Comment saveNewComment(Comment comment, Timezone timezone) {
         String sql = commentQueries.insertQuery();
-        return jdbcTemplate.queryForObject(sql, new CommentRowMapper(),
-                                                 comment.getBody(),
-                                                 comment.getUserId(),
+        int result = jdbcTemplate.update(sql,    comment.getUserId(),
                                                  comment.getPostId(),
+                                                 comment.getBody(),
                                                  timezone.toString());
+        if (result == 0) {
+            throw new SQLError("Error while saving the comment in the database");
+        }
+        return comment;
     }
 
     @Override

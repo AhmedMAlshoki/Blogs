@@ -21,7 +21,7 @@ public class PostResultSetExtractor implements ResultSetExtractor<Map<Long, Post
         Long postId = null;
         log.info("Start Mapping ");
         while (rs.next()) {
-            if(rs.getObject("post_id") != null) {
+            if(rs.findColumn("post_id") > 0) {
                 log.info("Mapping to Post id: {}", rs.getLong("post_id"));
                 if (!posts.containsKey(rs.getLong("post_id")))
                 {
@@ -34,7 +34,7 @@ public class PostResultSetExtractor implements ResultSetExtractor<Map<Long, Post
                     postId = post.getId();
                     posts.put(post.getId(), post);
                 }
-                if (rs.getObject("like_id") != null)
+                if (rs.findColumn("like_id") > 0)
                 {
                     Like like = new Like(rs.getLong("like_user_id"),
                             rs.getObject("created_at", OffsetDateTime.class));

@@ -10,6 +10,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.GraphQlRequest;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,7 +20,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
-
+@Slf4j
 public class EmailPasswordAuthenticationFilter extends OncePerRequestFilter {
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -39,6 +40,7 @@ public class EmailPasswordAuthenticationFilter extends OncePerRequestFilter {
             }
             if (apiHelperMethods.isLoginMutation(requestBody)) {
                 try {
+                    log.info("Login mutation DETECTED");
                     // Parse the GraphQL request to extract email and password
                     GraphQlRequest graphQLRequest = apiHelperMethods.parseGraphQLRequest(requestBody);
                     String email = apiHelperMethods.extractEmail(graphQLRequest);
@@ -52,15 +54,18 @@ public class EmailPasswordAuthenticationFilter extends OncePerRequestFilter {
 
                         // Set authentication in security context
                         try {
+                            log.info("Authentication in progress");
                             Authentication authentication = authenticationManager.authenticate(authToken);
-                            SecurityContextHolder.getContext().setAuthentication(authentication);
 
+                            SecurityContextHolder.getContext().setAuthentication((AdvancedEmailPasswordToken)authentication);
+                            log.info("Authentication DONE");
                         } catch (AuthenticationException e) {
+                            log.info("Authentication FAILED");
                             throw new UserNotFoundException("User not found");
                         }
                     }
                 } catch (Exception e) {
-                    throw new HandlingRequestException("Failed to process login mutation");
+                    throw new HandlingRequestException("Failed to process login mutation "+e.getMessage());
                 }
             }
         }

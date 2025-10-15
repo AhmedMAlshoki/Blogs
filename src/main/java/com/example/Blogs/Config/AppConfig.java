@@ -9,6 +9,7 @@ import com.example.Blogs.Enums.Timezone;
 import com.example.Blogs.Models.Comment;
 import com.example.Blogs.Models.Post;
 import com.example.Blogs.Models.User;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,6 +20,7 @@ import java.util.List;
 import java.util.Random;
 
 
+@Slf4j
 @Component
 public class AppConfig implements CommandLineRunner {
 
@@ -47,9 +49,11 @@ public class AppConfig implements CommandLineRunner {
     private void insertSampleData() {
         try {
             System.out.println("Inserting massive sample data...");
-            //createUsers();
-            //createPosts();
+
+            createUsers();
+            createPosts();
             createComments();
+
             createLikes();
             createRelationships();
 
@@ -613,6 +617,9 @@ public class AppConfig implements CommandLineRunner {
 
     private User createUser(String username, String displayName, String email, String password, Timezone timezone) {
         String encodedPassword = passwordEncoder.encode(password);
+        if (email.equals("sophie.martin@email.com")) {
+            log.info("Encoded password: {}", encodedPassword);
+        }
         User user = new User(username, displayName, email, encodedPassword);
         userDAO.saveNewUser(user, timezone);
         return user;

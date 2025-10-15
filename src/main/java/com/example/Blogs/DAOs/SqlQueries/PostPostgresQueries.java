@@ -67,37 +67,37 @@ public  class  PostPostgresQueries extends PostQueries {
 
     @Override
     public String SQLQueryForPostSearch() {
-        return "SELECT search_articles(?, ?, ?, ?, ?, ?);";
+        return "SELECT search_articles(?, ?, ?, ?, ?, ?)";
     }
 
     @Override
     public  String insertQuery() {
-        return "INSERT INTO posts (user_id, body, title ,created_timezone) VALUES (? , ?, ?, ?);";
+        return "INSERT INTO posts (user_id, body, title ,created_timezone) VALUES (? , ?, ?, ?)";
     }
 
     @Override
     public  String updateQuery() {
-        return "UPDATE posts SET body = ?,title = ?, updated_timezone = ? WHERE id = ?;" ;
+        return "UPDATE posts SET body = ?,title = ?, updated_timezone = ? WHERE id = ?" ;
     }
 
     @Override
     public  String deleteQuery() {
-        return "DELETE FROM posts WHERE id = ?;";
+        return "DELETE FROM posts WHERE id = ?";
     }
 
     @Override
     public String likePostQuery() {
-        return "INSERT INTO likes (user_id, post_id, created_timezone) VALUES (?, ?, ?);";
+        return "INSERT INTO likes (user_id, post_id, created_timezone) VALUES (?, ?, ?)";
     }
 
     @Override
     public String dislikePostQuery() {
-        return "DELETE FROM likes WHERE user_id = ? AND post_id = ?;";
+        return "DELETE FROM likes WHERE user_id = ? AND post_id = ?";
     }
 
     @Override
     public String getPostOwnerQuery() {
-        return "SELECT user_id FROM posts WHERE id = ?;";
+        return "SELECT user_id FROM posts WHERE id = ?";
     }
 
 

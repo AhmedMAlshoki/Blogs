@@ -49,17 +49,19 @@ public class GraphQLFilterExceptionHandler {
                     jwtEx.getMessage(), ErrorType.UNAUTHORIZED, 401);
             case TooManyRequestsException tmrEx -> prepareGraphQLErrorResponse(
                     tmrEx.getMessage(), ErrorType.BAD_REQUEST, 429);
+            case SQLError sqEx -> prepareGraphQLErrorResponse(
+                    sqEx.getMessage(), ErrorType.INTERNAL_ERROR, 500);
             default -> prepareGraphQLErrorResponse(
                     "Internal server error", ErrorType.INTERNAL_ERROR, 500);
         };
 
         Map<String, Object> errorResponse = Map.of(
-                "data", (Object) null,
+                "data", (Object) "null",
                 "errors", Collections.singletonList(error.toSpecification())
         );
 
         return ResponseEntity
-                .status((HttpStatusCode) error.getExtensions().get(" statusCode"))
+                .status((Integer) error.getExtensions().get("statusCode"))
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(errorResponse);
     }

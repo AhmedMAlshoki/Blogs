@@ -87,9 +87,9 @@ public class UserDAOImplement extends DAO_Implementation implements UserDAO  {
             String sql = userQueries.insertQuery();
             jdbcTemplate.update(sql,
                     user.getUsername(),
-                    user.getDisplayName(),
-                    user.getEmail(),
                     user.getPassword(),
+                    user.getEmail(),
+                    user.getDisplayName(),
                     timezone.toString());
             return "User have registered successfully";
         }

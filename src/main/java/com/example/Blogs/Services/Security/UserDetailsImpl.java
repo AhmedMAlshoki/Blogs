@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@Slf4j
 public class UserDetailsImpl implements UserDetails {
 
     private Long id;
@@ -43,12 +45,7 @@ public class UserDetailsImpl implements UserDetails {
 
 
     public static UserDetailsImpl build(User user) {
-
-        return new UserDetailsImpl (
-                user.getId(),
-                user.getUsername(),
-                user.getPassword()
-        );
+        return new UserDetailsImpl(user.getId(), user.getEmail(), user.getPassword());
     }
 
 }

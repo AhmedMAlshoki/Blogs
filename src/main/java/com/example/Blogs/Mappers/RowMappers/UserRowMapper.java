@@ -13,16 +13,17 @@ import java.time.OffsetDateTime;
 public class UserRowMapper implements RowMapper<User> {
     @Override
     public User mapRow(ResultSet rs, int rowNum) throws SQLException {
-        if (rs.getString("email") != null) {
+        try {
             return new User(
                     rs.getLong("id"),
-                    rs.getString("username"),
+                    rs.getString("email"),
                     rs.getString("password"));
-    }
-        else return new User(
-                rs.getLong("id"),
-                rs.getString("username"),
-                rs.getString("display_name"),
-                rs.getObject("created_at", OffsetDateTime.class));
+        } catch (Exception e) {
+         return new User(
+                    rs.getLong("id"),
+                    rs.getString("username"),
+                    rs.getString("display_name"),
+                    rs.getObject("created_at", OffsetDateTime.class));
+        }
     }
 }

@@ -35,10 +35,11 @@ public class Post {
     @JsonSerialize(using = OffsetDateTimeSerializer.class)
     @JsonDeserialize(using = OffsetDateTimeDeserializer.class)
     private OffsetDateTime updated_at;
-    private List<Like> likes;
+    private List<Like> likes = new ArrayList<Like>();
     public Post(String body,Long user) {
         this.body = body;
         this.userId = user;
+        likes = new ArrayList<Like>();
     }
 
     public Post(long id, long userId, String body,String title, OffsetDateTime createdAt) {
@@ -75,9 +76,4 @@ public class Post {
         this.likes = new ArrayList<Like>();
     }
 
-
-
-    public void serialize(){
-
-    }
 }

@@ -73,10 +73,11 @@ public class SecurityConfiguration {
         http.csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->{
-                            auth.requestMatchers("/graphql", "/graphiql").authenticated();
-                            auth.anyRequest().permitAll();
+                    auth.requestMatchers("/graphiql/**", "/graphiql").permitAll();
+                    auth.requestMatchers("/graphql").authenticated();
+                    auth.anyRequest().permitAll();
                         }
-                ).httpBasic(withDefaults());
+                );
         http.addFilterBefore(exceptionHandlerFilter, CorsFilter.class);
         http.addFilterAfter(requestCachingFilter, ExceptionHandlerFilter.class);
         http.addFilterAt(emailPasswordAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
