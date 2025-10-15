@@ -3,6 +3,7 @@ package com.example.Blogs.Filters;
 import com.example.Blogs.AuthenticationObject.AdvancedEmailPasswordToken;
 import com.example.Blogs.Exceptions.JwtFilterException;
 import com.example.Blogs.Exceptions.UserNotAuthenticated;
+import com.example.Blogs.Filters.Wrappers.CachedBodyHttpServletRequest;
 import com.example.Blogs.Services.Security.UserDetailsImpl;
 import com.example.Blogs.Services.Security.UserDetailsServiceImpl;
 import com.example.Blogs.Utils.ApiUtils.ApiHelperMethods;
@@ -29,8 +30,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
 
+        CachedBodyHttpServletRequest cachedBodyHttpServletRequest = new CachedBodyHttpServletRequest(request);
+
         try{
-            String jwt = jwtUtil.parseJwt(request);
+            String jwt = jwtUtil.parseJwt(cachedBodyHttpServletRequest);
             if(jwt != null && jwtUtil.validateJwtToken(jwt)){
                 String username = jwtUtil.getUserIdFromJwtToken(jwt);
                 Long id = Long.parseLong(username);
@@ -40,9 +43,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 authentication.setJwt(jwt);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             } else if (jwt == null) {
-                if (apiHelperMethods.isRegisterRequest(apiHelperMethods.getRequestBody(request)))
+                if (apiHelperMethods.isRegisterRequest(apiHelperMethods.getRequestBody(cachedBodyHttpServletRequest)))
                 {
-                    filterChain.doFilter(request, response);
+                    filterChain.doFilter(cachedBodyHttpServletRequest, response);
                 }
                 Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
                 if (authentication == null) {
@@ -59,6 +62,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
-        filterChain.doFilter(request, response);
+        filterChain.doFilter(cachedBodyHttpServletRequest, response);
     }
 }

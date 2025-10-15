@@ -13,6 +13,7 @@ import com.maxmind.geoip2.model.CityResponse;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,7 @@ import java.io.IOException;
 import java.util.Optional;
 
 @Component
+@Slf4j
 public class ClientApiExtractionFilter implements Filter {
     private static final Logger logger = LoggerFactory.getLogger(ClientApiExtractionFilter.class);
     private final ApiHelperMethods apiHelperMethods = new ApiHelperMethods();
@@ -38,13 +40,14 @@ public class ClientApiExtractionFilter implements Filter {
 
 
 
+        CachedBodyHttpServletRequest cachedBodyHttpServletRequest = new CachedBodyHttpServletRequest(httpRequest);
         if (apiHelperMethods.isGraphQLRequest(httpRequest)) {
             try {
-                if (apiHelperMethods.isRegisterRequest(apiHelperMethods.getRequestBody(httpRequest)))
+                if (apiHelperMethods.isRegisterRequest(apiHelperMethods.getRequestBody(cachedBodyHttpServletRequest)))
                 {
                     chain.doFilter(request,response);
                 }
-                ClientApiInfo clientApiInfo = extractClientApiInfo(httpRequest);
+                ClientApiInfo clientApiInfo = extractClientApiInfo(cachedBodyHttpServletRequest);
 
                 if (clientApiInfo != null) {
                     // Log the client API information
@@ -67,8 +70,7 @@ public class ClientApiExtractionFilter implements Filter {
                 }
 
             } catch (Exception e) {
-                logger.error("Error extracting client API information", e);
-                throw new HandlingRequestException("Failed to process login mutation");
+                throw new HandlingRequestException("Failed to extract client API information "+e.getMessage());
             }
         }
 
@@ -84,16 +86,21 @@ public class ClientApiExtractionFilter implements Filter {
 
         // 2. Extract from GraphQL request body (if it\'s already cached)
         if (request instanceof CachedBodyHttpServletRequest cachedRequest) {
+            log.info("CACHED REQUEST");
             apiHelperMethods.extractFromRequestBody(cachedRequest, builder);
         }
 
+        log.info("CACHED REQUEST 2");
         // 3. Extract from query parameters (if any)
         apiHelperMethods.extractFromQueryParams(request, builder);
 
+        log.info("CACHED REQUEST 3");
         // 4. Extract IP address and perform geolocation
         String clientIp = IPExtractor.getClientIpAddress(request);
+        if (clientIp.contains("127"))
+            clientIp = "8.8.8.8";
         builder.ipAddress(clientIp);
-        if (clientIp != null && !clientIp.isEmpty()) {
+        if (!clientIp.isEmpty()) {
             CityResponse geoResponse = geolocationService.geolocate(clientIp);
             if (geoResponse != null) {
                 if (geoResponse.getCountry() != null && geoResponse.getCountry().getName() != null) {

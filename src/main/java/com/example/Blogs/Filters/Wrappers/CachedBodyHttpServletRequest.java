@@ -32,10 +32,6 @@ public class CachedBodyHttpServletRequest extends HttpServletRequestWrapper {
         return new BufferedReader(new InputStreamReader(byteArrayInputStream, StandardCharsets.UTF_8));
     }
 
-    public byte[] getCachedBody() {
-        return cachedBody;
-    }
-
     private static class CachedBodyServletInputStream extends ServletInputStream {
         private final InputStream cachedBodyInputStream;
 

@@ -3,6 +3,7 @@ package com.example.Blogs.Filters;
 import com.example.Blogs.AuthenticationObject.AdvancedEmailPasswordToken;
 import com.example.Blogs.Exceptions.HandlingRequestException;
 import com.example.Blogs.Exceptions.UserNotFoundException;
+import com.example.Blogs.Filters.Wrappers.CachedBodyHttpServletRequest;
 import com.example.Blogs.Models.User;
 import com.example.Blogs.Services.Security.UserDetailsImpl;
 import com.example.Blogs.Utils.ApiUtils.ApiHelperMethods;
@@ -29,6 +30,7 @@ public class EmailPasswordAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
 
+        CachedBodyHttpServletRequest cachedBodyHttpServletRequest = new CachedBodyHttpServletRequest(request);
         // Check if this is a GraphQL request
         if (apiHelperMethods.isGraphQLRequest(request)) {
             // Read the request body to check for login mutation
@@ -36,7 +38,7 @@ public class EmailPasswordAuthenticationFilter extends OncePerRequestFilter {
 
             if (apiHelperMethods.isRegisterRequest(requestBody))
             {
-                filterChain.doFilter(request,response);
+                filterChain.doFilter(cachedBodyHttpServletRequest,response);
             }
             if (apiHelperMethods.isLoginMutation(requestBody)) {
                 try {
@@ -69,6 +71,6 @@ public class EmailPasswordAuthenticationFilter extends OncePerRequestFilter {
                 }
             }
         }
-        filterChain.doFilter(request, response);
+        filterChain.doFilter(cachedBodyHttpServletRequest, response);
     }
 }
