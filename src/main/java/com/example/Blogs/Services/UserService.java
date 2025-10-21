@@ -10,10 +10,12 @@ import com.example.Blogs.Mappers.MapStructMappers.UserMapper;
 import com.example.Blogs.Models.User;
 import com.example.Blogs.Services.Security.UserDetailsImpl;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.control.MappingControl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,18 +23,21 @@ import java.util.Objects;
 
 
 @Service
+@Slf4j
 public class UserService {
 
 
     private final UserMapper userMapper;
     private final UserDAO userDAO;
+    private final PasswordEncoder passwordEncoder;
     @Setter
     private AdvancedEmailPasswordToken advancedEmailPasswordToken;
 
     @Autowired
-    public UserService(UserMapper userMapper, UserDAO userDAO) {
+    public UserService(UserMapper userMapper, UserDAO userDAO, PasswordEncoder passwordEncoder) {
         this.userMapper = userMapper;
         this.userDAO = userDAO;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public boolean isUserAuthorized(Long id) {
@@ -73,7 +78,7 @@ public class UserService {
     }
 
     private String saveUser(User user){
-        Timezone timezone = advancedEmailPasswordToken.getClientApiInfo().getTimezone();
+        Timezone timezone = Timezone.UTC;
         return userDAO.saveNewUser(user,timezone);
     }
 
@@ -87,7 +92,8 @@ public class UserService {
     }
 
     public String registerUser(String username, String displayName, String email, String password) {
-        User user = new User(username, displayName, email, password);
+        String encodedPassword = passwordEncoder.encode(password);
+        User user = new User(username, displayName, email, encodedPassword);
         return saveUser(user);
     }
 
@@ -118,4 +124,5 @@ public class UserService {
         Long currentUserId = ((UserDetailsImpl)advancedEmailPasswordToken.getPrincipal()).getId();
         return userDAO.unfollow(currentUserId, userId);
     }
+
 }

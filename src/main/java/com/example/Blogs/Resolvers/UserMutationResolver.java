@@ -4,6 +4,7 @@ package com.example.Blogs.Resolvers;
 import com.example.Blogs.DTOs.UserDTO;
 import com.example.Blogs.Services.UserService;
 import jakarta.validation.constraints.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 
 @Controller
+@Slf4j
 public class UserMutationResolver {
 
     private final UserService userService;
@@ -24,9 +26,13 @@ public class UserMutationResolver {
     @Validated
     @MutationMapping
     public String register(@Argument @NotBlank String username,
-                                  @Argument @NotBlank String displayName,
-                                  @Argument @NotBlank @Email String email,
-                                  @Argument @NotBlank @Size(min = 8) String password) {
+                           @Argument @NotBlank String displayName,
+                           @Argument @NotBlank @Email String email,
+                           @Argument @NotBlank @Size(min = 8) String password) {
+        log.info("Registering user: {}", username);
+        log.info("Registering user: {}", displayName);
+        log.info("Registering user: {}", email);
+        log.info("Registering user: {}", password);
         return userService.registerUser(username, displayName, email, password);
     }
 

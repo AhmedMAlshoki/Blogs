@@ -8,10 +8,12 @@ import com.example.Blogs.Services.Security.UserDetailsImpl;
 import com.example.Blogs.Services.Security.UserDetailsServiceImpl;
 import com.example.Blogs.Utils.ApiUtils.ApiHelperMethods;
 import com.example.Blogs.Utils.Jwt.JwtUtil;
+import io.lettuce.core.output.ListOfGenericMapsOutput;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,6 +21,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
 
+@Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Autowired
     private  JwtUtil jwtUtil;
@@ -34,6 +37,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         try{
             String jwt = jwtUtil.parseJwt(cachedBodyHttpServletRequest);
+            log.info("JWT FILTER  TOKEN DETECTED : JWT Token : {}",jwt);
             if(jwt != null && jwtUtil.validateJwtToken(jwt)){
                 String username = jwtUtil.getUserIdFromJwtToken(jwt);
                 Long id = Long.parseLong(username);
@@ -42,16 +46,21 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                         new AdvancedEmailPasswordToken(user, null, user.getAuthorities());
                 authentication.setJwt(jwt);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
+                log.info("JWT FILTER : Authentication set");
             } else if (jwt == null) {
                 if (apiHelperMethods.isRegisterRequest(apiHelperMethods.getRequestBody(cachedBodyHttpServletRequest)))
                 {
+                    log.info("JWT FILTER : Register request detected");
                     filterChain.doFilter(cachedBodyHttpServletRequest, response);
+                    return;
                 }
                 Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
                 if (authentication == null) {
+
                     throw new UserNotAuthenticated("User is not authenticated");
                 }
                 else if (authentication instanceof AdvancedEmailPasswordToken advancedToken) {
+                    log.info("JWT FILTER : Generate JWT Token");
                     jwt = jwtUtil.generateJwtToken(advancedToken);
                     advancedToken.setJwt(jwt);
                 }

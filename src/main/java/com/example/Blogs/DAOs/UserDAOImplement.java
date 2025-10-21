@@ -9,6 +9,7 @@ import com.example.Blogs.Mappers.ResultSetExtractors.ProfileResultSetExtractor;
 import com.example.Blogs.Mappers.ResultSetExtractors.UserResultSetExtractor;
 import com.example.Blogs.Mappers.RowMappers.UserRowMapper;
 import com.example.Blogs.Utils.DAOUtilities.DAOUtilities;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 @Repository
+@Slf4j
 public class UserDAOImplement extends DAO_Implementation implements UserDAO  {
 
 
@@ -81,6 +83,8 @@ public class UserDAOImplement extends DAO_Implementation implements UserDAO  {
     @Override
     public String saveNewUser(User user, Timezone timezone) throws ExictingUserException {
         if (existsByUsername(user.getUsername())||existsByEmail(user.getEmail())) {
+            log.info("exists username: {}",existsByUsername(user.getUsername()));
+            log.info("exists email : {}",existsByEmail(user.getEmail()));
             throw new ExictingUserException("User already exists with that username or email");
         }
         else{
@@ -198,7 +202,7 @@ public class UserDAOImplement extends DAO_Implementation implements UserDAO  {
     @Override
     public User findByIdUserDetails(Long id) {
         if (existsById(id)) {
-            String sql = userQueries.getUserCredential();
+            String sql = userQueries.findByIdUserDetails();
             return jdbcTemplate.queryForObject(sql, new UserRowMapper(), id);
         }
         else {

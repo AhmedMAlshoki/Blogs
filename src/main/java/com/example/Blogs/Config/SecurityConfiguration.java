@@ -74,7 +74,7 @@ public class SecurityConfiguration {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->{
                     auth.requestMatchers("/graphiql/**", "/graphiql").permitAll();
-                    auth.requestMatchers("/graphql").authenticated();
+                    auth.requestMatchers("/graphql").permitAll();
                     auth.anyRequest().permitAll();
                         }
                 );

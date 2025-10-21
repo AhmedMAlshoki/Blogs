@@ -20,21 +20,28 @@ public class FixedWindowRateLimiter {
     }
 
     public  boolean allowRequest(){
-        AdvancedEmailPasswordToken advancedEmailPasswordToken =(AdvancedEmailPasswordToken) SecurityContextHolder
-                                                                                            .getContext()
-                                                                                            .getAuthentication();
-        Long userId = advancedEmailPasswordToken.getCurrentUserId();
-        ConcurrentHashMap<Long, Integer> userWindows = windowCountsPerUser.computeIfAbsent(
-                userId,
-                k -> new ConcurrentHashMap<>()
-        );
-        Long currentWindow = System.currentTimeMillis() / windowSize;
-        Integer newCount = userWindows.compute(currentWindow, (k, oldCount) -> {
-            return (oldCount == null ? 0 : oldCount) + 1;
-        });
 
 
-        return newCount <= limit;
+        try {
+            AdvancedEmailPasswordToken advancedEmailPasswordToken =(AdvancedEmailPasswordToken) SecurityContextHolder
+                    .getContext()
+                    .getAuthentication();
+            Long userId = advancedEmailPasswordToken.getCurrentUserId();
+            ConcurrentHashMap<Long, Integer> userWindows = windowCountsPerUser.computeIfAbsent(
+                    userId,
+                    k -> new ConcurrentHashMap<>()
+            );
+            Long currentWindow = System.currentTimeMillis() / windowSize;
+            Integer newCount = userWindows.compute(currentWindow, (k, oldCount) -> {
+                return (oldCount == null ? 0 : oldCount) + 1;
+            });
+            return newCount <= limit;
+        }
+        catch (Exception e) {
+            return true;
+        }
+
+
 
     }
 

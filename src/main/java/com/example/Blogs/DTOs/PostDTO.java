@@ -5,6 +5,7 @@ import com.example.Blogs.Serializers.OffsetDateTimeDeserializer;
 import com.example.Blogs.Serializers.OffsetDateTimeSerializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import io.leangen.graphql.annotations.types.GraphQLType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,6 +15,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@GraphQLType(name = "Post")
 public class PostDTO {
     private Long id;
     private Long userId;

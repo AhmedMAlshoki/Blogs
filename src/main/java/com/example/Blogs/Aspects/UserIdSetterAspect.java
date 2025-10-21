@@ -9,8 +9,10 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 
 @Aspect
+@Component
 public class UserIdSetterAspect {
     @Pointcut("execution(* com.example.Blogs.Services.*.*(..))")
     public void serviceCall(){}
@@ -28,6 +30,7 @@ public class UserIdSetterAspect {
                 ((UserService) target).setAdvancedEmailPasswordToken( authentication);
             }
         }
+
     }
 
 

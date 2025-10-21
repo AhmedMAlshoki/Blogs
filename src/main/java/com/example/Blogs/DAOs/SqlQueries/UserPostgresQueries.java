@@ -34,7 +34,7 @@ public class UserPostgresQueries extends UserQueries{
 
     @Override
     public String findById() {
-        return "SELECT id, username, display_name FROM users WHERE id = ?";
+        return "SELECT id, username, display_name, created_at FROM users WHERE id = ?";
     }
 
     @Override

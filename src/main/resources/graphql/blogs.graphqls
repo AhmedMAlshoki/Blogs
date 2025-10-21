@@ -1,6 +1,5 @@
 type Query {
 
-    users: [User]
     user(id: ID!): User
     followers(userId: ID!): [User]
     followingList(userId: ID!): [User]

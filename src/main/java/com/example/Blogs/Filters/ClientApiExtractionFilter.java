@@ -45,7 +45,9 @@ public class ClientApiExtractionFilter implements Filter {
             try {
                 if (apiHelperMethods.isRegisterRequest(apiHelperMethods.getRequestBody(cachedBodyHttpServletRequest)))
                 {
+                    log.info("IP FILTER :Register request detected");
                     chain.doFilter(request,response);
+                    return;
                 }
                 ClientApiInfo clientApiInfo = extractClientApiInfo(cachedBodyHttpServletRequest);
 

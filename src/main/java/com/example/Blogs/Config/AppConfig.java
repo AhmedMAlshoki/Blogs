@@ -617,9 +617,6 @@ public class AppConfig implements CommandLineRunner {
 
     private User createUser(String username, String displayName, String email, String password, Timezone timezone) {
         String encodedPassword = passwordEncoder.encode(password);
-        if (email.equals("sophie.martin@email.com")) {
-            log.info("Encoded password: {}", encodedPassword);
-        }
         User user = new User(username, displayName, email, encodedPassword);
         userDAO.saveNewUser(user, timezone);
         return user;

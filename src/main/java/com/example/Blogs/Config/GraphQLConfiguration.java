@@ -25,6 +25,8 @@ public class GraphQLConfiguration {
                 .scalar(scalarType);
     }
 
+
+
     @Bean
     public GraphQLScalarType offsetDateTimeScalar() {
         var formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss XXX");

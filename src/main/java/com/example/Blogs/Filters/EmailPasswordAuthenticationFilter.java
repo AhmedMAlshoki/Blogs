@@ -39,6 +39,7 @@ public class EmailPasswordAuthenticationFilter extends OncePerRequestFilter {
             if (apiHelperMethods.isRegisterRequest(requestBody))
             {
                 filterChain.doFilter(cachedBodyHttpServletRequest,response);
+                return;
             }
             if (apiHelperMethods.isLoginMutation(requestBody)) {
                 try {
