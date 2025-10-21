@@ -555,6 +555,7 @@ public class AppConfig implements CommandLineRunner {
         followUser(31L, 56L);  // User 31 liked Post 56 (owner: 56) -> follow owner
         followUser(7L, 91L);   // User 7 liked Post 91 (owner: 91) -> follow owner
         followUser(49L, 15L);  // User 49 liked Post 15 (owner: 15) -> follow owner
+        followUser(16L, 23L);
 
         // Users who commented on posts now follow the post owners
         followUser(23L, 5L);   // User 23 commented on Post 5 -> follow post owner

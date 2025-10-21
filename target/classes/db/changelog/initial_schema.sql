@@ -11,9 +11,9 @@ CREATE TABLE  IF NOT EXISTS users (
     display_name VARCHAR(255),
     email VARCHAR(255) UNIQUE  NOT NULL,
     password VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP WITH  TIME ZONE ,
+    created_at TIMESTAMP WITH  TIME ZONE  DEFAULT CURRENT_TIMESTAMP,
     created_timezone VARCHAR(255) DEFAULT 'UTC',
-    updated_at TIMESTAMP WITH  TIME ZONE ,
+    updated_at TIMESTAMP WITH  TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_timezone VARCHAR(255) DEFAULT 'UTC'
 );
 --posts table
@@ -27,9 +27,9 @@ CREATE TABLE  IF NOT EXISTS posts (
                                            setweight(to_tsvector('english', coalesce(body, '')), 'B'))
         STORED,
     score INTEGER DEFAULT 0,
-    created_at TIMESTAMP WITH  TIME ZONE ,
+    created_at TIMESTAMP WITH  TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     created_timezone VARCHAR(255) DEFAULT 'UTC',
-    updated_at TIMESTAMP WITH  TIME ZONE ,
+    updated_at TIMESTAMP WITH  TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_timezone VARCHAR(255)
 );
 
@@ -39,7 +39,7 @@ CREATE TABLE  IF NOT EXISTS likes (
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
     post_id INTEGER REFERENCES posts(id) ON DELETE CASCADE,
-    created_at TIMESTAMP WITH  TIME ZONE,
+    created_at TIMESTAMP WITH  TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     created_timezone VARCHAR(255) DEFAULT 'UTC'
 );
 
@@ -49,9 +49,9 @@ CREATE TABLE  IF NOT EXISTS comments (
     user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
     post_id INTEGER REFERENCES posts(id) ON DELETE CASCADE,
     body TEXT,
-    created_at TIMESTAMP WITH TIME ZONE ,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     created_timezone VARCHAR(255) DEFAULT 'UTC',
-    updated_at TIMESTAMP WITH TIME ZONE ,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_timezone VARCHAR(255) DEFAULT 'UTC'
 );
 --relationship table

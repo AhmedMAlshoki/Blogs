@@ -3,6 +3,7 @@ package com.example.Blogs.Resolvers;
 
 import com.example.Blogs.DTOs.CommentDTO;
 import com.example.Blogs.Services.CommentService;
+import com.example.Blogs.Services.UserService;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -17,11 +18,13 @@ import org.springframework.validation.annotation.Validated;
 public class CommentMutationResolver {
 
     private final CommentService commentService;
+    private final UserService userService;
 
 
     @Autowired
-    public CommentMutationResolver(CommentService commentService) {
+    public CommentMutationResolver(CommentService commentService, UserService userService) {
         this.commentService = commentService;
+        this.userService = userService;
     }
 
     @Validated

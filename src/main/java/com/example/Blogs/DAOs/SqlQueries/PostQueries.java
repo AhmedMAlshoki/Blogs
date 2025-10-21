@@ -16,4 +16,5 @@ public abstract class PostQueries {
     public abstract String dislikePostQuery();
     public abstract String getPostOwnerQuery();
     public abstract String getTopPostsOffsetQuery();
+    public abstract String getByUserIdsQuery();
 }

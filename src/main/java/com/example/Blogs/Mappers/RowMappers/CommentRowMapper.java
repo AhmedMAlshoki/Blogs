@@ -15,8 +15,8 @@ public class CommentRowMapper implements RowMapper<Comment> {
         return new Comment(
                 rs.getLong("id"),
                 rs.getString("body"),
-                rs.getLong("comment_post_id"),
-                rs.getLong("comment_user_id"),
+                rs.getLong("post_id"),
+                rs.getLong("user_id"),
                 rs.getObject("created_at", OffsetDateTime.class)
         );
     }

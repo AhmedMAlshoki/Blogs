@@ -12,6 +12,7 @@ import com.example.Blogs.Mappers.RowMappers.CommentRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -123,9 +124,9 @@ public class CommentDAOImplement extends DAO_Implementation implements CommentDA
     }
 
     @Override
-    public Map<Long, List<Comment>> findByMultiplePosts(List<Long> postIds)  {
+    public HashMap<Long, List<Comment>> findByMultiplePosts(List<Long> postIds)  {
         String sql = commentQueries.SQLQueryForFindByMultiplePosts();
         Object[] params = daoUtilities.preparingParamForTheQuery(postIds);
-        return jdbcTemplate.query(sql, new CommentResultSetExtractor(), params);
+        return jdbcTemplate.query(sql,new CommentResultSetExtractor(),params);
     }
 }

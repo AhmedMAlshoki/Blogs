@@ -27,13 +27,15 @@ public class Like {
     @JsonIgnore
     private OffsetDateTime createdAt;
 
-    public Like(Long user) {
+    public Like(Long id,Long user) {
         this.userId = user;
+        this.id = id;
     }
 
-    public Like(Long user, OffsetDateTime createdAt) {
+    public Like(Long id, Long user, OffsetDateTime createdAt) {
         this.userId = user;
         this.createdAt = createdAt;
+        this.id = id;
     }
 
 

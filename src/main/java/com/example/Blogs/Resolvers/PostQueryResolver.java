@@ -1,13 +1,17 @@
 package com.example.Blogs.Resolvers;
 
+import com.example.Blogs.AuthenticationObject.AdvancedEmailPasswordToken;
 import com.example.Blogs.DTOs.PostDTO;
 import com.example.Blogs.Services.PostService;
+import com.example.Blogs.Services.UserService;
 import jakarta.validation.constraints.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 
@@ -18,10 +22,12 @@ import java.util.List;
 @Controller
 public class PostQueryResolver {
     private final PostService postService;
+    private final UserService userService;
 
     @Autowired
-    public PostQueryResolver(PostService postService) {
+    public PostQueryResolver(PostService postService,UserService userService) {
         this.postService = postService;
+        this.userService = userService;
     }
 
 
@@ -39,7 +45,7 @@ public class PostQueryResolver {
 
     @Validated
     @QueryMapping
-    @PreAuthorize("@userService.isUserAuthorized(#id)")
+    @PostAuthorize("@userService.isUserAuthorized(#userId)")
     public Iterable<PostDTO> postsByFollowing(@Argument @Positive @NotNull Long userId) {
         return postService.getFollowingPosts(userId);
     }

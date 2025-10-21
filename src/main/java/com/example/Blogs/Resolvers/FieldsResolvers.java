@@ -3,6 +3,7 @@ package com.example.Blogs.Resolvers;
 import com.example.Blogs.DTOs.CommentDTO;
 import com.example.Blogs.DTOs.PostDTO;
 import com.example.Blogs.DTOs.UserDTO;
+import com.example.Blogs.Models.Post;
 import com.example.Blogs.Services.CommentService;
 import com.example.Blogs.Services.PostService;
 import com.example.Blogs.Services.UserService;
@@ -32,15 +33,15 @@ public class FieldsResolvers {
 
     @Validated
     @SchemaMapping(typeName = "User", field = "posts")
-    public Iterable<PostDTO> getPosts(UserDTO user) {
-        return postService.getUserPosts(user.getId());
-    }
+    public CompletableFuture<PostDTO> getPosts(PostDTO post, DataLoader<Long, PostDTO> postDTODataLoader) {
+        return postDTODataLoader.load(post.getId());
+    } //DataLoader
 
     @Validated
     @SchemaMapping(typeName = "Post", field = "comments")
     public Iterable<CommentDTO> getComments(PostDTO post) {
         return commentService.getPostComments(post.getId());
-    }
+    } //DataLoader
 
 
 

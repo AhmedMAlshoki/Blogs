@@ -1,6 +1,7 @@
 package com.example.Blogs.Utils;
 
 import com.example.Blogs.AuthenticationObject.AdvancedEmailPasswordToken;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Component;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Component
+@Slf4j
 public class FixedWindowRateLimiter {
     @Value("${fixedRateLimiter.limit}")
     private  int limit;
@@ -32,6 +34,7 @@ public class FixedWindowRateLimiter {
                     k -> new ConcurrentHashMap<>()
             );
             Long currentWindow = System.currentTimeMillis() / windowSize;
+            log.info("CURRENT WINDOW  : {}", currentWindow);
             Integer newCount = userWindows.compute(currentWindow, (k, oldCount) -> {
                 return (oldCount == null ? 0 : oldCount) + 1;
             });

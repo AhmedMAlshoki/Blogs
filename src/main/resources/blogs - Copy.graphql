@@ -18,6 +18,8 @@ type Query {
         after: Int   # Cursor for pagination
     ): [Post]!
 
+    getTopPosts(offset: Int): [Post]!
+
 
     commentsByPost(postId: ID!): [Comment]
     commentsByUser(userId: ID!): [Comment]
@@ -81,7 +83,6 @@ type Post {
 
 type Like {
     id: ID!
-    postId: ID!
     userId: ID!
 }
 

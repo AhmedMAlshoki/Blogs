@@ -49,23 +49,23 @@ public class UserPostgresQueries extends UserQueries{
 
     @Override
     public String findFollowers() {
-        return "SELECT u.id, u.username, u.display_name FROM users u " +
-                "INNER JOIN relationships r ON  u.id = r.following_id " +
+        return "SELECT u.id, u.username, u.display_name ,u.created_at FROM users u " +
+                "INNER JOIN relationships r ON  u.id = r.follower_id " +
                 "WHERE r.following_id = ?";
     }
 
     @Override
     public String findFollowing() {
-        return "SELECT u.id, u.username, u.display_name FROM users u " +
-                "INNER JOIN relationships r ON  u.id = r.follower_id " +
+        return "SELECT u.id, u.username, u.display_name ,u.created_at FROM users u " +
+                "INNER JOIN relationships r ON  u.id = r.following_id " +
                 "WHERE r.follower_id = ?";
     }
 
     @Override
     public String getUserProfile() {
-        return "SELECT u.id AS user_id, u.username, u.display_name, u.created_at ," +
-                " p.id AS post_id, p.title, p.body, p.created_at AS published_at FROM users u " +
-                "LEFT JOIN  posts p ON u.id = p.user_id WHERE u.id = ? ORDER BY p.created_at DESC";
+        return "SELECT u.id AS user_id, u.username, u.display_name, u.created_at AS user_created_at ," +
+                " p.id AS post_id, p.user_id AS post_user_id, p.title, p.body, p.created_at AS published_at FROM users u " +
+                "LEFT JOIN  posts p ON p.user_id = u.id WHERE u.id = ? ORDER BY p.created_at DESC";
     }
 
     @Override

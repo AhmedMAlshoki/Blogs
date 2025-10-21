@@ -124,6 +124,7 @@ public class PostService {
     }
 
     public boolean isUserAuthorized(Long id) {
+        log.info("CURRENT USER'S ID  : {}", advancedEmailPasswordToken.getCurrentUserId());
         return Objects.equals(advancedEmailPasswordToken.getCurrentUserId(), getPostOwner(id));
     }
 
@@ -160,5 +161,10 @@ public class PostService {
     public String dislikePost(Long id) {
         Long userId = advancedEmailPasswordToken.getCurrentUserId();
         return postDAO.dislikePost(id,userId);
+    }
+
+    public List<PostDTO> findByUserIds(List<Long> postIds) {
+        List<Post> posts = postDAO.getByUserIds(postIds);
+        return posts.stream().map(postMapper::postToPostDTO).toList();
     }
 }

@@ -33,12 +33,12 @@ public class CommentPostgresQueries extends CommentQueries {
 
     @Override
     public String SQLQueryForFindByPost() {
-        return "SELECT user_id, body, created_at FROM comments WHERE post_id = ?";
+        return "SELECT id, user_id, post_id, body, created_at FROM comments WHERE post_id = ?";
     }
 
     @Override
     public String SQLQueryForFindByUser() {
-        return "SELECT post_id, body, created_at FROM comments WHERE post_id = ?";
+        return "SELECT id, user_id, post_id, body, created_at FROM comments WHERE post_id = ?";
     }
 
     @Override

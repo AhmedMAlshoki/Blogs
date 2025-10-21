@@ -3,6 +3,7 @@ package com.example.Blogs.DAOs;
 import com.example.Blogs.Enums.Timezone;
 import com.example.Blogs.Models.Comment;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -16,5 +17,5 @@ public interface CommentDAO {
     String updateComment(String body,Long id, Timezone timezone);
     List<Comment> findByPost(Long postId);
     List<Comment> findByUser(Long userId);
-    Map<Long,List<Comment>> findByMultiplePosts(List<Long> postIds);
+    HashMap<Long,List<Comment>> findByMultiplePosts(List<Long> postIds);
 }

@@ -13,19 +13,22 @@ import java.time.OffsetDateTime;
 public class ProfileResultSetExtractor implements ResultSetExtractor<User> {
     @Override
     public User extractData(ResultSet rs) throws SQLException, DataAccessException {
-        User user = new User(
-                rs.getLong("id"),
-                rs.getString("username"),
-                rs.getString("display_name"),
-                rs.getObject("created_at", OffsetDateTime.class)
-        );
+        User user = null;
         while (rs.next()) {
+            if (user == null) {
+                user = new User(
+                        rs.getLong("user_id"),
+                        rs.getString("username"),
+                        rs.getString("display_name"),
+                        rs.getObject("user_created_at", OffsetDateTime.class)
+                );
+            }
                Post post = new Post(
                        rs.getLong("post_id"),
                        rs.getLong("post_user_id"),
                        rs.getString("body"),
                        rs.getString("title"),
-                       rs.getObject("created_at", OffsetDateTime.class));
+                       rs.getObject("published_at", OffsetDateTime.class));
                user.getPosts().put(post.getId(), post);
 
         }

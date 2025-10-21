@@ -1,19 +1,19 @@
 package com.example.Blogs.DAOs;
 
 import com.example.Blogs.Enums.Timezone;
+import com.example.Blogs.Mappers.ResultSetExtractors.PostResultSetExtractor;
 import com.example.Blogs.Utils.DAOUtilities.DAOUtilities;
 import com.example.Blogs.DAOs.SqlQueries.PostQueries;
 import com.example.Blogs.Exceptions.PostNotFoundException;
 import com.example.Blogs.Exceptions.UserNotFoundException;
 import com.example.Blogs.Models.Post;
-import com.example.Blogs.Mappers.ResultSetExtractors.PostResultSetExtractor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.time.OffsetDateTime;
 import java.util.List;
-import java.util.Map;
+import java.util.HashMap;
 
 @Repository
 public class PostDAOImplement extends DAO_Implementation implements PostDAO {
@@ -44,24 +44,24 @@ public class PostDAOImplement extends DAO_Implementation implements PostDAO {
 
 
 
-    private Map<Long, Post> MapPosts (String sql,List<Long> ids) {
+    private HashMap<Long, Post> HashMapPosts (String sql,List<Long> ids) {
         Object[] params = daoUtilities.preparingParamForTheQuery(ids);
         return jdbcTemplate.query(sql, new PostResultSetExtractor(), params);
     }
 
-    private Map<Long, Post> MapPosts (String sql,String searchQuery, List<Long> authorFilter, OffsetDateTime minDate, OffsetDateTime maxDate, Integer limit, Integer offset) {
+    private HashMap<Long, Post> HashMapPosts (String sql,String searchQuery, List<Long> authorFilter, OffsetDateTime minDate, OffsetDateTime maxDate, Integer limit, Integer offset) {
         return jdbcTemplate.query(sql, new PostResultSetExtractor(),searchQuery, authorFilter, minDate, maxDate);
     }
 
-    private Map<Long, Post> MapPosts (String sql,Integer offset) {
+    private HashMap<Long, Post> HashMapPosts (String sql,Integer offset) {
         return jdbcTemplate.query(sql, new PostResultSetExtractor(), offset);
     }
 
-    private Map<Long, Post> MapPosts (String sql,Long id) {
+    private HashMap<Long, Post> HashMapPosts (String sql,Long id) {
         return jdbcTemplate.query(sql, new PostResultSetExtractor(), id);
     }
 
-    private Map<Long, Post> MapPosts (String sql) {
+    private HashMap<Long, Post> HashMapPosts (String sql) {
         return jdbcTemplate.query(sql, new PostResultSetExtractor());
     }
 
@@ -70,9 +70,9 @@ public class PostDAOImplement extends DAO_Implementation implements PostDAO {
         if (existsById(id)) {
             List<Long> ids = List.of(id);
             String sql = postQueries.SqlQueryForFindingOnePostOrMultiple();
-            Map<Long, Post> postsMap = MapPosts(sql,ids);
-            assert postsMap != null;
-            return postsMap.get(id);
+            HashMap<Long, Post> postsHashMap = HashMapPosts(sql,ids);
+            assert postsHashMap != null;
+            return postsHashMap.get(id);
         } else {
             throw new PostNotFoundException("Post not found");
         }
@@ -84,9 +84,9 @@ public class PostDAOImplement extends DAO_Implementation implements PostDAO {
     public List<Post> findByUser(Long userId) throws UserNotFoundException {
         if (userDAO.existsById(userId)) {
             String sqlForPostsByUser = postQueries.SqlQueryForFindingAllPostsByUser();
-            Map<Long, Post> postsMap =
-                    MapPosts(sqlForPostsByUser,userId);
-            return postsMap.values().stream().toList();
+            HashMap<Long, Post> postsHashMap =
+                    HashMapPosts(sqlForPostsByUser,userId);
+            return postsHashMap.values().stream().toList();
         }
         else {
             throw new UserNotFoundException("User not found");
@@ -97,9 +97,9 @@ public class PostDAOImplement extends DAO_Implementation implements PostDAO {
     public List<Post> findFollowingUsersPosts(Long userId) throws UserNotFoundException {
         if (userDAO.existsById(userId)) {
             String sqlForFollowingPosts = postQueries.SQLQueryForCurrentUserFollowingPosts();
-            Map<Long, Post> postsMap =
-                    MapPosts(sqlForFollowingPosts,userId);
-            return postsMap.values().stream().toList();
+            HashMap<Long, Post> postsHashMap =
+                    HashMapPosts(sqlForFollowingPosts,userId);
+            return postsHashMap.values().stream().toList();
         }
         else {
             throw new UserNotFoundException("User not found");
@@ -115,10 +115,10 @@ public class PostDAOImplement extends DAO_Implementation implements PostDAO {
                                              Integer limit,
                                              Integer offset) {
         String sql = postQueries.SQLQueryForPostSearch();
-        Map<Long, Post> postsMap = MapPosts(sql,searchQuery, authorFilter, minDate, maxDate,limit,offset);
-        assert postsMap != null;
-        if (!postsMap.isEmpty()) {
-            return postsMap.values().stream().toList();
+        HashMap<Long, Post> postsHashMap = HashMapPosts(sql,searchQuery, authorFilter, minDate, maxDate,limit,offset);
+        assert postsHashMap != null;
+        if (!postsHashMap.isEmpty()) {
+            return postsHashMap.values().stream().toList();
         }
         return  List.of();
     }
@@ -126,9 +126,9 @@ public class PostDAOImplement extends DAO_Implementation implements PostDAO {
     @Override
     public List<Post> findTopPosts() {
         String sqlForTopPosts = postQueries.SQLQueryForTopPosts();
-        Map<Long, Post> postsMap = MapPosts(sqlForTopPosts);
-        if (!postsMap.isEmpty()) {
-            return postsMap.values().stream().toList();
+        HashMap<Long, Post> postsHashMap = HashMapPosts(sqlForTopPosts);
+        if (!postsHashMap.isEmpty()) {
+            return postsHashMap.values().stream().toList();
         }
         return List.of();
     }
@@ -136,9 +136,9 @@ public class PostDAOImplement extends DAO_Implementation implements PostDAO {
     @Override
     public List<Post> findTopPostsOffset(Integer offset) {
         String sqlForTopPosts = postQueries.getTopPostsOffsetQuery();
-        Map<Long, Post> postsMap = MapPosts(sqlForTopPosts,offset);
-        if (!postsMap.isEmpty()) {
-            return postsMap.values().stream().toList();
+        HashMap<Long, Post> postsHashMap = HashMapPosts(sqlForTopPosts,offset);
+        if (!postsHashMap.isEmpty()) {
+            return postsHashMap.values().stream().toList();
         }
         return List.of();
     }
@@ -176,6 +176,16 @@ public class PostDAOImplement extends DAO_Implementation implements PostDAO {
     public Long getPostOwner(Long postId) {
         String sql = postQueries.getPostOwnerQuery();
         return jdbcTemplate.queryForObject(sql, Long.class, postId);
+    }
+
+    @Override
+    public List<Post> getByUserIds(List<Long> userIds) {
+        String sql = postQueries.getByUserIdsQuery();
+        HashMap<Long, Post> postsHashMap = HashMapPosts(sql,userIds);
+        if (!postsHashMap.isEmpty()) {
+            return postsHashMap.values().stream().toList();
+        }
+        return List.of();
     }
 
     @Override

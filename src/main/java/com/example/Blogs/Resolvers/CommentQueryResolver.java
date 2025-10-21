@@ -2,6 +2,7 @@ package com.example.Blogs.Resolvers;
 
 import com.example.Blogs.DTOs.CommentDTO;
 import com.example.Blogs.Services.CommentService;
+import com.example.Blogs.Services.UserService;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +20,8 @@ public class CommentQueryResolver {
 
     @Autowired
     private CommentService commentService;
+    @Autowired
+    private  UserService userService;
 
 
     @Validated

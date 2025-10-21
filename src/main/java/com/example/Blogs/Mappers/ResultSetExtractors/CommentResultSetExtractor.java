@@ -9,23 +9,24 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CommentResultSetExtractor implements ResultSetExtractor<Map<Long, List<Comment>>> {
-    Map<Long, List<Comment>> organizedComments = Map.of();
+public class CommentResultSetExtractor implements ResultSetExtractor<HashMap<Long, List<Comment>>> {
+    HashMap<Long, List<Comment>> organizedComments = new HashMap<>();
     @Override
-    public Map<Long, List<Comment>> extractData(ResultSet rs) throws SQLException, DataAccessException {
+    public HashMap<Long, List<Comment>> extractData(ResultSet rs) throws SQLException, DataAccessException {
         while (rs.next()) {
             Comment comment = new Comment(
                     rs.getLong("id"),
                     rs.getString("body"),
-                    rs.getLong("comment_post_id"),
-                    rs.getLong("comment_user_id"),
+                    rs.getLong("post_id"),
+                    rs.getLong("user_id"),
                     rs.getObject("created_at", OffsetDateTime.class));
-            if (!organizedComments.containsKey(rs.getLong("comment_post_id")))
-                organizedComments.put(rs.getLong("comment_post_id"), new ArrayList<Comment>());
-            organizedComments.get(rs.getLong("comment_post_id")).add(comment);
+            if (!organizedComments.containsKey(rs.getLong("post_id")))
+                organizedComments.put(rs.getLong("post_id"), new ArrayList<Comment>());
+            organizedComments.get(rs.getLong("post_id")).add(comment);
         }
         return organizedComments;
     }

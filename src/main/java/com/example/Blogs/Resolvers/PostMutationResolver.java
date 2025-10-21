@@ -2,6 +2,7 @@ package com.example.Blogs.Resolvers;
 
 import com.example.Blogs.DTOs.PostDTO;
 import com.example.Blogs.Services.PostService;
+import com.example.Blogs.Services.UserService;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -32,7 +33,7 @@ public class PostMutationResolver {
 
     @Validated
     @MutationMapping
-    @PreAuthorize("@userService.isUserAuthorized(#id)")
+    @PreAuthorize("@postService.isUserAuthorized(#id)")
     public PostDTO updatePost(@Argument @Positive @NotNull Long id,
                               @Argument @NotBlank String body,
                               @Argument @Size(min = 1, max = 50) String title) {
@@ -41,7 +42,7 @@ public class PostMutationResolver {
 
     @Validated
     @MutationMapping
-    @PreAuthorize("@userService.isUserAuthorized(#id)")
+    @PreAuthorize("@postService.isUserAuthorized(#id)")
     public String deletePost(@Argument @Positive @NotNull Long id) {
         return postService.deletePost(id);
     }

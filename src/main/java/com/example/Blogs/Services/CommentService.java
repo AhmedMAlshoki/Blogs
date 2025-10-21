@@ -7,17 +7,16 @@ import com.example.Blogs.Enums.Timezone;
 import com.example.Blogs.Mappers.MapStructMappers.CommentMapper;
 import com.example.Blogs.Models.Comment;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class CommentService {
     private final CommentDAO commentDAO;
     private final CommentMapper commentMapper;
@@ -31,6 +30,7 @@ public class CommentService {
     }
 
     public boolean isUserAuthorized(Long id) {
+        log.info("CURRENT USER'S ID  : {}", advancedEmailPasswordToken.getCurrentUserId());
         return Objects.equals(advancedEmailPasswordToken.getCurrentUserId(), findCommentOwner(id));
     }
 
@@ -46,6 +46,8 @@ public class CommentService {
 
     public Iterable<CommentDTO> getPostComments(Long id) {
         List<Comment> comments = commentDAO.findByPost(id);
+        if (comments == null)
+            return List.of();
         return comments.stream().map(commentMapper::commentToCommentDTO).toList();
     }
 
@@ -77,5 +79,11 @@ public class CommentService {
 
     public String deleteComment(Long id) {
         return commentDAO.deleteById(id);
+    }
+
+    public List<CommentDTO> findByMultiplePosts(List<Long> postIds) {
+        HashMap<Long,List<Comment>> comments = commentDAO.findByMultiplePosts(postIds);
+        //return comments.values().stream().map(commentMapper::commentToCommentDTO).toList();
+        return comments.values().stream().flatMap(List::stream).map(commentMapper::commentToCommentDTO).toList();
     }
 }

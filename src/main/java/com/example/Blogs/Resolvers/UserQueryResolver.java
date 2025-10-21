@@ -40,19 +40,19 @@ public class UserQueryResolver {
 
     @Validated
     @QueryMapping
-    public Iterable<UserDTO> followers(@Argument @Positive @NotNull Long id) {
-        return userService.findFollowers(id);
+    public Iterable<UserDTO> followers(@Argument @Positive @NotNull Long userId) {
+        return userService.findFollowers(userId);
     }
 
     @Validated
     @QueryMapping
-    public Iterable<UserDTO> followingList(@Argument @Positive @NotNull Long id) {
-        return userService.findFollowings(id);
+    public Iterable<UserDTO> followingList(@Argument @Positive @NotNull Long userId) {
+        return userService.findFollowings(userId);
     }
 
     @Validated
     @QueryMapping
-    public UserDTO userProfile(@Argument @Positive @NotNull Long id) {
-        return userService.getUserFullProfile(id);
+    public UserDTO userProfile(@Argument @Positive @NotNull Long userId) {
+        return userService.getUserFullProfile(userId);
     }
 }

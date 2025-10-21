@@ -41,6 +41,7 @@ public class UserService {
     }
 
     public boolean isUserAuthorized(Long id) {
+        log.info("CURRENT USER'S ID  : {}", advancedEmailPasswordToken.getCurrentUserId());
         return Objects.equals(advancedEmailPasswordToken.getCurrentUserId(), id);
     }
 

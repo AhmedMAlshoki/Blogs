@@ -52,16 +52,23 @@ public  class  PostPostgresQueries extends PostQueries {
     @Override
     public String getTopPostsOffsetQuery() {
         return  theStandardSelectStatement() +
-                "FROM posts p LEFT JOIN likes l ON p.id = l.post_id" +
+                "FROM posts p LEFT JOIN likes l ON p.id = l.post_id " +
                 "WHERE p.created_at > NOW() - INTERVAL '1 week' " +
                 "GROUP BY p.id , l.id ORDER BY p.score DESC  LIMIT 20 OFFSET ? * 20";
     }
 
     @Override
+    public String getByUserIdsQuery() {
+        return theStandardSelectStatement() +
+                "FROM posts p LEFT JOIN likes l ON p.id = l.post_id " +
+                "WHERE p.user_id = ANY(?) GROUP BY p.id , l.id ORDER BY p.created_at DESC";
+    }
+
+    @Override
     public String SQLQueryForCurrentUserFollowingPosts() { //TODO: implement this SQLQueryForCurrentUserFollowing
         return  theStandardSelectStatement() +
-                "FROM posts p LEFT JOIN likes l ON p.id = l.post_id" +
-                "INNER JOIN relationships r ON p.user_id = r.follower_id " +
+                "FROM posts p LEFT JOIN likes l ON p.id = l.post_id " +
+                "INNER JOIN relationships r ON p.user_id = r.following_id " +
                 "WHERE r.follower_id = ? GROUP BY p.id , l.id ORDER BY p.created_at DESC";
     }
 

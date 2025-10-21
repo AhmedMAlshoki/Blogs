@@ -2,6 +2,7 @@ package com.example.Blogs.Aspects;
 
 import com.example.Blogs.Exceptions.TooManyRequestsException;
 import com.example.Blogs.Utils.FixedWindowRateLimiter;
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Aspect
 @Component
+@Slf4j
 public class RateLimitAspect {
     private final FixedWindowRateLimiter rateLimiter ;
 
@@ -23,6 +25,7 @@ public class RateLimitAspect {
 
     @Before("resolverCall()")
     public void rateLimitCheck() throws TooManyRequestsException {
+        log.info("RATE LIMIT CHECK");
         if (!rateLimiter.allowRequest()) {
             throw new TooManyRequestsException("The site is busy, Please try again later");
         }

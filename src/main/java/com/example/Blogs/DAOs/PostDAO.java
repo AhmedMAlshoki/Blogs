@@ -21,4 +21,5 @@ public interface PostDAO {
     String likePost(Long postId, Long userId, Timezone timezone);
     String dislikePost(Long postId, Long userId);
     Long getPostOwner(Long postId);
+    List<Post> getByUserIds(List<Long> userIds);
 }
