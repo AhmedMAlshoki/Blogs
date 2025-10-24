@@ -75,7 +75,7 @@ public class UserPostgresQueries extends UserQueries{
 
     @Override
     public String getMultipleUsers() {
-        return "SELECT id,username,display_name,created_at FROM users WHERE id = ANY(?)";
+        return "SELECT id,username,display_name,created_at FROM users WHERE id  IN(%s)";
     }
 
     @Override

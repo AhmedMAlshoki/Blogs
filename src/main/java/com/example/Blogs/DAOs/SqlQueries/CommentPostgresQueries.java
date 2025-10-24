@@ -43,7 +43,7 @@ public class CommentPostgresQueries extends CommentQueries {
 
     @Override
     public String SQLQueryForFindByMultiplePosts() {
-        return "SELECT * FROM comments WHERE post_id = ANY(?)";
+        return "SELECT * FROM comments WHERE post_id  IN(%s)";
     }
 
     @Override

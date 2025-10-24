@@ -113,8 +113,9 @@ public class UserDAOImplement extends DAO_Implementation implements UserDAO  {
     @Override
     public List<User> getByUserIds(List<Long> ids) {
         String sql = userQueries.getMultipleUsers();
-        Object[] params = daoUtilities.preparingParamForTheQuery(ids);
-        List<User> users = jdbcTemplate.query(sql, new UserResultSetExtractor(), params);
+        String inClause = daoUtilities.preparingParamForTheQuery(ids);
+        String finalSql = String.format(sql, inClause);
+        List<User> users = jdbcTemplate.query(finalSql, new UserResultSetExtractor(), ids.toArray());
         assert users != null;
         if (!users.isEmpty()) return users;
         return List.of();

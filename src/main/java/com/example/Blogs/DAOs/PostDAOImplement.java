@@ -45,8 +45,9 @@ public class PostDAOImplement extends DAO_Implementation implements PostDAO {
 
 
     private HashMap<Long, Post> HashMapPosts (String sql,List<Long> ids) {
-        Object[] params = daoUtilities.preparingParamForTheQuery(ids);
-        return jdbcTemplate.query(sql, new PostResultSetExtractor(), params);
+        String inClauseParams = daoUtilities.preparingParamForTheQuery(ids);
+        String modifiedSQL = String.format(sql,inClauseParams);
+        return jdbcTemplate.query(modifiedSQL, new PostResultSetExtractor(), ids.toArray());
     }
 
     private HashMap<Long, Post> HashMapPosts (String sql,String searchQuery, List<Long> authorFilter, OffsetDateTime minDate, OffsetDateTime maxDate, Integer limit, Integer offset) {

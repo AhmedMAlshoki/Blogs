@@ -126,7 +126,8 @@ public class CommentDAOImplement extends DAO_Implementation implements CommentDA
     @Override
     public HashMap<Long, List<Comment>> findByMultiplePosts(List<Long> postIds)  {
         String sql = commentQueries.SQLQueryForFindByMultiplePosts();
-        Object[] params = daoUtilities.preparingParamForTheQuery(postIds);
-        return jdbcTemplate.query(sql,new CommentResultSetExtractor(),params);
+        String params = daoUtilities.preparingParamForTheQuery(postIds);
+        String newSql = String.format(sql,params);
+        return jdbcTemplate.query(newSql,new CommentResultSetExtractor(),postIds.toArray());
     }
 }

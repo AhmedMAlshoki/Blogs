@@ -35,7 +35,7 @@ public  class  PostPostgresQueries extends PostQueries {
     public  String SqlQueryForFindingOnePostOrMultiple() {
         return  theStandardSelectStatement() +
                 "FROM posts p " +
-                "LEFT JOIN likes l ON p.id = l.post_id WHERE p.id = ANY(?)";
+                "LEFT JOIN likes l ON p.id = l.post_id WHERE p.id  IN(%s)";
     }
 
 
@@ -61,7 +61,7 @@ public  class  PostPostgresQueries extends PostQueries {
     public String getByUserIdsQuery() {
         return theStandardSelectStatement() +
                 "FROM posts p LEFT JOIN likes l ON p.id = l.post_id " +
-                "WHERE p.user_id = ANY(?) GROUP BY p.id , l.id ORDER BY p.created_at DESC";
+                "WHERE p.user_id  IN(%s) GROUP BY p.id , l.id ORDER BY p.created_at DESC";
     }
 
     @Override
