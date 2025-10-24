@@ -1,54 +1,55 @@
 package com.example.Blogs.Config;
 
-import com.example.Blogs.DTOs.CommentDTO;
-import com.example.Blogs.DTOs.PostDTO;
-import com.example.Blogs.DTOs.UserDTO;
-import com.example.Blogs.Models.Post;
-import com.example.Blogs.Services.CommentService;
-import com.example.Blogs.Services.PostService;
-import com.example.Blogs.Services.UserService;
-import org.dataloader.DataLoader;
-import org.dataloader.DataLoaderFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
+import com.example.Blogs.DataLoaders.CommentDataLoader;
+import com.example.Blogs.DataLoaders.PostDataLoader;
+import com.example.Blogs.DataLoaders.UserDataLoader;
+import lombok.extern.slf4j.Slf4j;
+import org.dataloader.DataLoaderRegistry;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.graphql.server.WebGraphQlInterceptor;
+import org.springframework.graphql.server.WebGraphQlRequest;
+import org.springframework.graphql.server.WebGraphQlResponse;
+import org.springframework.stereotype.Component;
+import reactor.core.publisher.Mono;
 
 @Configuration
+@Slf4j
 public class DataLoaderConfig {
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private PostService postService;
-    @Autowired
-    private CommentService commentService;
+    @Component
+    public static class DataLoaderInterceptor implements WebGraphQlInterceptor {
 
+        private final UserDataLoader userDataLoader;
+        private final PostDataLoader postDataLoader;
+        private final CommentDataLoader commentDataLoader;
 
-    @Bean
-    public DataLoader<Long, UserDTO> userDataLoader() {
-        return DataLoaderFactory.newDataLoader((userIds -> {
-            List<UserDTO> users = userService.findByIds(userIds);
-            return CompletableFuture.completedFuture(users);
-        }));
+        public DataLoaderInterceptor(UserDataLoader userDataLoader,
+                                     PostDataLoader postDataLoader,
+                                     CommentDataLoader commentDataLoader) {
+            this.userDataLoader = userDataLoader;
+            this.postDataLoader = postDataLoader;
+            this.commentDataLoader = commentDataLoader;
+            log.info("=== DataLoaderInterceptor constructor called ===");
+        }
+
+        @Override
+        public Mono<WebGraphQlResponse> intercept(WebGraphQlRequest request, Chain chain) {
+            log.info("=== INTERCEPTOR CALLED - Creating DataLoaderRegistry ===");
+            DataLoaderRegistry registry = new DataLoaderRegistry();
+            registry.register("userDataLoader", userDataLoader.userDataLoader());
+            registry.register("postDataLoader", postDataLoader.postDataLoader());
+            registry.register("commentDataLoader", commentDataLoader.commentDataLoader());
+
+            log.info("=== Registered DataLoaders: {} ===", registry.getKeys());
+
+            // Configure the ExecutionInput to use this registry
+            request.configureExecutionInput((executionInput, builder) -> {
+                log.info("=== Configuring ExecutionInput with DataLoaderRegistry ===");
+                return builder.dataLoaderRegistry(registry).build();
+            });
+
+            return chain.next(request);
+        }
     }
-
-    @Bean
-    public DataLoader<Long, PostDTO> postDataLoader() {
-        return DataLoaderFactory.newDataLoader((userIds -> {
-            List<PostDTO> posts = postService.findByUserIds(userIds);
-            return CompletableFuture.completedFuture(posts);
-        }));
-    }
-
-    @Bean
-    public DataLoader<Long, CommentDTO> commentDataLoader() {
-        return DataLoaderFactory.newDataLoader((postIds -> {
-            List<CommentDTO> comments = commentService.findByMultiplePosts(postIds);
-            return CompletableFuture.completedFuture(comments);
-        }));
-    }
-
 
 }

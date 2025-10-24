@@ -3,45 +3,44 @@ package com.example.Blogs.Resolvers;
 import com.example.Blogs.DTOs.CommentDTO;
 import com.example.Blogs.DTOs.PostDTO;
 import com.example.Blogs.DTOs.UserDTO;
-import com.example.Blogs.Models.Post;
-import com.example.Blogs.Services.CommentService;
-import com.example.Blogs.Services.PostService;
-import com.example.Blogs.Services.UserService;
+import graphql.schema.DataFetchingEnvironment;
+import lombok.extern.slf4j.Slf4j;
 import org.dataloader.DataLoader;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.SchemaMapping;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.annotation.Validated;
 
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 @Controller
+@Slf4j
 public class FieldsResolvers {
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private PostService postService;
-    @Autowired
-    private CommentService commentService;
 
-
-    @Validated
-    @SchemaMapping(typeName = "Post", field = "user")
-    public CompletableFuture<UserDTO> getUser(PostDTO post, DataLoader<Long, UserDTO> userDataLoader) {
-        return userDataLoader.load(post.getUserId());
+    @SchemaMapping(typeName = "User", field = "posts")
+    public CompletableFuture<List<PostDTO>> getPosts(UserDTO user, DataFetchingEnvironment env) {
+        log.info("Field Resolver getPosts");
+        log.info("Data Loader Registry {}",env.getDataLoaderRegistry()==null);
+        log.info("Data Loader Registry Keys {}",env.getDataLoaderRegistry().getKeys());
+        DataLoader<Long, List<PostDTO>> dataLoader = env.getDataLoader("postDataLoader");
+        assert dataLoader != null;
+        return dataLoader.load(user.getId());
     }
 
-    @Validated
-    @SchemaMapping(typeName = "User", field = "posts")
-    public CompletableFuture<PostDTO> getPosts(PostDTO post, DataLoader<Long, PostDTO> postDTODataLoader) {
-        return postDTODataLoader.load(post.getId());
-    } //DataLoader
+    @SchemaMapping(typeName = "Post", field = "user")
+    public CompletableFuture<UserDTO> getUser(PostDTO post, DataFetchingEnvironment env) {
+        log.info("Field Resolver getUser");
+        DataLoader<Long, UserDTO> dataLoader = env.getDataLoader("userDataLoader");
+        assert dataLoader != null;
+        return dataLoader.load(post.getUserId());
+    }
 
-    @Validated
     @SchemaMapping(typeName = "Post", field = "comments")
-    public Iterable<CommentDTO> getComments(PostDTO post) {
-        return commentService.getPostComments(post.getId());
-    } //DataLoader
+    public CompletableFuture<List<CommentDTO>> getComments(PostDTO post, DataFetchingEnvironment env) {
+        log.info("Field Resolver getComments");
+        DataLoader<Long, List<CommentDTO>> dataLoader = env.getDataLoader("commentDataLoader");
+        assert dataLoader != null;
+        return dataLoader.load(post.getId());
+    }
 
 
 

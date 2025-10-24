@@ -144,6 +144,12 @@
             <artifactId>spqr</artifactId>
             <version>0.12.4</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/com.graphql-java/java-dataloader -->
+        <dependency>
+            <groupId>com.graphql-java</groupId>
+            <artifactId>java-dataloader</artifactId>
+            <version>3.3.0</version>
+        </dependency>
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-test</artifactId>

@@ -7,6 +7,7 @@ import graphql.language.StringValue;
 import graphql.language.Value;
 import graphql.schema.*;
 import jakarta.validation.constraints.NotNull;
+import org.dataloader.DataLoaderRegistry;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.graphql.execution.RuntimeWiringConfigurer;
@@ -65,4 +66,5 @@ public class GraphQLConfiguration {
                     }
                 }).build();
     }
+
 }

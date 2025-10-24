@@ -164,6 +164,7 @@ public class PostService {
     }
 
     public List<PostDTO> findByUserIds(List<Long> postIds) {
+        log.info("findByUserIds : {}",postIds);
         List<Post> posts = postDAO.getByUserIds(postIds);
         return posts.stream().map(postMapper::postToPostDTO).toList();
     }
