@@ -11,12 +11,12 @@ type Query {
     postsByFollowing(userId: ID!): [Post]
     searchPosts(
         query: String   # Full-text search term
-        authorIds: [ID!]
+        authorIds: [Int]
         minDate: Date
         maxDate: Date
-        first: Int = 20 # Pagination (default 20 items)
-        after: Int   # Cursor for pagination
-    ): [Post]!
+        size: Int = 20
+        offset: Int = 1
+    ): SearchQueryResult
 
     getTopPosts(offset: Int): [Post]!
 
@@ -24,7 +24,6 @@ type Query {
     commentsByPost(postId: ID!): [Comment]
     commentsByUser(userId: ID!): [Comment]
 }
-
 type Mutation {
    saveNewComment(postId: ID!, body: String!): Comment
 
@@ -55,13 +54,26 @@ type Mutation {
     login(email: String!, password: String!): LoginResponse!
 
 }
-
 type LoginResponse {
     token: String!
     user: User!
 }
 
+type SearchQueryResult {
+    SearchQueryPosts: [SearchQueryPost]
+    total: Int
+}
 
+type SearchQueryPost{
+    id: ID!
+    title: String!
+    body: String!
+    publishedAt: Date
+    user : Int!
+    displayName: String
+    rank: Float!
+    highlight: String!
+}
 
 type User {
     id: ID!
@@ -75,7 +87,7 @@ type Post {
     id: ID!
     title: String!
     body: String!
-    createdAt: Date!
+    createdAt: Date
     user: User
     likes: [Like]!
     comments: [Comment]

@@ -9,7 +9,10 @@ import org.springframework.jdbc.core.ResultSetExtractor;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,8 +33,10 @@ public class PostResultSetExtractor implements ResultSetExtractor<HashMap<Long, 
                             rs.getLong("post_id"),
                             rs.getLong("post_user_id"),
                             rs.getString("body"),
-                            rs.getString("title"),
-                            rs.getObject("created_at", OffsetDateTime.class));
+                            rs.getString("title"));
+                    LocalDateTime dataBaseDate = LocalDateTime.parse(rs.getObject("created_at", OffsetDateTime.class).toString(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSS"));
+                    OffsetDateTime offsetDateTime = OffsetDateTime.of(dataBaseDate, ZoneId.systemDefault().getRules().getOffset(dataBaseDate));
+                    post.setCreatedAt(offsetDateTime);
                     postId = post.getId();
                     posts.put(post.getId(), post);
                 }

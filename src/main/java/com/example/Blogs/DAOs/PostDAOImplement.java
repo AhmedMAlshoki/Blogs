@@ -1,12 +1,15 @@
 package com.example.Blogs.DAOs;
 
+import com.example.Blogs.CustomResponses.SearchQueryResult;
 import com.example.Blogs.Enums.Timezone;
 import com.example.Blogs.Mappers.ResultSetExtractors.PostResultSetExtractor;
+import com.example.Blogs.Mappers.ResultSetExtractors.SearchQueryPostsResultSetExtractor;
 import com.example.Blogs.Utils.DAOUtilities.DAOUtilities;
 import com.example.Blogs.DAOs.SqlQueries.PostQueries;
 import com.example.Blogs.Exceptions.PostNotFoundException;
 import com.example.Blogs.Exceptions.UserNotFoundException;
 import com.example.Blogs.Models.Post;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -16,6 +19,7 @@ import java.util.List;
 import java.util.HashMap;
 
 @Repository
+@Slf4j
 public class PostDAOImplement extends DAO_Implementation implements PostDAO {
 
     private  UserDAO userDAO;
@@ -50,8 +54,8 @@ public class PostDAOImplement extends DAO_Implementation implements PostDAO {
         return jdbcTemplate.query(modifiedSQL, new PostResultSetExtractor(), ids.toArray());
     }
 
-    private HashMap<Long, Post> HashMapPosts (String sql,String searchQuery, List<Long> authorFilter, OffsetDateTime minDate, OffsetDateTime maxDate, Integer limit, Integer offset) {
-        return jdbcTemplate.query(sql, new PostResultSetExtractor(),searchQuery, authorFilter, minDate, maxDate);
+    private SearchQueryResult HashMapPosts (String sql,String searchQuery, List<Long> authorFilter, OffsetDateTime minDate, OffsetDateTime maxDate, Integer limit, Integer offset) {
+        return jdbcTemplate.query(sql, new SearchQueryPostsResultSetExtractor(),searchQuery, authorFilter, minDate, maxDate,limit,offset);
     }
 
     private HashMap<Long, Post> HashMapPosts (String sql,Integer offset) {
@@ -109,19 +113,21 @@ public class PostDAOImplement extends DAO_Implementation implements PostDAO {
 
 
     @Override
-    public List<Post> findPostsBySearchQuery(String searchQuery,
-                                             List<Long> authorFilter,
-                                             OffsetDateTime minDate,
-                                             OffsetDateTime maxDate,
-                                             Integer limit,
-                                             Integer offset) {
+    public SearchQueryResult findPostsBySearchQuery(String searchQuery,
+                                                    List<Long> authorFilter,
+                                                    OffsetDateTime minDate,
+                                                    OffsetDateTime maxDate,
+                                                    Integer limit,
+                                                    Integer offset) {
+        log.info("Query Call in DAO");
         String sql = postQueries.SQLQueryForPostSearch();
-        HashMap<Long, Post> postsHashMap = HashMapPosts(sql,searchQuery, authorFilter, minDate, maxDate,limit,offset);
-        assert postsHashMap != null;
-        if (!postsHashMap.isEmpty()) {
-            return postsHashMap.values().stream().toList();
+        SearchQueryResult result = HashMapPosts(sql,searchQuery, authorFilter, minDate, maxDate, limit, offset);
+        if (result.getTotal() == 0) {
+            log.info("No posts found");
+            return null;
         }
-        return  List.of();
+        log.info("Number of posts found : {}", result.getTotal());
+        return result;
     }
 
     @Override

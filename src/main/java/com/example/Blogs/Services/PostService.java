@@ -1,21 +1,18 @@
 package com.example.Blogs.Services;
 
 import com.example.Blogs.AuthenticationObject.AdvancedEmailPasswordToken;
+import com.example.Blogs.CustomResponses.SearchQueryResult;
 import com.example.Blogs.DAOs.PostDAO;
 import com.example.Blogs.DTOs.PostDTO;
 import com.example.Blogs.Enums.Timezone;
 import com.example.Blogs.Exceptions.PostNotFoundException;
 import com.example.Blogs.Mappers.MapStructMappers.PostMapper;
 import com.example.Blogs.Models.Post;
-import com.example.Blogs.ScheduleJobs.TopPostsJob;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.scheduling.config.ScheduledTask;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
@@ -62,14 +59,15 @@ public class PostService {
         return  posts.stream().map(postMapper::postToPostDTO).toList();
     }
 
-    public List<PostDTO> getPostsBySearchQuery(String searchQuery,
-                                            List<Long> authorFilter,
-                                            OffsetDateTime minDate,
-                                            OffsetDateTime maxDate,
-                                            Integer limit,
-                                            Integer offset) {
-        List<Post> posts = postDAO.findPostsBySearchQuery(searchQuery, authorFilter, minDate, maxDate, limit, offset);
-        return posts.stream().map(postMapper::postToPostDTO).toList();
+    public SearchQueryResult getPostsBySearchQuery(String searchQuery,
+                                                   List<Long> authorFilter,
+                                                   OffsetDateTime minDate,
+                                                   OffsetDateTime maxDate,
+                                                   Integer limit,
+                                                   Integer offset) {
+        SearchQueryResult searchQueryResult = postDAO.findPostsBySearchQuery(searchQuery, authorFilter, minDate, maxDate, limit, offset);
+        log.info("NUMBER OF POSTS = {} ",searchQueryResult.getSearchQueryPosts().size());
+        return searchQueryResult;
     }
 
 

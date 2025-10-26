@@ -6,7 +6,10 @@ import org.springframework.jdbc.core.ResultSetExtractor;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class UserResultSetExtractor implements ResultSetExtractor<List<User>> {
@@ -17,9 +20,11 @@ public class UserResultSetExtractor implements ResultSetExtractor<List<User>> {
             User user = new User(
                     rs.getLong("id"),
                     rs.getString("username"),
-                    rs.getString("display_name"),
-                    rs.getObject("created_at", OffsetDateTime.class)
+                    rs.getString("display_name")
             );
+            LocalDateTime dataBaseDate = LocalDateTime.parse(rs.getObject("created_at", OffsetDateTime.class).toString(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSS"));
+            OffsetDateTime offsetDateTime = OffsetDateTime.of(dataBaseDate, ZoneId.systemDefault().getRules().getOffset(dataBaseDate));
+            user.setSignedUpAt(offsetDateTime);
             users.add(user);
         }
         return users;

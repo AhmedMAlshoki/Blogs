@@ -1,6 +1,7 @@
 package com.example.Blogs.Resolvers;
 
 import com.example.Blogs.AuthenticationObject.AdvancedEmailPasswordToken;
+import com.example.Blogs.CustomResponses.SearchQueryResult;
 import com.example.Blogs.DTOs.PostDTO;
 import com.example.Blogs.Services.PostService;
 import com.example.Blogs.Services.UserService;
@@ -52,13 +53,13 @@ public class PostQueryResolver {
 
     @Validated
     @QueryMapping
-    public Iterable<PostDTO> postsBySearchQuery(@Argument @NotBlank @Size(min = 1, max = 100) String searchQuery,
-                                                @Argument @Size(min = 0, max = 5) List<Long> authorFilter,
-                                                @Argument OffsetDateTime minDate,
-                                                @Argument OffsetDateTime maxDate,
-                                                @Argument @Min(0) Integer size,
-                                                @Argument @Max(50) Integer offset) {
-        return postService.getPostsBySearchQuery(searchQuery, authorFilter, minDate, maxDate, size, offset);
+    public SearchQueryResult searchPosts(@Argument @NotBlank @Size(min = 1, max = 100) String query,
+                                         @Argument @Size(min = 0, max = 5) List<Long> authorFilter,
+                                         @Argument OffsetDateTime minDate,
+                                         @Argument OffsetDateTime maxDate,
+                                         @Argument @Min(0) Integer size,
+                                         @Argument @Max(50) Integer offset) {
+        return postService.getPostsBySearchQuery(query, authorFilter, minDate, maxDate, size, offset);
     }
 
     @Validated

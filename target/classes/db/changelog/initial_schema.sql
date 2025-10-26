@@ -4,6 +4,8 @@
 
 CREATE EXTENSION IF NOT EXISTS pg_trgm;
 CREATE EXTENSION IF NOT EXISTS unaccent;
+
+
 --users table
 CREATE TABLE  IF NOT EXISTS users (
     id SERIAL PRIMARY KEY,
@@ -11,9 +13,9 @@ CREATE TABLE  IF NOT EXISTS users (
     display_name VARCHAR(255),
     email VARCHAR(255) UNIQUE  NOT NULL,
     password VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP WITH  TIME ZONE  DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMP WITHOUT  TIME ZONE  DEFAULT CURRENT_TIMESTAMP,
     created_timezone VARCHAR(255) DEFAULT 'UTC',
-    updated_at TIMESTAMP WITH  TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITHOUT  TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_timezone VARCHAR(255) DEFAULT 'UTC'
 );
 --posts table
@@ -27,9 +29,9 @@ CREATE TABLE  IF NOT EXISTS posts (
                                            setweight(to_tsvector('english', coalesce(body, '')), 'B'))
         STORED,
     score INTEGER DEFAULT 0,
-    created_at TIMESTAMP WITH  TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMP WITHOUT  TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     created_timezone VARCHAR(255) DEFAULT 'UTC',
-    updated_at TIMESTAMP WITH  TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITHOUT  TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_timezone VARCHAR(255)
 );
 
@@ -39,7 +41,7 @@ CREATE TABLE  IF NOT EXISTS likes (
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
     post_id INTEGER REFERENCES posts(id) ON DELETE CASCADE,
-    created_at TIMESTAMP WITH  TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMP WITHOUT  TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     created_timezone VARCHAR(255) DEFAULT 'UTC'
 );
 
@@ -49,9 +51,9 @@ CREATE TABLE  IF NOT EXISTS comments (
     user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
     post_id INTEGER REFERENCES posts(id) ON DELETE CASCADE,
     body TEXT,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     created_timezone VARCHAR(255) DEFAULT 'UTC',
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_timezone VARCHAR(255) DEFAULT 'UTC'
 );
 --relationship table
@@ -77,21 +79,6 @@ CREATE UNIQUE INDEX IF NOT EXISTS user_like_post_unique ON likes (user_id, post_
 --for efficient search
 CREATE INDEX IF NOT EXISTS posts_search_idx ON posts USING GIN (search_vector);
 
---to get user's posts quickly using index
-DO '
-BEGIN
-    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = ''search_result'') THEN
-        CREATE TYPE search_result AS (
-            id INTEGER,
-            title VARCHAR(255),
-            body TEXT,
-            user_name VARCHAR(255),
-            published_at TIMESTAMPTZ,
-            rank FLOAT,
-            highlight TEXT
-        );
-    END IF;
-END ' LANGUAGE plpgsql;
 
 
 --Trigger Function to update score of post
@@ -182,35 +169,33 @@ CREATE TRIGGER comments_created_at
 --The Search Articles Function
 
 
-
+DROP FUNCTION IF EXISTS search_articles;
 CREATE OR REPLACE FUNCTION search_articles(
     search_query TEXT,
     author_filter INTEGER[] DEFAULT NULL,
-    min_date TIMESTAMP WITH TIME ZONE DEFAULT NULL,
-    max_date TIMESTAMP WITH TIME ZONE DEFAULT NULL,
+    min_date TIMESTAMP WITHOUT TIME ZONE DEFAULT NULL,
+    max_date TIMESTAMP WITHOUT TIME ZONE DEFAULT NULL,
     page_size INTEGER DEFAULT 20,
     page_number INTEGER DEFAULT 1
     ) RETURNS TABLE (
-              results search_result,
-              total_count BIGINT
+        id INTEGER,
+        title VARCHAR(255),
+        body TEXT,
+        user_id INTEGER,
+        display_name VARCHAR(255),
+        published_at TIMESTAMP WITHOUT TIME ZONE,
+        rank FLOAT,
+        highlight TEXT
     ) AS $$
           DECLARE
           tsquery_var tsquery;
-          total BIGINT;
     BEGIN
        -- Convert search query to tsquery, handling multiple words
         SELECT array_to_string(array_agg(lexeme || ':*'), ' & ')
         FROM unnest(regexp_split_to_array(trim(search_query), '\s+')) lexeme
         INTO search_query;
         tsquery_var := to_tsquery('english', search_query); --plainto_tsquery('english',search_query)
-        -- Get total count for pagination
-        SELECT COUNT(DISTINCT p.id)
-        FROM posts p
-        WHERE p.search_vector @@ tsquery_var
-        AND (author_filter IS NULL OR p.user_id = ANY(author_filter))
-        AND (min_date IS NULL OR p.created_at >= min_date)
-        AND (max_date IS NULL OR p.created_at <= max_date)
-        INTO total;
+
 
         RETURN QUERY
                WITH ranked_articles AS (
@@ -218,7 +203,8 @@ CREATE OR REPLACE FUNCTION search_articles(
                              p.id,
                              p.title,
                              p.body,
-                             u.username as user_name,
+                             u.id as user_id,
+                             u.display_name as display_name,
                              p.created_at as published_at,
                              ts_rank(p.search_vector, tsquery_var) *
                              CASE
@@ -233,25 +219,17 @@ CREATE OR REPLACE FUNCTION search_articles(
                      AND (author_filter IS NULL OR u.id = ANY(author_filter))
                      AND (min_date IS NULL OR p.created_at >= min_date)
                      AND (max_date IS NULL OR p.created_at <= max_date)
-               ),
-               likes_for_ranking AS (
-                     SELECT likes.post_id as id , likes.user_id as user_id , likes.post_id as post_id
-                     FROM likes
-                     WHERE likes.post_id IN (
-                         SELECT id FROM ranked_articles
-                     )
                )
                SELECT
-                     ROW(ra.id,
-                      ra.title,
-                      ra.body,
-                      ra.user_name,
-                      ra.published_at,
-                      ra.rank,
-                      ra.highlight)::search_result AS results,
-                     total as total_count
+                     ra.id as id,
+                     ra.title as title,
+                     ra.body as body,
+                     ra.user_id user_id,
+                     ra.display_name as display_name,
+                     ra.published_at as published_at,
+                     ra.rank as rank,
+                     ra.highlight as highlight
                FROM ranked_articles ra
-               LEFT JOIN likes_for_ranking ON ra.id = likes_for_ranking.post_id
                ORDER BY ra.rank DESC
                LIMIT page_size
                OFFSET (page_number - 1) * page_size;

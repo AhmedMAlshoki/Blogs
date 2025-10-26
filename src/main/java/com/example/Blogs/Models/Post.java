@@ -42,11 +42,10 @@ public class Post {
         likes = new ArrayList<Like>();
     }
 
-    public Post(long id, long userId, String body,String title, OffsetDateTime createdAt) {
+    public Post(long id, long userId, String body,String title) {
         this.id = id;
         this.userId = userId;
         this.body = body;
-        this.createdAt = createdAt;
         this.title = title;
         List<Like> likes = new ArrayList<Like>();
     }

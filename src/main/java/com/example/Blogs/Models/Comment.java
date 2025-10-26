@@ -36,11 +36,10 @@ public class Comment {
     }
 
 
-    public Comment(long id, String body, long commentPostId, long commentUserId, OffsetDateTime createdAt) {
+    public Comment(long id, String body, long commentPostId, long commentUserId) {
         this.id = id;
         this.body = body;
         this.postId = commentPostId;
         this.userId = commentUserId;
-        this.createdAt = createdAt;
     }
 }
