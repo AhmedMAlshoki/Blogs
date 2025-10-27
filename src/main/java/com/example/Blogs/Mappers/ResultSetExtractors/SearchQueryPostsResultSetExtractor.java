@@ -3,8 +3,10 @@ package com.example.Blogs.Mappers.ResultSetExtractors;
 
 import com.example.Blogs.CustomResponses.SearchQueryResult;
 import com.example.Blogs.Models.SearchQueryPost;
+import com.example.Blogs.Utils.TimeDateUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.postgresql.util.PGobject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import java.sql.ResultSet;
@@ -13,14 +15,13 @@ import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
-import java.time.temporal.ChronoField;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 @Slf4j
 public class SearchQueryPostsResultSetExtractor implements ResultSetExtractor<SearchQueryResult> {
+
     @Override
     public SearchQueryResult extractData(ResultSet rs) throws SQLException, DataAccessException {
         SearchQueryResult postsFinalResult = new SearchQueryResult();
@@ -52,6 +53,7 @@ public class SearchQueryPostsResultSetExtractor implements ResultSetExtractor<Se
     }
 
     private  Object[] prepareFields(String rowString){
+        TimeDateUtil timeDateUtil = new TimeDateUtil();
         log.info("the fields as String : {}", rowString);
         rowString = Objects.requireNonNull(rowString).substring(1,rowString.length()-1);
         log.info("the fields as String after excluding () : {}", rowString);
@@ -62,15 +64,7 @@ public class SearchQueryPostsResultSetExtractor implements ResultSetExtractor<Se
         adjustedFields[2] = fields[2];
         adjustedFields[3] = Long.parseLong(fields[3]);
         adjustedFields[4] = fields[4];
-        DateTimeFormatter formatter = new DateTimeFormatterBuilder()
-                .appendPattern("yyyy-MM-dd HH:mm:ss")
-                .optionalStart()
-                .appendFraction(ChronoField.NANO_OF_SECOND, 0, 6, true)
-                .optionalEnd()
-                .toFormatter();
-        LocalDateTime dataBaseDate = LocalDateTime.parse(fields[5].substring(1,fields[5].length()-1),
-                 formatter);
-        adjustedFields[5] = OffsetDateTime.of(dataBaseDate, ZoneId.systemDefault().getRules().getOffset(dataBaseDate));
+        adjustedFields[5] = timeDateUtil.formatOffsetDateTime(fields[5].substring(1,fields[5].length()-1));
         adjustedFields[6] = Float.parseFloat(fields[6]);
         adjustedFields[7] = fields[7];
         return adjustedFields;

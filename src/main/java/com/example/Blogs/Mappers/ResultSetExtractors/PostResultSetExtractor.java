@@ -3,6 +3,7 @@ package com.example.Blogs.Mappers.ResultSetExtractors;
 import com.example.Blogs.Models.Comment;
 import com.example.Blogs.Models.Like;
 import com.example.Blogs.Models.Post;
+import com.example.Blogs.Utils.TimeDateUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
@@ -22,6 +23,7 @@ public class PostResultSetExtractor implements ResultSetExtractor<HashMap<Long, 
     @Override
     public HashMap<Long, Post> extractData(ResultSet rs) throws SQLException, DataAccessException {
         HashMap<Long, Post> posts = new java.util.HashMap<>();
+        TimeDateUtil timeDateUtil = new TimeDateUtil();
         Long postId = null;
         log.info("Start Mapping ");
         while (rs.next()) {
@@ -34,8 +36,7 @@ public class PostResultSetExtractor implements ResultSetExtractor<HashMap<Long, 
                             rs.getLong("post_user_id"),
                             rs.getString("body"),
                             rs.getString("title"));
-                    LocalDateTime dataBaseDate = LocalDateTime.parse(rs.getObject("created_at", OffsetDateTime.class).toString(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSS"));
-                    OffsetDateTime offsetDateTime = OffsetDateTime.of(dataBaseDate, ZoneId.systemDefault().getRules().getOffset(dataBaseDate));
+                    OffsetDateTime offsetDateTime = timeDateUtil.formatOffsetDateTime(rs.getObject("created_at", OffsetDateTime.class).toString());
                     post.setCreatedAt(offsetDateTime);
                     postId = post.getId();
                     posts.put(post.getId(), post);

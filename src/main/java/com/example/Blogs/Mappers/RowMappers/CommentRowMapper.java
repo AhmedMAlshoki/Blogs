@@ -1,6 +1,7 @@
 package com.example.Blogs.Mappers.RowMappers;
 
 import com.example.Blogs.Models.Comment;
+import com.example.Blogs.Utils.TimeDateUtil;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
@@ -15,9 +16,8 @@ import java.time.format.DateTimeFormatter;
 public class CommentRowMapper implements RowMapper<Comment> {
     @Override
     public Comment mapRow(ResultSet rs, int rowNum) throws SQLException {
-        LocalDateTime dataBaseDate = LocalDateTime.parse(rs.getObject("created_at", OffsetDateTime.class).toString(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSS"));
-        OffsetDateTime offsetDateTime = OffsetDateTime.of(dataBaseDate, ZoneId.systemDefault().getRules().getOffset(dataBaseDate));
-        Comment comment = new Comment(
+        TimeDateUtil timeDateUtil = new TimeDateUtil();
+        OffsetDateTime offsetDateTime = timeDateUtil.formatOffsetDateTime(rs.getObject("created_at", OffsetDateTime.class).toString());Comment comment = new Comment(
                 rs.getLong("id"),
                 rs.getString("body"),
                 rs.getLong("post_id"),

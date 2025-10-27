@@ -2,6 +2,7 @@ package com.example.Blogs.Mappers.ResultSetExtractors;
 
 import com.example.Blogs.Models.Post;
 import com.example.Blogs.Models.User;
+import com.example.Blogs.Utils.TimeDateUtil;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
 
@@ -16,11 +17,10 @@ public class ProfileResultSetExtractor implements ResultSetExtractor<User> {
     @Override
     public User extractData(ResultSet rs) throws SQLException, DataAccessException {
         User user = null;
+        TimeDateUtil timeDateUtil = new TimeDateUtil();
         while (rs.next()) {
             if (user == null) {
-                LocalDateTime dataBaseDate = LocalDateTime.parse(rs.getObject("created_at", OffsetDateTime.class).toString(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSS"));
-                OffsetDateTime offsetDateTime = OffsetDateTime.of(dataBaseDate, ZoneId.systemDefault().getRules().getOffset(dataBaseDate));
-
+                OffsetDateTime offsetDateTime = timeDateUtil.formatOffsetDateTime(rs.getObject("created_at", OffsetDateTime.class).toString());
                 user = new User(
                         rs.getLong("user_id"),
                         rs.getString("username"),
