@@ -174,7 +174,9 @@ public class UserDAOImplement extends DAO_Implementation implements UserDAO  {
     public User getUserCredential(String email) throws UserNotFoundException {
         if (existsByEmail(email)) {
             String sql = userQueries.getUserCredential();
-            return jdbcTemplate.queryForObject(sql, new UserRowMapper(), email);
+            User user =  jdbcTemplate.queryForObject(sql, new UserRowMapper(), email);
+            log.info("User found after the query : {}", user);
+            return user;
         }
         else {
             throw new UserNotFoundException("User not found");

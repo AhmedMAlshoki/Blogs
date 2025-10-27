@@ -10,7 +10,7 @@ type Query {
     postsByUser(userId: ID!): [Post]
     postsByFollowing(userId: ID!): [Post]
     searchPosts(
-        query: String   # Full-text search term
+        query: String
         authorIds: [Int]
         minDate: Date
         maxDate: Date
@@ -24,6 +24,7 @@ type Query {
     commentsByPost(postId: ID!): [Comment]
     commentsByUser(userId: ID!): [Comment]
 }
+
 type Mutation {
    saveNewComment(postId: ID!, body: String!): String
 
@@ -54,10 +55,12 @@ type Mutation {
     login(email: String!, password: String!): LoginResponse!
 
 }
+
 type LoginResponse {
     token: String!
     user: User!
 }
+
 
 type SearchQueryResult {
     SearchQueryPosts: [SearchQueryPost]
@@ -69,7 +72,7 @@ type SearchQueryPost{
     title: String!
     body: String!
     publishedAt: Date
-    user : Int!
+    user: Int!
     displayName: String
     rank: Float!
     highlight: String!

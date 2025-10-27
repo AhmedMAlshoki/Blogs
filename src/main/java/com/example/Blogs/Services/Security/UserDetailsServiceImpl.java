@@ -27,7 +27,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         User user = null;
         try {
             user = userDAO.getUserCredential(email);
-            log.info("User found: {} , GREAT SUCCESS", user.getId());
+            log.info("User found: {}", user);
         } catch (Exception e) {
             log.error("User not found: {} , TRY AGAIN , {}", email , e.getMessage());
             throw new UsernameNotFoundException("User not found");

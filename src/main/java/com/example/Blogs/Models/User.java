@@ -54,10 +54,11 @@ public class User {
         this.posts= new HashMap<Long, Post>();
     }
 
-    public User(long id, String username, String displayName) { //Constructor to Normal retrieve
+    public User(long id, String username, String displayName,OffsetDateTime offsetDateTime) { //Constructor to Normal retrieve
         this.id = id;
         this.username = username;
         this.displayName = displayName;
+        this.signedUpAt = offsetDateTime;
         this.posts= new HashMap<Long, Post>();
     }
 
