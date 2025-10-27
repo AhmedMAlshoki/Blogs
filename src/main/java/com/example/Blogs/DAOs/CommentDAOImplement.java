@@ -47,7 +47,7 @@ public class CommentDAOImplement extends DAO_Implementation implements CommentDA
     }
 
     @Override
-    public Comment saveNewComment(Comment comment, Timezone timezone) {
+    public String saveNewComment(Comment comment, Timezone timezone) {
         String sql = commentQueries.insertQuery();
         int result = jdbcTemplate.update(sql,    comment.getUserId(),
                                                  comment.getPostId(),
@@ -56,7 +56,7 @@ public class CommentDAOImplement extends DAO_Implementation implements CommentDA
         if (result == 0) {
             throw new SQLError("Error while saving the comment in the database");
         }
-        return comment;
+        return "New Comment Saved";
     }
 
     @Override

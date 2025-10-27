@@ -65,11 +65,11 @@ public class CommentService {
                                 map(commentMapper::commentToCommentDTO).toList()));
     }
 
-    public CommentDTO saveNewComment(Long postId, String body) {
+    public String saveNewComment(Long postId, String body) {
         Long userId = advancedEmailPasswordToken.getCurrentUserId();
         Timezone timezone = advancedEmailPasswordToken.getClientApiInfo().getTimezone();
         Comment comment = new Comment(body, postId, userId);
-        return commentMapper.commentToCommentDTO(commentDAO.saveNewComment(comment,timezone));
+        return commentDAO.saveNewComment(comment,timezone);
     }
 
     public String updateComment(String body, Long id) {

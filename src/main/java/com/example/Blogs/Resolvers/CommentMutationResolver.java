@@ -18,18 +18,16 @@ import org.springframework.validation.annotation.Validated;
 public class CommentMutationResolver {
 
     private final CommentService commentService;
-    private final UserService userService;
 
 
     @Autowired
-    public CommentMutationResolver(CommentService commentService, UserService userService) {
+    public CommentMutationResolver(CommentService commentService) {
         this.commentService = commentService;
-        this.userService = userService;
     }
 
     @Validated
     @MutationMapping
-    public CommentDTO saveNewComment(@Argument @Positive @NotNull Long postId,
+    public String saveNewComment(@Argument @Positive @NotNull Long postId,
                                      @Argument @NotBlank String body) {
         return commentService.saveNewComment(postId, body);
     }

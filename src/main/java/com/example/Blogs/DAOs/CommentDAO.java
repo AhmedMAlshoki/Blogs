@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface CommentDAO {
     Comment findById(Long id);
-    Comment saveNewComment(Comment comment, Timezone timezone);
+    String saveNewComment(Comment comment, Timezone timezone);
     Long findCommentOwner(Long id);
     String deleteById(Long id);
     boolean existsById(Long id);

@@ -196,7 +196,7 @@ public class PostDAOImplement extends DAO_Implementation implements PostDAO {
     }
 
     @Override
-    public Post saveNewPost(Post post , Timezone timezone) {
+    public String saveNewPost(Post post , Timezone timezone) {
         int rowsAffected = jdbcTemplate.update(
                 postQueries.insertQuery(),
                 post.getUserId(),
@@ -206,7 +206,7 @@ public class PostDAOImplement extends DAO_Implementation implements PostDAO {
         if (rowsAffected == 0) {
             throw new PostNotFoundException("Post not saved");
         }
-        return post;
+        return "New Post Saved";
     }
 
     @Override

@@ -26,7 +26,7 @@ public class PostMutationResolver {
 
     @Validated
     @MutationMapping
-    public PostDTO saveNewPost(@Argument @NotBlank String body,
+    public String saveNewPost(@Argument @NotBlank String body,
                                @Argument @Size(min = 1, max = 50) String title) {
         return postService.savePost(body,title);
     }

@@ -25,13 +25,13 @@ type Query {
     commentsByUser(userId: ID!): [Comment]
 }
 type Mutation {
-   saveNewComment(postId: ID!, body: String!): Comment
+   saveNewComment(postId: ID!, body: String!): String
 
     updateComment(body: String!,commentId: ID!,): String
 
     deleteComment(commentId: ID!): String
 
-    saveNewPost(title: String!, body: String!): Post
+    saveNewPost(title: String!, body: String!): String
 
     updatePost(postId: ID!, title: String!, body: String!): Post
 

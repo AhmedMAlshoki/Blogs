@@ -114,11 +114,11 @@ public class PostService {
         return posts.stream().map(postMapper::postToPostDTO).toList();
     }
 
-    public PostDTO savePost(String body, String title) {
+    public String savePost(String body, String title) {
         Long userId = advancedEmailPasswordToken.getCurrentUserId();
         Timezone timezone = advancedEmailPasswordToken.getClientApiInfo().getTimezone();
         Post post = new Post(body,title,userId);
-        return postMapper.postToPostDTO(postDAO.saveNewPost(post,timezone));
+        return postDAO.saveNewPost(post,timezone);
     }
 
     public boolean isUserAuthorized(Long id) {

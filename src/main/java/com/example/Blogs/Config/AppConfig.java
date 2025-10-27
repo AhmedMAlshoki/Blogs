@@ -625,8 +625,11 @@ public class AppConfig implements CommandLineRunner {
 
     private Post createPost(Long userId, String title, String body, Timezone timezone) {
         Post post = new Post(body, title, userId);
-        Post savedPost = postDAO.saveNewPost(post, timezone);
-        return savedPost;
+        String savedPost = postDAO.saveNewPost(post, timezone);
+        if (savedPost.equals("New Post Saved"))
+            return post;
+        else
+            return null;
     }
 
     private void createComment(Long userId, Long postId, String body, Timezone timezone) {

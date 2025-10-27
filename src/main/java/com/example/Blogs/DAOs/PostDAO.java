@@ -11,7 +11,7 @@ public interface PostDAO {
 
     Post findById(Long id);
     boolean existsById(Long id);
-    Post saveNewPost(Post post , Timezone timezone);
+    String saveNewPost(Post post , Timezone timezone);
     Post updatePost(Post post , Timezone timezone);
     String deleteById(Long id);
     List<Post> findByUser(Long userId);
