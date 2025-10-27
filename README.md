@@ -409,22 +409,4 @@ Contributions are welcome! Please follow these guidelines:
 4. Add tests if applicable
 5. Submit a pull request
 
-## 📝 License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## 👤 Author
-
-**Ahmed** - *Initial work*
-
-## 🙏 Acknowledgments
-
-- Spring Boot Team
-- PostgreSQL Team
-- Redis Labs
-- GraphQL Foundation
-- All open-source contributors whose libraries made this project possible
-
----
-
-**Note**: This project is actively maintained. For issues and feature requests, please use the GitHub issue tracker.
