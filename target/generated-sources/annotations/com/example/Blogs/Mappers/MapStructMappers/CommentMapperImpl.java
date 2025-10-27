@@ -7,8 +7,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-10-27T18:59:35+0300",
-    comments = "version: 1.6.3, compiler: javac, environment: Java 21.0.7 (Oracle Corporation)"
+    date = "2025-10-27T19:27:27+0300",
+    comments = "version: 1.6.3, compiler: Eclipse JDT (IDE) 3.44.0.v20251001-1143, environment: Java 21.0.8 (Eclipse Adoptium)"
 )
 @Component
 public class CommentMapperImpl implements CommentMapper {
@@ -21,11 +21,11 @@ public class CommentMapperImpl implements CommentMapper {
 
         CommentDTO commentDTO = new CommentDTO();
 
+        commentDTO.setBody( comment.getBody() );
+        commentDTO.setCreatedAt( comment.getCreatedAt() );
         commentDTO.setId( comment.getId() );
         commentDTO.setPostId( comment.getPostId() );
-        commentDTO.setBody( comment.getBody() );
         commentDTO.setUserId( comment.getUserId() );
-        commentDTO.setCreatedAt( comment.getCreatedAt() );
 
         return commentDTO;
     }
@@ -38,11 +38,11 @@ public class CommentMapperImpl implements CommentMapper {
 
         Comment comment = new Comment();
 
-        comment.setId( commentDTO.getId() );
-        comment.setUserId( commentDTO.getUserId() );
-        comment.setPostId( commentDTO.getPostId() );
         comment.setBody( commentDTO.getBody() );
         comment.setCreatedAt( commentDTO.getCreatedAt() );
+        comment.setId( commentDTO.getId() );
+        comment.setPostId( commentDTO.getPostId() );
+        comment.setUserId( commentDTO.getUserId() );
 
         return comment;
     }

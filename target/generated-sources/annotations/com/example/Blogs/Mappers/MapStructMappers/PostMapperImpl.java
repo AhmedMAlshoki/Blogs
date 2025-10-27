@@ -10,8 +10,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-10-27T18:59:35+0300",
-    comments = "version: 1.6.3, compiler: javac, environment: Java 21.0.7 (Oracle Corporation)"
+    date = "2025-10-27T19:27:27+0300",
+    comments = "version: 1.6.3, compiler: Eclipse JDT (IDE) 3.44.0.v20251001-1143, environment: Java 21.0.8 (Eclipse Adoptium)"
 )
 @Component
 public class PostMapperImpl implements PostMapper {
@@ -24,16 +24,16 @@ public class PostMapperImpl implements PostMapper {
 
         PostDTO postDTO = new PostDTO();
 
-        postDTO.setId( post.getId() );
-        postDTO.setUserId( post.getUserId() );
         postDTO.setBody( post.getBody() );
-        postDTO.setTitle( post.getTitle() );
         postDTO.setCreatedAt( post.getCreatedAt() );
-        postDTO.setUpdated_at( post.getUpdated_at() );
+        postDTO.setId( post.getId() );
         List<Like> list = post.getLikes();
         if ( list != null ) {
             postDTO.setLikes( new ArrayList<Like>( list ) );
         }
+        postDTO.setTitle( post.getTitle() );
+        postDTO.setUpdated_at( post.getUpdated_at() );
+        postDTO.setUserId( post.getUserId() );
 
         return postDTO;
     }
@@ -46,16 +46,16 @@ public class PostMapperImpl implements PostMapper {
 
         Post post = new Post();
 
-        post.setId( postDTO.getId() );
-        post.setUserId( postDTO.getUserId() );
         post.setBody( postDTO.getBody() );
-        post.setTitle( postDTO.getTitle() );
         post.setCreatedAt( postDTO.getCreatedAt() );
-        post.setUpdated_at( postDTO.getUpdated_at() );
+        post.setId( postDTO.getId() );
         List<Like> list = postDTO.getLikes();
         if ( list != null ) {
             post.setLikes( new ArrayList<Like>( list ) );
         }
+        post.setTitle( postDTO.getTitle() );
+        post.setUpdated_at( postDTO.getUpdated_at() );
+        post.setUserId( postDTO.getUserId() );
 
         return post;
     }
